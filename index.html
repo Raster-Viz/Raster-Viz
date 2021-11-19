@@ -5,6 +5,50 @@
     <title>Raster Viz</title>
     <link rel="stylesheet" type="text/css" href="index.css" media=”screen” />
 </head>
+<style>
+    /* Style The Dropdown Button */
+    .dropbtn {
+        background-color: #FFAACC;
+        color: grey;
+        padding: 16px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    /*  position the dropdown content */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    /* Dropdown Content hidden by Default */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #CCCCCC;
+        min-width: 160px;
+        z-index: 1;
+    }
+
+    /* Links inside the dropdown */
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    /* Change color of dropdown links on hover */
+    .dropdown-content a:hover {
+        background-color: #11f111;
+    }
+
+    /* Show the dropdown menu on hover */
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+</style>
 
 <label for="file-options">File</label>
 
@@ -25,14 +69,14 @@
     <option value="properties">Properties</option>
 </select>
 
-<select name="Languages" id="select_languages">
-    <option value="">--Please choose an option--</option>
-    <option value="C++" >C++</option>
-    <option value="Python">Python</option>
-    <option value="C">C</option>
-    <option value="Java">Java</option>
-    <option value="C#">C#</option>
-    <option value="Ruby">Ruby</option>
-</select>
+<h2> Dropdown using CSS </h2>
+<div class="dropdown">
+    <button class="dropbtn">Dropdown</button>
+    <div class="dropdown-content">
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+    </div>
+</div>
 
 </html>
