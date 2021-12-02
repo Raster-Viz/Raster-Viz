@@ -1,5 +1,5 @@
 html, body {
-    font-family: "Times New Roman";
+    font-family: "Courier";
     height: 100%;
     background-color: #edfaff;
 }
@@ -31,11 +31,12 @@ html, body {
 
 /* style the dropdown button */
 .dropbtn {
-     background-color: #aad2ff;
-     color: #2c5e66;
-     padding: 16px;
-     font-size: 20px;
-     cursor: pointer;
+    font-family: "Courier";
+    background-color: #aad2ff;
+    color: #2c5e66;
+    padding: 16px;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 /* links inside the dropdown */
