@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,26 @@
 
     <body>
 
-        <label for="file-options">File</label>
+    <div class="dropdown">
+        <button class="dropbtn">File</button>
+        <div class="dropdown-content">
+            <a href="#">Save</a>
+            <a href="#">Print</a>
+            <a href="#">Import</a>
+            <a href="#">Exit</a>
+        </div>
+        <button class="dropbtn">Edit</button>
+        <div class="dropdown-content">
+            <a href="#">Remove</a>
+            <a href="#">Zoom to Layer</a>
+            <a href="#">Selection Zoom</a>
+            <a href="#">Properties</a>
+        </div>
+    </div>
+
+    <!--commenting this out for now as we have menu options above it
+        i nevertheless want to keep the code for now -- JDH-->
+        <!--<label for="file-options">File</label>
 
         <select name="file-options" id="file-options">
             <option value="save">Save</option>
@@ -27,17 +46,10 @@
             <option value="select-zoom">Selection Zoom</option>
             <option value="...">...</option>
             <option value="properties">Properties</option>
-        </select>
+        </select>-->
 
-        <h2> Dropdown Test Using CSS File </h2>
-        <div class="dropdown">
-            <button class="dropbtn">Dropdown</button>
-            <div class="dropdown-content">
-                <a href="#">Link 1</a>
-                <a href="#">Link 2</a>
-                <a href="#">Link 3</a>
-            </div>
-        </div>
+<!--    <h2> Dropdown Test Using CSS File </h2> -->
+
 
         <table>
             <tr>
