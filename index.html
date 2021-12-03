@@ -13,10 +13,10 @@
     <div class="dropdown">
         <button class="dropbtn">File</button>
         <div class="dropdown-content">
-            <a href="#" onclick="changefunction();">Save</a><br>
-            <a href="#">Print</a><br>
-            <a href="#">Import</a><br>
-            <a href="#">Exit</a>
+            <a href="#" id = "save" onclick="changefunction(id);">Save</a><br>
+            <a href="#" id = "print" onclick="changefunction(id);">Print</a><br>
+            <a href="#" id = "import" onclick="changefunction(id);">Import</a><br>
+            <a href="#" id = "exit" onclick="changefunction(id);">Exit</a>
         </div>
     </div>
     <div class="dropdown">
@@ -64,17 +64,17 @@
 
     </body>
 </html>
-<!--<script type = text/javascript>-->
-<!--    function changefunction(i){-->
-<!--        if(i == "print"){window.print()}-->
-<!--        if(i == "save"){-->
-<!--            window.location.href = "/index.html"-->
-<!--        }-->
-<!--        if(i == "exit"){window.close()}-->
-<!--        if(i == "import"){-->
-<!--            var input = document.createElement('input');-->
-<!--            input.type = 'file';-->
-<!--            input.click();-->
-<!--        }-->
-<!--    }-->
-<!--</script>-->
+<script type = text/javascript>
+    function changefunction(i){
+        if(i == "print"){window.print()}
+        if(i == "save"){
+            window.location.href = "/index.html"
+        }
+        if(i == "exit"){window.close()}
+        if(i == "import"){
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.click();
+        }
+    }
+</script>
