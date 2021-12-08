@@ -29,6 +29,7 @@ html, body {
     box-shadow: 0px 10px 10px 0px rgba(60, 220, 248, 0.4);
     background-color: Gainsboro;
     min-width: 160px;
+    font-size: 18px;
     z-index: 1;
 }
 
