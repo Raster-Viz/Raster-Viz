@@ -6,5 +6,5 @@ def create_raster(file):
 def add_to_raster(raster, file):
     raster.add(file)
     return raster
-raster = create_raster("Tree.png")
-add_to_raster(raster, "Tree.png")
+raster = create_raster("web_function/data/elevation.tif")
+add_to_raster(raster, "web_function/data/elevation2.tif")
