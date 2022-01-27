@@ -8,3 +8,4 @@ def add_to_raster(raster, file):
     return raster
 raster = create_raster("web_function/data/elevation.tif")
 add_to_raster(raster, "web_function/data/elevation2.tif")
+raster.save('')
