@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'rs_viz/styles.css' %}">
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Raster Viz</title>
+</head>
+
+    <body>
+
+    <div class="dropdown">&nbsp;
+        <button class="dropbtn">File</button>
+        <div class="dropdown-content">
+            <a href="#" id = "save" onclick="changefunction(id);">Save</a><br>
+            <a href="#" id = "print" onclick="changefunction(id);">Print</a><br>
+            <a href="{% url 'layer_upload' %}" id = "import">Import</a><br>
+            <a href="#" id = "exit" onclick="changefunction(id);">Exit</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Edit</button>
+        <div class="dropdown-content">
+            <a href="#">Remove</a><br>
+            <a href="#">Properties</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">View</button>
+        <div class="dropdown-content">
+            <a href="#">Zoom to Layer</a><br>
+            <a href="#">Selection Zoom</a><br>
+            <a href="#">Grid</a><br>
+            <a href="#">Ruler</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Help</button>
+        <div class="dropdown-content">
+            <a href="help.html">Help</a>
+        </div>
+    </div>
+
+    <div class="image"><img src="Tree.png" width="90" height="90"></div>
+
+        <table>
+            <tr>
+                <td>
+                    <p style="font-size:24px"><b>&nbsp;Table of Contents:</b></p>
+                    <div style="border-style: ridge; border-width: thick; margin: 1em; border-square: 10px; background: #FFD6A5; width: 250px; height: 420px;">
+
+                    </div>
+                    <div style="border-style: ridge; border-width: thick; margin: 1em; border-square: 10px; background: lightblue; width: 250px; height: 200px;">
+                        &#9432;
+                    </div>
+                </td>
+                <td>
+                    <br><br><br>
+                    <div class="center" style="border-style: inset; border-width: thick; border-color: Gainsboro; border-square: 10px; background: LightSteelBlue; width: 1000px; height: 640px;">
+                        <img class="test" src="mask.jpeg" width="420" height="540" padding="5">
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </body>
+</html>
+<script type = text/javascript>
+    function changefunction(i){
+        if(i == "print"){window.print()}
+        if(i == "save"){
+            window.location.href = "/index.html"
+        }
+        if(i == "exit"){window.close()}
+        if(i == "import"){
+
+        }
+    }
+</script>

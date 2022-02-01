@@ -1,0 +1,75 @@
+html, body {
+    font-family: "Courier";
+    height: 100%;
+    background-color: FloralWhite;
+}
+
+/* position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.image {
+    height: 100px;
+    width: 100px;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    top: 20px;
+}
+
+/* dropdown content is hidden by default */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    /*width: 100%;*/
+    /*overflow: auto;*/
+    padding: 12px 16px;
+    box-shadow: 0px 10px 10px 0px rgba(60, 220, 248, 0.4);
+    background-color: Gainsboro;
+    min-width: 160px;
+    font-size: 18px;
+    z-index: 1;
+}
+
+/* change color of dropdown links on hover */
+/*.dropdown-content a:hover {
+    color: #FFFFFF;
+    background-color: #00A4BD;
+}*/
+
+/* style the dropdown button */
+.dropbtn {
+    font-family: "Courier";
+    background-color: Gainsboro;
+    font-weight: bold;
+    color: black;
+    hiehgt: 12px;
+    width: 106px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* links inside the dropdown */
+/*.dropdown-content a {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    color: #000000;
+}*/
+
+/* show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.center {
+    text-align: center;
+}
+
+.test {
+    position:absolute;
+    top:20%;
+    left:34%;
+}
