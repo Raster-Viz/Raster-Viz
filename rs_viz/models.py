@@ -5,6 +5,10 @@ from django.urls import reverse
 import os
 from raster_tools import Raster
 
+# This model is a template for importing raster objects into
+# the web database, and provides a name for the layer. The activated
+# var sets up a potential method that may be used to turning layers 'on and off'
+
 class Layer(models.Model):
     name = models.CharField(max_length=100)
     document = models.FileField(upload_to='rs_viz/')

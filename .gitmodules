@@ -1,0 +1,3 @@
+[submodule "raster_tools"]
+	path = raster_tools
+	url = https://github.com/Raster-Viz/raster_tools.git

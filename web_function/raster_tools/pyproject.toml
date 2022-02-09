@@ -1,0 +1,11 @@
+[build-system]
+# Minimum requirements for the build system to execute.
+requires = ["wheel", "setuptools", "cython", "numpy"]
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
+known_first_party = ["raster_tools", "test"]
