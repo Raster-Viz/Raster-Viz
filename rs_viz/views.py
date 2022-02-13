@@ -7,8 +7,8 @@ from .forms import LayerForm
 from .models import Layer
 from django.views.generic.edit import CreateView
 from raster_tools import Raster
+from django.views.generic import TemplateView
 # Imaginary function to handle an uploaded file.
-
 
 class CreateFileUpload(CreateView):
     model = Layer
@@ -27,7 +27,6 @@ class CreateFileUpload(CreateView):
             'form': form
         })
 
-
 def index(request):
     layers = Layer.objects.values_list('name')
     directory = 'media/rs_viz/'
@@ -41,3 +40,7 @@ def index(request):
 
     return render(request, 'rs_viz/index.html')
 # Create your views here.
+
+#This template view sets up the help.html page to work correctly
+class HelpPageView(TemplateView):
+    template_name = 'rs_viz/help.html'
