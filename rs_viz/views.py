@@ -39,7 +39,7 @@ def index(request):
     for file in os.listdir(directory):
         fname = directory+file
         if i<1:
-
+            rs = create_raster.create_raster(fname)
         else:
             rs = create_raster.add_to_raster(rs, fname)
 
