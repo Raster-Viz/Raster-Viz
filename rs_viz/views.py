@@ -10,9 +10,8 @@ from .models import Layer
 from django.views.generic.edit import CreateView
 from raster_tools import Raster
 from web_function import create_raster
-# Imaginary function to handle an uploaded file.
+from django.views.generic import TemplateView
 
-# View for creating layer objects
 class CreateFileUpload(CreateView):
     model = Layer
     template_name = 'rs_viz/layer_upload.html'
@@ -30,7 +29,7 @@ class CreateFileUpload(CreateView):
         return render(request, '', {
             'form': form
         })
-
+      
 # This function creates the home page view for the web application
 def index(request):
     layers = Layer.objects.values_list('name')
@@ -67,3 +66,6 @@ def test_matplotlib(request):
     response = HttpResponse(content_type='image/png')
     canvas.print_png(response)
     return response
+  
+class HelpPageView(TemplateView):
+    template_name = 'rs_viz/help.html'
