@@ -40,6 +40,7 @@ def index(request):
         fname = directory+file
         if i<1:
             rs = create_raster.create_raster(fname)
+            i+=1
         else:
             rs = create_raster.add_to_raster(rs, fname)
 
