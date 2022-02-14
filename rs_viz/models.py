@@ -18,3 +18,6 @@ class Layer(models.Model):
 
     def get_absolute_url(self):
         return reverse('index')
+
+    def create_raster(self):
+        return Raster(self.document)
