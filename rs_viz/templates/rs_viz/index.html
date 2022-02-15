@@ -3,6 +3,11 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'rs_viz/styles.css' %}">
 <html lang="en">
+{% if red_flag %}
+    <div id="red_flag" title="Red Flag">
+        <p>{{vocal}}</p>
+    </div>
+{% endif %}
 
 <head>
     <meta charset="UTF-8">
@@ -14,6 +19,7 @@
     <div class="dropdown">&nbsp;
         <button class="dropbtn">File</button>
         <div class="dropdown-content">
+            <a href="{% url 'del' %}" id = "new">New</a><br>
             <a href="#" id = "save" onclick="changefunction(id);">Save</a><br>
             <a href="#" id = "print" onclick="changefunction(id);">Print</a><br>
             <a href="{% url 'layer_upload' %}" id = "import">Import</a><br>
@@ -67,6 +73,7 @@
     </body>
 </html>
 <script type = text/javascript>
+
     function changefunction(i){
         if(i == "print"){window.print()}
         if(i == "save"){
