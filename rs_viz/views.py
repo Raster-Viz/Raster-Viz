@@ -12,10 +12,16 @@ from raster_tools import Raster
 from web_function import create_raster
 from django.views.generic import TemplateView
 
+
+def delete_everything(request):
+    Layer.objects.all().delete()
+    return redirect('index')
+
+
 class CreateFileUpload(CreateView):
     model = Layer
     template_name = 'rs_viz/layer_upload.html'
-    fields = ('name', 'document')
+    fields = ('name', 'document', 'activated')
 
     # Function to handle uploaded file
     def model_form_upload(request):
@@ -32,34 +38,45 @@ class CreateFileUpload(CreateView):
       
 # This function creates the home page view for the web application
 def index(request):
-    layers = Layer.objects.values_list('name')
-    directory = 'media/rs_viz/'
-    i =0;
-    arr = []
-    for file in os.listdir(directory):
-        fname = directory+file
-        if i<1:
-            rs = create_raster.create_raster(fname)
-            i+=1
+    layers = Layer.objects.filter(activated=True)
+    vocal = None
+    i = 0
+    rs = 0
+    flag ={'red_flag':False}
+    for layer in layers:
+        if (i == 0):
+            rs = create_raster.create_raster(layer.document.path)
+            i += 1
         else:
-            rs = create_raster.add_to_raster(rs, fname)
+            raster = create_raster.create_raster(layer.document.path)
+            try:
+                rs = create_raster.add_to_raster(rs, raster)
+            except ValueError:
+                vocal = "A value Error was raised in" + layer.name
+                layer.activated = False
+                layer.save()
+                flag={'red_flag':True}
 
-    return render(request, 'rs_viz/index.html')
+
+    voc = {'vocal': vocal}
+    return render(request, 'rs_viz/index.html', voc, flag)
+
 # Create your views here.
 from pylab import figure, axes, pie, title
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 def test_matplotlib(request):
-    layers = Layer.objects.values_list('name')
-    directory = 'media/rs_viz/'
-    i = 0;
-    for file in os.listdir(directory):
-        fname = directory + file
-        if i < 1:
-            rs = create_raster.create_raster(fname)
+    plt.clf()
+    layers = Layer.objects.filter(activated=True)
+    i = 0
+    rs = 0
+    for layer in layers:
+        if (i == 0):
+            rs = create_raster.create_raster(layer.document.path)
             i += 1
         else:
-            rs = create_raster.add_to_raster(rs, fname)
+            raster = create_raster.create_raster(layer.document.path)
+            rs = create_raster.add_to_raster(rs, raster)
     arr = rs._to_presentable_xarray()
     arr.plot()
     f = plt.gcf()
@@ -70,3 +87,21 @@ def test_matplotlib(request):
   
 class HelpPageView(TemplateView):
     template_name = 'rs_viz/help.html'
+
+
+
+
+def model_test(request):
+    layers = Layer.objects.filter(activated = True)
+    context = {"layers": layers}
+    i = 0
+    rs = 0
+    for layer in layers:
+        if(i == 0):
+            rs = create_raster.create_raster(layer.document.path)
+            i+=1
+        else:
+            raster = create_raster.create_raster(layer.document.path)
+            rs = create_raster.add_to_raster(rs,raster)
+    rast = {"rast": rs}
+    return render(request, 'rs_viz/fig.html', context)
