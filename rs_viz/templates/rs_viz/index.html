@@ -2,6 +2,7 @@
 {% load static %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'rs_viz/styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'rs_viz/print.css' %}" media="print" />
 <html lang="en">
 {% if red_flag %}
     <div id="red_flag" title="Red Flag">
@@ -11,29 +12,30 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Raster Viz</title>
 </head>
 
     <body>
     <!--test-->
-    <div class="dropdown">&nbsp;
+    <div class="dropdown noprint">&nbsp;
         <button class="dropbtn">File</button>
         <div class="dropdown-content">
-            <a href="{% url 'del' %}" id = "new">New</a><br>
-            <a href="#" id = "save" onclick="changefunction(id);">Save</a><br>
-            <a href="#" id = "print" onclick="changefunction(id);">Print</a><br>
-            <a href="{% url 'layer_upload' %}" id = "import">Import</a><br>
-            <a href="#" id = "exit" onclick="changefunction(id);">Exit</a>
+           <a href="{% url 'del' %}" id = "new">New</a><br>
+           <a href="#" id="save" download="index"><!--onclick="changefunction(id);"-->Save</a><br>
+           <input type="button" id="print" onclick="changefunction(id);" value="Print" /><br>
+           <a href="{% url 'layer_upload' %}" id = "import">Import</a><br>
+           <a href="#" id = "exit" onclick="changefunction(id);">Exit</a>
         </div>
     </div>
-    <div class="dropdown">
+    <div class="dropdown noprint">
         <button class="dropbtn">Edit</button>
         <div class="dropdown-content">
             <a href="#">Remove</a><br>
             <a href="#">Properties</a>
         </div>
     </div>
-    <div class="dropdown">
+    <div class="dropdown noprint">
         <button class="dropbtn">View</button>
         <div class="dropdown-content">
             <a href="#">Zoom to Layer</a><br>
@@ -42,22 +44,23 @@
             <a href="#">Ruler</a>
         </div>
     </div>
-    <div class="dropdown">
+    <div class="dropdown noprint">
         <button class="dropbtn">Help</button>
         <div class="dropdown-content">
             <a href="{% url 'help' %}">Help</a>
         </div>
     </div>
 
-    <div class="image"><img src="{% static 'rs_viz/Tree.png' %}" width="90" height="90"></div>
+    <div class="image noprint"><img src="{% static 'rs_viz/Tree.png' %}" width="90" height="90"></div>
         <table>
             <tr>
                 <td>
-                    <p style="font-size:24px"><b>&nbsp;Table of Contents:</b></p>
-                    <div style="border-style: ridge; border-width: thick; margin: 1em; border-square: 10px; background: #FFD6A5; width: 250px; height: 420px;">
+
+                    <p class="noprint"style="font-size:24px"><b>&nbsp;Table of Contents:</b></p>
+                    <div class="noprint" style="border-style: ridge; border-width: thick; margin: 1em; border-square: 10px; background: #FFD6A5; width: 250px; height: 420px;">
 
                     </div>
-                    <div style="border-style: ridge; border-width: thick; margin: 1em; border-square: 10px; background: lightblue; width: 250px; height: 200px;">
+                    <div class="noprint" style="border-style: ridge; border-width: thick; margin: 1em; border-square: 10px; background: lightblue; width: 250px; height: 200px;">
                         &#9432;
                     </div>
                 </td>
@@ -77,7 +80,7 @@
     function changefunction(i){
         if(i == "print"){window.print()}
         if(i == "save"){
-            window.location.href = "/index.html"
+            window.location.href = "index.html"
         }
         if(i == "exit"){window.close()}
         if(i == "import"){
