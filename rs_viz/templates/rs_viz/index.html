@@ -16,7 +16,9 @@
     <div class="dropdown noprint">&nbsp;
         <button class="dropbtn">File</button>
         <div class="dropdown-content">
-            <a href="#" id="save" download="index"><!--onclick="changefunction(id);"-->Save</a><br>
+            <a href="" id="download" download="index">
+                <button type="button">Save</button>
+            </a><br>
             <input type="button" id="print" onclick="changefunction(id);" value="Print" /><br>
             <a href="{% url 'layer_upload' %}" id = "import">Import</a><br>
             <a href="#" id = "exit" onclick="changefunction(id);">Exit</a>
@@ -49,11 +51,6 @@
         <table>
             <tr>
                 <td>
-
-
-
-
-
                     <p class="noprint"style="font-size:24px"><b>&nbsp;Table of Contents:</b></p>
                     <div class="noprint" style="border-style: ridge; border-width: thick; margin: 1em; border-square: 10px; background: #FFD6A5; width: 250px; height: 420px;">
 
