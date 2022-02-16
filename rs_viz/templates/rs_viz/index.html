@@ -4,6 +4,11 @@
 <link rel="stylesheet" type="text/css" href="{% static 'rs_viz/styles.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'rs_viz/print.css' %}" media="print" />
 <html lang="en">
+{% if red_flag %}
+    <div id="red_flag" title="Red Flag">
+        <p>{{vocal}}</p>
+    </div>
+{% endif %}
 
 <head>
     <meta charset="UTF-8">
@@ -16,12 +21,13 @@
     <div class="dropdown noprint">&nbsp;
         <button class="dropbtn">File</button>
         <div class="dropdown-content">
+           <a href="{% url 'del' %}" id = "new">New</a><br>
             <a href="" id="download" download="index">
                 <button type="button">Save</button>
             </a><br>
-            <input type="button" id="print" onclick="changefunction(id);" value="Print" /><br>
-            <a href="{% url 'layer_upload' %}" id = "import">Import</a><br>
-            <a href="#" id = "exit" onclick="changefunction(id);">Exit</a>
+           <input type="button" id="print" onclick="changefunction(id);" value="Print" /><br>
+           <a href="{% url 'layer_upload' %}" id = "import">Import</a><br>
+           <a href="#" id = "exit" onclick="changefunction(id);">Exit</a>
         </div>
     </div>
     <div class="dropdown noprint">
@@ -51,6 +57,7 @@
         <table>
             <tr>
                 <td>
+
                     <p class="noprint"style="font-size:24px"><b>&nbsp;Table of Contents:</b></p>
                     <div class="noprint" style="border-style: ridge; border-width: thick; margin: 1em; border-square: 10px; background: #FFD6A5; width: 250px; height: 420px;">
 
@@ -71,6 +78,7 @@
     </body>
 </html>
 <script type = text/javascript>
+
     function changefunction(i){
         if(i == "print"){window.print()}
         if(i == "save"){
