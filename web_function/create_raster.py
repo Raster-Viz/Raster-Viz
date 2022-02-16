@@ -13,7 +13,7 @@ def create_raster(file):
 def add_to_raster(raster, file):
     rs = Raster(file)
     fs = raster.add(rs)
-    return raster
+    return fs
 
 
 if __name__ == "__main__":

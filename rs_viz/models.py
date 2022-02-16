@@ -13,6 +13,11 @@ class Layer(models.Model):
     name = models.CharField(max_length=100)
     document = models.FileField(upload_to='rs_viz/')
     activated = models.BooleanField(blank=True, default=True)
+
+    @property
+    def get_Raster(self):
+        return Raster(self.document.path)
+
     def __str__(self):
         return self.name
 

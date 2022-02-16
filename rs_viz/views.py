@@ -72,10 +72,10 @@ def test_matplotlib(request):
     rs = 0
     for layer in layers:
         if (i == 0):
-            rs = create_raster.create_raster(layer.document.path)
+            rs = layer.get_Raster
             i += 1
         else:
-            raster = create_raster.create_raster(layer.document.path)
+            raster = layer.get_Raster
             rs = create_raster.add_to_raster(rs, raster)
     arr = rs._to_presentable_xarray()
     arr.plot()
