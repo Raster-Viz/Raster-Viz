@@ -12,7 +12,7 @@ from raster_tools import Raster
 class Layer(models.Model):
     name = models.CharField(max_length=100)
     document = models.FileField(upload_to='rs_viz/')
-    activated = True
+    activated = models.BooleanField(blank=True, default=True)
     def __str__(self):
         return self.name
 
