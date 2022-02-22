@@ -1,4 +1,5 @@
 import os
+import folium
 
 from django.template import loader
 from django.http import HttpResponseRedirect, HttpResponse
@@ -38,6 +39,14 @@ class CreateFileUpload(CreateView):
       
 # This function creates the home page view for the web application
 def index(request):
+
+    # Creates the Map View's default folium map
+    m = folium.Map(location=[46.8721, -113.9940], control_scale ='True', zoom_start=14)
+    #test = folium.Html('<b>Hello world</b>', script=True)
+    #popup = folium.Popup(test, max_width=2650)
+    #folium.RegularPolygonMarker(location=[51.5, -0.25], popup=popup).add_to(m)
+    m = m._repr_html_() #updated
+
     layers = Layer.objects.filter(activated=True)
     vocal = None
     i = 0
@@ -57,9 +66,10 @@ def index(request):
                 layer.save()
                 flag={'red_flag':True}
 
+    context = {'folMap': m,
+                'vocal': vocal}
 
-    voc = {'vocal': vocal}
-    return render(request, 'rs_viz/index.html')
+    return render(request, 'rs_viz/index.html', context, flag)
 
 # Create your views here.
 from pylab import figure, axes, pie, title
@@ -88,9 +98,6 @@ def test_matplotlib(request):
 class HelpPageView(TemplateView):
     template_name = 'rs_viz/help.html'
 
-
-
-
 def model_test(request):
     layers = Layer.objects.filter(activated = True)
     context = {"layers": layers}
@@ -105,3 +112,15 @@ def model_test(request):
             rs = create_raster.add_to_raster(rs,raster)
     rast = {"rast": rs}
     return render(request, 'rs_viz/fig.html', context)
+
+
+def show_map(request):
+
+    m = folium.Map(location=[46.8721, -113.9940], control_scale ='True', zoom_start=14)
+    #test = folium.Html('<b>Hello world</b>', script=True)
+    #popup = folium.Popup(test, max_width=2650)
+    #folium.RegularPolygonMarker(location=[51.5, -0.25], popup=popup).add_to(m)
+    m = m._repr_html_() #updated
+
+    context = {'my_map': m}
+    return render(request, 'rs_viz/index.html', context)
