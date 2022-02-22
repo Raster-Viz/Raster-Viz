@@ -3,3 +3,9 @@
         display: none;
     }
 }
+
+@media download {
+    .nodownload {
+        display: hidden;
+    }
+}

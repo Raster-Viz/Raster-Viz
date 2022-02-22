@@ -22,7 +22,9 @@
         <button class="dropbtn">File</button>
         <div class="dropdown-content">
            <a href="{% url 'del' %}" id = "new">New</a><br>
-           <a href="#" id="save" download="index"><!--onclick="changefunction(id);"-->Save</a><br>
+            <a href="" id="download" download="index">
+                <button type="button">Save</button>
+            </a><br>
            <input type="button" id="print" onclick="changefunction(id);" value="Print" /><br>
            <a href="{% url 'layer_upload' %}" id = "import">Import</a><br>
            <a href="#" id = "exit" onclick="changefunction(id);">Exit</a>
