@@ -2,12 +2,12 @@
 {% load static %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'rs_viz/styles.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'rs_viz/print.css' %}" media="print" />
+<link rel="stylesheet" type="text/css" href="{% static 'rs_viz/print.css' %}" media="print"/>
 <html lang="en">
 {% if red_flag %}
-    <div id="red_flag" title="Red Flag">
-        <p>{{vocal}}</p>
-    </div>
+<div id="red_flag" title="Red Flag">
+    <p>{{vocal}}</p>
+</div>
 {% endif %}
 
 <head>
@@ -16,76 +16,77 @@
     <title>Raster Viz</title>
 </head>
 
-    <body>
-    <!--test-->
-    <div class="dropdown noprint">&nbsp;
-        <button class="dropbtn">File</button>
-        <div class="dropdown-content">
-           <a href="{% url 'del' %}" id = "new">New</a><br>
-            <a href="" id="download" download="index">
-                <button type="button">Save</button>
-            </a><br>
-           <input type="button" id="print" onclick="changefunction(id);" value="Print" /><br>
-           <a href="{% url 'layer_upload' %}" id = "import">Import</a><br>
-           <a href="#" id = "exit" onclick="changefunction(id);">Exit</a>
-        </div>
-    </div>
-    <div class="dropdown noprint">
-        <button class="dropbtn">Edit</button>
-        <div class="dropdown-content">
-            <a href="#">Remove</a><br>
-            <a href="#">Properties</a>
-        </div>
-    </div>
-    <div class="dropdown noprint">
-        <button class="dropbtn">View</button>
-        <div class="dropdown-content">
-            <a href="#">Zoom to Layer</a><br>
-            <a href="#">Selection Zoom</a><br>
-            <a href="#">Grid</a><br>
-            <a href="#">Ruler</a>
-        </div>
-    </div>
-    <div class="dropdown noprint">
-        <button class="dropbtn">Help</button>
-        <div class="dropdown-content">
-            <a href="{% url 'help' %}">Help</a>
-        </div>
+<body>
+
+<!-- Top Menu Bar-->
+<nav id='menu' class="noprint">
+    <input type='checkbox' id='responsive-menu' onclick='updatemenu()'><label></label>
+    <ul>
+        <li><a class='dropdown-arrow' href="#">File</a>
+            <ul class='sub-menus'>
+                <li><a href="{% url 'del' %}" id="new">New</a></li>
+                <li><a href="" id="download" download="index">Save</a></li>
+                <li><a href="" id="print" onclick="changefunction(id);">Print</a></li>
+                <li><a href="{% url 'layer_upload' %}" id="import">Import</a></li>
+            </ul>
+        </li>
+        <li><a class='dropdown-arrow' href="#">Edit</a>
+            <ul class='sub-menus'>
+                <li><a href="#">Remove</a></li>
+                <li><a href="#">Properties</a></li>
+            </ul>
+        </li>
+        <li><a class='dropdown-arrow' href="#">View</a>
+            <ul class='sub-menus'>
+                <li><a href="#">Zoom to Layer</a></li>
+                <li><a href="#">Selection Zoom</a></li>
+                <li><a href="#">Grid</a></li>
+                <li><a href="#">Ruler</a></li>
+            </ul>
+        </li>
+        <li><a href="{% url 'help' %}">Help</a></li>
+        <div class="center"><h1>Raster Viz <span style="color: black">Web Utility</span></h1></div>
+    </ul>
+</nav>
+
+<!--<div class="image noprint"><img src="{% static 'rs_viz/Tree.png' %}" width="90" height="90"></div>-->
+
+
+<!-- Main Application -->
+<!--<p class="noprint" style="font-size:24px"><b>&nbsp;Table of Contents:</b></p>-->
+
+<div class="grid-container">
+    <div class="toc noprint">Table of Contents</div>
+
+    <div class="select noprint">
+        <button type="button">Placeholder 1</button>
+        <button type="button">Placeholder 2</button>
+        <button type="button">Placeholder 3</button>
     </div>
 
-    <div class="image noprint"><img src="{% static 'rs_viz/Tree.png' %}" width="90" height="90"></div>
-        <table>
-            <tr>
-                <td>
+    <div class="layer noprint">LAYER</div>
 
-                    <p class="noprint"style="font-size:24px"><b>&nbsp;Table of Contents:</b></p>
-                    <div class="noprint" style="border-style: ridge; border-width: thick; margin: 1em; border-square: 10px; background: #FFD6A5; width: 250px; height: 420px;">
+    <div class="id noprint">&#9432;</div>
 
-                    </div>
-                    <div class="noprint" style="border-style: ridge; border-width: thick; margin: 1em; border-square: 10px; background: lightblue; width: 250px; height: 200px;">
-                        &#9432;
-                    </div>
-                </td>
-                <td>
-                    <br><br><br>
-                    <div class="center" style="border-style: inset; border-width: thick; border-color: Gainsboro; border-square: 10px; background: LightSteelBlue; width: 1000px; height: 640px;">
-                        <img class="test" src="{% static 'rs_viz/mask.jpeg' %}" width="420" height="540" padding="5">
-                    </div>
-                </td>
-            </tr>
-        </table>
+    <div class="map">{{ folMap|safe }}</div>
+</div>
 
-    </body>
+</body>
 </html>
-<script type = text/javascript>
 
-    function changefunction(i){
-        if(i == "print"){window.print()}
-        if(i == "save"){
+<script type=text/javascript>
+
+    function changefunction(i) {
+        if (i == "print") {
+            window.print()
+        }
+        if (i == "save") {
             window.location.href = "index.html"
         }
-        if(i == "exit"){window.close()}
-        if(i == "import"){
+        if (i == "exit") {
+            window.close()
+        }
+        if (i == "import") {
 
         }
     }
