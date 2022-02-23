@@ -22,7 +22,7 @@
         <button class="dropbtn">File</button>
         <div class="dropdown-content">
            <a href="{% url 'del' %}" id = "new">New</a><br>
-            <a href="" id="download" download="index">
+            <a href="{% url 'layer_upload' %}" id="download" download="Visualization"><!-- adding the url allows to save a different page-->
                 <button type="button">Save</button>
             </a><br>
            <input type="button" id="print" onclick="changefunction(id);" value="Print" /><br>
