@@ -7,5 +7,15 @@
 <body>
     <p> {{layers}} </p>
     <a href="{% url 'test' %}"> link </a>
+
+    {% for q in layers %}
+
+    <p> {{ q.document }} </p>
+
+    {% endfor %}
+
+    {% for key, val in List.items %}
+        <p> {{key}} : {{val}} </p>
+    {% endfor %}
 </body>
 </html>
