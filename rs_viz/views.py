@@ -59,7 +59,7 @@ def index(request):
 
 
     voc = {'vocal': vocal}
-    return render(request, 'rs_viz/index.html', voc, flag)
+    return render(request, 'rs_viz/index.html')
 
 # Create your views here.
 from pylab import figure, axes, pie, title
