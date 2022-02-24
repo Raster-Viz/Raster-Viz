@@ -69,7 +69,7 @@ def index(request):
     context = {'folMap': m,
                 'vocal': vocal}
 
-    return render(request, 'rs_viz/index.html', context, flag)
+    return render(request, 'rs_viz/index.html', context)
 
 # Create your views here.
 from pylab import figure, axes, pie, title
