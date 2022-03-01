@@ -70,7 +70,7 @@ def index(request):
             raster = create_raster.add_to_raster(raster, fs)
 
     context = {'folMap': m,
-                'vocal': vocal}
+                'vocal': vocal, 'layers':layers}
 
     return render(request, 'rs_viz/index.html', context)
 
@@ -159,3 +159,9 @@ def show_map(request):
 
     context = {'my_map': m}
     return render(request, 'rs_viz/index.html', context)
+
+
+def remove_layer(request):
+    layers = Layer.objects.all()
+    context = {'layers': layers}
+    return render(request, 'rs_viz/rem.html', context)
