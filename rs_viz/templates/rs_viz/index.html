@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-{% load static %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'rs_viz/styles.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'rs_viz/print.css' %}" media="print"/>
-<html lang="en">
-{% if red_flag %}
-<div id="red_flag" title="Red Flag">
-    <p>{{vocal}}</p>
-</div>
-{% endif %}
-
+<html lang="en-US">
 <head>
+    {% if red_flag %}
+    <div id="red_flag" title="Red Flag">
+        <p>{{vocal}}</p>
+    </div>
+    {% endif %}
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'rs_viz/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'rs_viz/print.css' %}" media="print"/>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Raster Viz Web Utility</title>
@@ -44,7 +44,7 @@
             </ul>
         </li>
         <li><a href="{% url 'help' %}">Help</a></li>
-        <div class="center"><h1>Raster Viz <span style="color: black">Web Utility</span></h1></div>
+        <h1 class="center">Raster Viz <span style="color: black">Web Utility</span></h1>
     </ul>
 </nav>
 
@@ -56,22 +56,36 @@
         <button type="button" class="button1">&#9824;</button>
         <button type="button" class="button1">&#9827;</button>
         <button type="button" class="button1">&#9830;</button>
+        <button type="button" class="button1">&#9432;</button>
     </div>
 
-    <div class="layer noprint">Layers Menu
-        <br>
-    {% for q in layers %}
-        <br>
-        <input type="checkbox" id="layer1" name="layer1" value="yes">
-        <label for="layer1">{{ q.document.filename }}</label>
-
-    {% endfor %}
-
-
+    <!-- Layer View -->
+    <div class="layer noprint">
+        <table>
+            <tr class="tr_layer">
+                <th style="width: 27%; text-align: center">Activate</th>
+                <th>Layer Name</th>
+            </tr>
+            {% for q in layers %}
+            <tr>
+                <td><input type="checkbox" id="layer1" name="layer1" value="yes"></td>
+                <td><label for="layer1">{{ q.document.filename }}</label></td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 
-    <div class="id noprint">&#9432;</div>
+    <!-- Identify Cell -->
+    <div class="id noprint">
+        <table>
+            <tr class="tr_id">
+                <th style="width: 35%">Location</th>
+                <th>Value(s)</th>
+            </tr>
+        </table>
+    </div>
 
+    <!-- Map View -->
     <div class="map">{{ folMap|safe }}</div>
 </div>
 
