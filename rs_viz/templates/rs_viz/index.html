@@ -60,11 +60,10 @@
 
     <div class="layer noprint">Layers Menu
         <br>
-    {% for q in layers %}
+    {% for value in layers %}
         <br>
         <input type="checkbox" id="layer1" name="layer1" value="yes">
-        <label for="layer1">{{ q.document.filename }}</label>
-
+        <label for="layer1">{{ value.filename }}</label>
     {% endfor %}
 
 

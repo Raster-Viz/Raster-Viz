@@ -35,4 +35,4 @@ class Layer(models.Model):
 
     @property
     def filename(self):
-        return os.path.basename(self.document)
+        return os.path.basename(self.document.name)

@@ -45,10 +45,11 @@ def index(request):
 
     # Creates the Map View's default folium map
     m = folium.Map(location=[46.8721, -113.9940], control_scale ='True', zoom_start=14)
+
     #test = folium.Html('<b>Hello world</b>', script=True)
     #popup = folium.Popup(test, max_width=2650)
     #folium.RegularPolygonMarker(location=[51.5, -0.25], popup=popup).add_to(m)
-    m = m._repr_html_() #updated
+     #updated
 
     layers = Layer.objects.filter(activated=True)
     vocal = None
@@ -68,7 +69,7 @@ def index(request):
             fs = raster._to_presentable_xarray()
             fs.combine_first(arr)
             raster = create_raster.add_to_raster(raster, fs)
-
+    m = m._repr_html_()
     context = {'folMap': m,
                 'vocal': vocal, 'layers':layers}
 
