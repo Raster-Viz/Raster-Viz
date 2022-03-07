@@ -76,7 +76,9 @@ body{
     border-width: thick;
     border-color: Gainsboro;
     background: LightSteelBlue;
+    display: block;
 }
+.rast{display : none}
 
 .grid-container {
     display: grid;
