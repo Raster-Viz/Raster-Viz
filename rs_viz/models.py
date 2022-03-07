@@ -23,7 +23,7 @@ class Layer(models.Model):
     document = models.FileField(upload_to='rs_viz/', validators=[validate_file_extension])
     activated = models.BooleanField(blank=True, default=True)
     marked = False
-    @property
+
     def get_Raster(self):
         return Raster(self.document.path)
 
@@ -33,6 +33,23 @@ class Layer(models.Model):
     def get_absolute_url(self):
         return reverse('index')
 
-    @property
     def filename(self):
         return os.path.basename(self.document.name)
+
+    def set_rasters(self, layers):
+        raster = self.get_Raster()
+        for layer in layers:
+            rs = layer.get_Raster()
+            arr = rs._to_presentable_xarray()
+            try:
+                self.add_to_raster(rs)
+            except ValueError:
+                fs = raster._to_presentable_xarray()
+                fs.combine_first(arr)
+                self.add_to_raster(fs)
+
+    @property
+    def set_activated_False(self):
+        self.activated = False
+        self.save()
+        print(self.activated)

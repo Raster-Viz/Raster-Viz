@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'rs_viz/styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'rs_viz/print.css' %}" media="print"/>
 <head>
 </head>
 
 <body>
+<nav id='menu' class="noprint">
+    <a href="{% url 'index' %}"> Home </a>
+</nav>
+{% for layer in layers %}
+    <br>
+    <input type="checkbox" id="layer1" name="layer1" value="yes">
+    <label for="layer1">{{ layer.filename }}</label>
+{% endfor %}
 </body>
 </html>

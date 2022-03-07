@@ -1,6 +1,6 @@
-import os
 import folium
-
+from io import BytesIO
+import base64
 import numpy
 import xarray
 from django.core.exceptions import ValidationError
@@ -12,7 +12,6 @@ from matplotlib import pyplot as plt
 from .forms import LayerForm
 from .models import Layer
 from django.views.generic.edit import CreateView
-from raster_tools import Raster
 from web_function import create_raster
 from django.views.generic import TemplateView
 
@@ -41,18 +40,8 @@ class CreateFileUpload(CreateView):
         })
       
 # This function creates the home page view for the web application
-def index(request):
-
-    # Creates the Map View's default folium map
-    m = folium.Map(location=[46.8721, -113.9940], control_scale ='True', zoom_start=14)
-
-    #test = folium.Html('<b>Hello world</b>', script=True)
-    #popup = folium.Popup(test, max_width=2650)
-    #folium.RegularPolygonMarker(location=[51.5, -0.25], popup=popup).add_to(m)
-     #updated
-
+def render_raster():
     layers = Layer.objects.filter(activated=True)
-    vocal = None
     i = 0
     raster = 0
     for layer in layers:
@@ -69,9 +58,47 @@ def index(request):
             fs = raster._to_presentable_xarray()
             fs.combine_first(arr)
             raster = create_raster.add_to_raster(raster, fs)
+    return raster
+
+def add_to_raster(raster, rs):
+    raster.add(rs)
+
+def index(request):
+    plt.clf()
+    # Creates the Map View's default folium map
+    m = folium.Map(location=[46.8721, -113.9940], control_scale ='True', zoom_start=14)
+    graphic = "empty"
+    #test = folium.Html('<b>Hello world</b>', script=True)
+    #popup = folium.Popup(test, max_width=2650)
+    #folium.RegularPolygonMarker(location=[51.5, -0.25], popup=popup).add_to(m)
+     #updated
+
+    layers = Layer.objects.filter(activated=True)
+    raster = render_raster()
+    try:
+        arr = raster._to_presentable_xarray()
+
+    except AttributeError:
+        arr = xarray.DataArray([[0],[0]])
+
+    if (arr.shape[0] != 3):
+        arr.plot()
+    else:
+        arr.plot.imshow()
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+
+    graphic = base64.b64encode(image_png)
+    graphic = graphic.decode('utf-8')
+
+    vocal = None
+    i = 0
     m = m._repr_html_()
     context = {'folMap': m,
-                'vocal': vocal, 'layers':layers}
+                'vocal': vocal, 'layers':layers, 'graphic':graphic}
 
     return render(request, 'rs_viz/index.html', context)
 
