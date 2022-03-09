@@ -1,6 +1,42 @@
 body{
     background-color: rgba(42,140,25,0.22);
+    padding: 8px;
+}
+
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    font-family: Arial, serif;
+    font-size: 16px;
+}
+
+th {
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    text-align: left;
     padding: 5px;
+}
+
+th:last-child {
+    border-right: none;
+}
+
+tr {
+    border-bottom: 1px solid black;
+}
+
+.tr_layer { background-color: rgba(190,153,24,0.16);  }
+.tr_id    { background-color: rgba(158,169,157,0.37); }
+
+tr:last-child {
+    border-bottom: none;
+}
+
+td {
+    padding: 3px 5px;
+    word-wrap: break-word;
+    font-size: 14px;
 }
 
 .center {
@@ -25,11 +61,12 @@ body{
     cursor: pointer;
     color: #ffffff;
     font-family: Arial, serif;
-    font-size: 15px;
+    font-size: 25px;
     font-weight: bold;
-    padding: 11px 23px;
     text-decoration: none;
     text-shadow: 0 -1px 0 #2b665e;
+    width: 45px;
+    height: 40px;
 }
 .button1:hover {
     background-color: #6c7c7c;
@@ -66,7 +103,7 @@ body{
     border-style: ridge;
     border-width: thick;
     /*margin: 1em;*/
-    background: whitesmoke;
+    background: white;
     border-radius: 7px;
 }
 
@@ -76,7 +113,9 @@ body{
     border-width: thick;
     border-color: Gainsboro;
     background: LightSteelBlue;
+    display: block;
 }
+.rast{display : none}
 
 .grid-container {
     display: grid;
@@ -94,24 +133,19 @@ body{
     /*height: 800px;*/
 }
 
-.grid-container > div {
-    /*text-align: center;*/
-}
-
-/*Menu Bar*/
+/* ---- Menu Bar ---- */
 #menu {
     background: #076727;
     color: #FFF;
     height: 49px;
-    /*padding-left: 18px;*/
     border-radius: 9px 9px 0 0;
     font-family: Arial, serif;
+    margin-top: 0;
 }
 
-#menu h1 {
-/*    display: inline-block;
-    vertical-align: top;*/
-}
+/*#menu h1 {
+
+}*/
 
 #menu ul, #menu li  {
     margin: 0 auto;

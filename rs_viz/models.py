@@ -1,9 +1,11 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.urls import reverse
 import os
 from raster_tools import Raster
+from django.core.exceptions import ValidationError
 
 # This model is a template for importing raster objects into
 # the web database, and provides a name for the layer. The activated
@@ -11,7 +13,7 @@ from raster_tools import Raster
 def validate_file_extension(value):
     import os
     ext = os.path.splitext(value.name)[1]
-    valid_extensions = ['.tif', '.jpeg', '.png']
+    valid_extensions = ['.tif', '.jpeg', '.png', '.jpg']
     if not ext in valid_extensions:
         raise ValidationError(u'File not supported!')
 
@@ -20,8 +22,8 @@ class Layer(models.Model):
     name = models.CharField(max_length=100)
     document = models.FileField(upload_to='rs_viz/', validators=[validate_file_extension])
     activated = models.BooleanField(blank=True, default=True)
+    marked = False
 
-    @property
     def get_Raster(self):
         return Raster(self.document.path)
 
@@ -30,3 +32,24 @@ class Layer(models.Model):
 
     def get_absolute_url(self):
         return reverse('index')
+
+    def filename(self):
+        return os.path.basename(self.document.name)
+
+    def set_rasters(self, layers):
+        raster = self.get_Raster()
+        for layer in layers:
+            rs = layer.get_Raster()
+            arr = rs._to_presentable_xarray()
+            try:
+                self.add_to_raster(rs)
+            except ValueError:
+                fs = raster._to_presentable_xarray()
+                fs.combine_first(arr)
+                self.add_to_raster(fs)
+
+    @property
+    def set_activated_False(self):
+        self.activated = False
+        self.save()
+        print(self.activated)

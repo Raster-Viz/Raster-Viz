@@ -1,3 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'rs_viz/styles.css' %}">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload</title>
+</head>
+<body>
+<nav id='menu' class="noprint">
+    <a href="{% url 'index' %}"> Home </a>
+</nav>
 {% block content %}
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -7,3 +20,4 @@
 
   <p><a href="{% url 'index' %}" >Return to home</a></p>
 {% endblock %}
+</body>
