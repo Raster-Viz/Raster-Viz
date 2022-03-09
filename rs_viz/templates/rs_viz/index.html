@@ -24,7 +24,7 @@
         <li><a class='dropdown-arrow' href="#">File</a>
             <ul class='sub-menus'>
                 <li><a href="{% url 'del' %}" id="new">New</a></li>
-                <li><a href="" id="download" download="index">Save</a></li>
+                <li><a href="{% url 'xml' %}" id="download" download="data_paths">Save</a></li>
                 <li><a href="" id="print" onclick="changefunction(id);">Print</a></li>
                 <li><a href="{% url 'layer_upload' %}" id="import">Import</a></li>
             </ul>

@@ -10,5 +10,6 @@ urlpatterns = [
     path('help/', HelpPageView.as_view(), name="help"),
     path('mod/', views.model_test, name='fig'),
     path('redir/', views.delete_everything, name='del'),
-    path('rem/', views.remove_layer, name='rem')
+    path('rem/', views.remove_layer, name='rem'),
+    path('xml/', views.convert_xml, name='xml')
 ]

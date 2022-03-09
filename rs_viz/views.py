@@ -15,6 +15,7 @@ from django.views.generic.edit import CreateView
 from raster_tools import Raster
 from web_function import create_raster
 from django.views.generic import TemplateView
+from django.core import serializers
 
 
 def delete_everything(request):
@@ -159,6 +160,17 @@ def show_map(request):
 
     context = {'my_map': m}
     return render(request, 'rs_viz/index.html', context)
+
+
+def remove_layer(request):
+    layers = Layer.objects.all()
+    context = {'layers': layers}
+    return render(request, 'rs_viz/rem.html', context)
+
+def convert_xml(request):
+    data = Layer.objects.all()
+    data = serializers.serialize('xml', data)
+    return HttpResponse(data, content_type='application/xml')
 
 
 def remove_layer(request):
