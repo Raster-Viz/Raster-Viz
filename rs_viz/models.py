@@ -29,7 +29,7 @@ class Layer(models.Model):
     name = models.CharField(max_length=100)
     document = models.FileField(upload_to='rs_viz/', validators=[validate_file_extension])
     activated = models.BooleanField(blank=True, default=True)
-    marked = models.BooleanField(default=False)
+    marked = False
 
     def get_Raster(self):
         return Raster(self.document.path)
