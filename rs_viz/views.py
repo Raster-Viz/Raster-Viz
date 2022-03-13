@@ -19,6 +19,7 @@ from .models import Layer
 from django.views.generic.edit import CreateView
 from web_function import create_raster
 from django.views.generic import TemplateView
+from django.core import serializers
 from folium import plugins
 from django.views.generic.edit import DeletionMixin
 
@@ -100,6 +101,9 @@ def render_raster():
             fs.combine_first(arr)
             raster = raster.add(raster, fs)
     return raster
+
+def add_to_raster(raster, rs):
+    raster.add(rs)
 
 def index(request):
     plt.clf()
@@ -229,13 +233,19 @@ def show_map(request):
     return render(request, 'rs_viz/index.html', context)
 
 
-def remove_layer(request):
-    layers = Layer.objects.all()
-    context = {'layers': layers}
-    return render(request, 'rs_viz/rem.html', context)
 
 def delete_files(request):
     choices = request.POST.getlist('choice') #Get the file name from the as a list
     for i in choices:
         Layer.objects.filter(document=i).delete()
     return redirect('index')
+def convert_xml(request):
+    data = Layer.objects.all()
+    data = serializers.serialize('xml', data)
+    return HttpResponse(data, content_type='application/xml')
+
+
+def remove_layer(request):
+    layers = Layer.objects.all()
+    context = {'layers': layers}
+    return render(request, 'rs_viz/rem.html', context)
