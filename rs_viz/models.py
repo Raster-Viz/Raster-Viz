@@ -4,12 +4,18 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.urls import reverse
 import os
+
+from rasterio.errors import NotGeoreferencedWarning
+
 from raster_tools import Raster
 from django.core.exceptions import ValidationError
 
 # This model is a template for importing raster objects into
 # the web database, and provides a name for the layer. The activated
 # var sets up a potential method that may be used to turning layers 'on and off'
+from web_function import create_raster
+
+
 def validate_file_extension(value):
     import os
     ext = os.path.splitext(value.name)[1]
@@ -18,11 +24,12 @@ def validate_file_extension(value):
         raise ValidationError(u'File not supported!')
 
 
+
 class Layer(models.Model):
     name = models.CharField(max_length=100)
     document = models.FileField(upload_to='rs_viz/', validators=[validate_file_extension])
     activated = models.BooleanField(blank=True, default=True)
-    marked = False
+    marked = models.BooleanField(default=False)
 
     def get_Raster(self):
         return Raster(self.document.path)
@@ -36,20 +43,10 @@ class Layer(models.Model):
     def filename(self):
         return os.path.basename(self.document.name)
 
-    def set_rasters(self, layers):
-        raster = self.get_Raster()
-        for layer in layers:
-            rs = layer.get_Raster()
-            arr = rs._to_presentable_xarray()
-            try:
-                self.add_to_raster(rs)
-            except ValueError:
-                fs = raster._to_presentable_xarray()
-                fs.combine_first(arr)
-                self.add_to_raster(fs)
-
     @property
-    def set_activated_False(self):
-        self.activated = False
-        self.save()
+    def set_rem(self):
+        if self.activated == False:
+            self.activated = True
+        else:
+            self.activated = False
         print(self.activated)
