@@ -17,10 +17,6 @@ def add_to_raster(raster, file):
 
 
 if __name__ == "__main__":
-    raster = create_raster("web_function/data/elevation.tif")
+    raster = create_raster("web_function/data/pods0_like_elevation.tif")
     raster = add_to_raster(raster, "web_function/data/elevation2.tif")
-    print((raster._rs))
-    arr = raster._to_presentable_xarray()
-    arr.plot()
-    plot = plt.gcf()
-
+    print((raster._rs[0].min().values.item()))

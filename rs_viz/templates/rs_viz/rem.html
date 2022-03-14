@@ -10,10 +10,18 @@
 <nav id='menu' class="noprint">
     <a href="{% url 'index' %}"> Home </a>
 </nav>
-{% for layer in layers %}
-    <br>
-    <input type="checkbox" id="layer1" name="layer1" value="yes">
-    <label for="layer1">{{ layer.filename }}</label>
-{% endfor %}
+<form method="POST" action="{% url 'set' %}"> {% csrf_token %}
+    {% for layer in layers %}
+        <tr>
+            <td><input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ layer.document }}" /></td>
+            <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br /></td>
+    {% endfor %}
+        </tr>
+    <p><button type="submit">delete</button></p>
+</form>
+
+
 </body>
+<script type="text/javascript">
+</script>
 </html>

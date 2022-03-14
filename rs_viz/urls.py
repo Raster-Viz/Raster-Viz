@@ -11,5 +11,6 @@ urlpatterns = [
     path('mod/', views.model_test, name='fig'),
     path('redir/', views.delete_everything, name='del'),
     path('rem/', views.remove_layer, name='rem'),
-    path('xml/', views.convert_xml, name='xml')
+    path('xml/', views.convert_xml, name='xml'),
+    path('del/', views.delete_files, name='set'),
 ]
