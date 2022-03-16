@@ -65,14 +65,17 @@ def add_to_raster(raster, rs):
     raster.add(rs)
 
 def index(request):
-    plt.clf()
+    #plt.clf() <------------------------------------------------------------------------------------------
     # Creates the Map View's default folium map
-    m = folium.Map(location=[46.8721, -113.9940], control_scale ='True', zoom_start=14)
+    #m = folium.Map(location=[46.8721, -113.9940], control_scale ='True', zoom_start=14)
+
+    f = folium.Figure(width='100%', height='100%')
+    m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f)
     graphic = "empty"
+
     #test = folium.Html('<b>Hello world</b>', script=True)
     #popup = folium.Popup(test, max_width=2650)
     #folium.RegularPolygonMarker(location=[51.5, -0.25], popup=popup).add_to(m)
-     #updated
 
     layers = Layer.objects.filter(activated=True)
     raster = render_raster()
