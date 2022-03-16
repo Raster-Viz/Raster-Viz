@@ -21,7 +21,7 @@
 <!-- Top Menu Bar-->
 <nav id='menu' class="noprint">
     <ul>
-        <li><a class='dropdown-arrow' href="#">File</a>
+        <li><button class="dropdown-arrow firstBtn">File</button>
             <ul class='sub-menus'>
                 <li><a href="{% url 'del' %}" id="new">New</a></li>
                 <li><a href="{% url 'xml' %}" id="download" download="data_paths">Save</a></li>
@@ -29,13 +29,13 @@
                 <li><a href="{% url 'layer_upload' %}" id="import">Import</a></li>
             </ul>
         </li>
-        <li><a class='dropdown-arrow' href="#">Edit</a>
+        <li><button class="dropdown-arrow">Edit</button>
             <ul class='sub-menus'>
                 <li><a href="{% url 'rem' %}">Remove</a></li>
                 <li><a href="#">Properties</a></li>
             </ul>
         </li>
-        <li><a class='dropdown-arrow' href="#">View</a>
+        <li><button class="dropdown-arrow">View</button>
             <ul class='sub-menus'>
                 <li><a href="#">Zoom to Layer</a></li>
                 <li><a href="#">Selection Zoom</a></li>
@@ -44,7 +44,7 @@
             </ul>
         </li>
         <li><a href="{% url 'help' %}">Help</a></li>
-        <h1 class="center">Raster Viz <span style="color: black">Web Utility</span></h1>
+        <li class="appName">Raster Viz <span style="color: black">Web Utility</span></li>
     </ul>
 </nav>
 
@@ -53,18 +53,21 @@
     <div class="toc noprint">TABLE OF CONTENTS</div>
 
     <div class="select noprint">
-        <button type="button" class="Folium toggle" onclick="toggle_visibility('FoliumMap', 'RasterImages')">Map</button>
-        <button type="button" class="Image toggle" onclick="toggle_visibility('RasterImages', 'FoliumMap')">Image</button>
-        <button type="button" class="button1">&#9830;</button>
-        <button type="button" class="button1">&#9432;</button>
+        <button type="button" class="btn1">&#9824;</button>
+        <button type="button" class="btn1">&#9827;</button>
+        <button type="button" class="btn1">&#9830;</button>
+        <button type="button" class="btn1">&#9432;</button>
     </div>
 
     <!-- Layer View -->
-    <div class="layer noprint">
+    <div class="layer noprint" style="overflow: auto">
         <table>
             <tr class="tr_layer">
-                <th style="width: 27%; text-align: center">Activate</th>
-                <th>Layer Name</th>
+                <th class="th_col_width_layer">
+                    <span class="full_act">Activate</span>
+                    <span class="short">Act.</span>
+                </th>
+                <th class="th1">Layer Name</th>
             </tr>
             {% for q in layers %}
             <tr>
@@ -75,23 +78,22 @@
         </table>
     </div>
 
-
     <!-- Identify Cell -->
-    <div class="id noprint">
+    <div class="id noprint" style="overflow: auto">
         <table>
             <tr class="tr_id">
-                <th style="width: 35%">Location</th>
-                <th>Value(s)</th>
+                <!--<th style="width: 35%">Location</th>-->
+                <th class="th_col_width_id">
+                    <span class="full_loc">Location</span>
+                    <span class="short">Loc.</span>
+                </th>
+                <th class="th1">Value(s)</th>
             </tr>
         </table>
     </div>
-    <div class="id noprint">&#9432;</div>
 
-    <div class="map">
-        <div class = "map" id= "FoliumMap">{{ folMap|safe }}</div>
-        <div class = "rast" id="RasterImages"><img src="data:image/png;base64,{{ graphic|safe }}"></div>
-    </div>
-
+    <!-- Map View -->
+    <div class="map">{{ folMap|safe }}</div>
 </div>
 
 </body>
@@ -114,11 +116,3 @@
         }
     }
 </script>
-<script type="text/javascript">
-  function toggle_visibility(id, separate) {
-     var e = document.getElementById(id);
-     var v = document.getElementById(separate);
-     e.style.display = 'block';
-     v.style.display = 'none';
-  }
-  </script>
