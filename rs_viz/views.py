@@ -1,34 +1,32 @@
-import folium
 from io import BytesIO
-import base64
-import numpy
-import xarray
+import folium
+import base64, xarray
+
+from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect, HttpResponse
+from django.template import loader, RequestContext
+from django.shortcuts import render, redirect
+from django.core import serializers
 from django.core.checks import messages
 from django.core.exceptions import ValidationError
-from django.template import loader, RequestContext
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, redirect, render_to_response
-from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.edit import CreateView
+from django.views.generic.edit import DeletionMixin
+from django.views.generic import TemplateView
+
 from matplotlib import pyplot as plt, cm
 from rioxarray.exceptions import MissingCRS
-
 from raster_tools import Raster, surface
 from .forms import LayerForm
 from .models import Layer
-from django.views.generic.edit import CreateView
 from web_function import create_raster
-from django.views.generic import TemplateView
-from django.core import serializers
 from folium import plugins
-from django.views.generic.edit import DeletionMixin
-
-
+from pylab import figure, axes, pie, title
+from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 def delete_everything(request):
     Layer.objects.all().delete()
     return redirect('index')
-
 
 class CreateFileUpload(CreateView):
     model = Layer
@@ -106,17 +104,12 @@ def add_to_raster(raster, rs):
     raster.add(rs)
 
 def index(request):
-    #plt.clf() <------------------------------------------------------------------------------------------
-    # Creates the Map View's default folium map
-    #m = folium.Map(location=[46.8721, -113.9940], control_scale ='True', zoom_start=14)
+    plt.clf()
 
+    # Creates the Map View's default folium map
     f = folium.Figure(width='100%', height='100%')
     m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f)
     graphic = "empty"
-
-    #test = folium.Html('<b>Hello world</b>', script=True)
-    #popup = folium.Popup(test, max_width=2650)
-    #folium.RegularPolygonMarker(location=[51.5, -0.25], popup=popup).add_to(m)
 
     layers = Layer.objects.filter(activated=True)
     # raster =0
@@ -148,10 +141,6 @@ def index(request):
                 'vocal': vocal, 'layers':layers, 'graphic':graphic}
 
     return render(request, 'rs_viz/index.html', context)
-
-# Create your views here.
-from pylab import figure, axes, pie, title
-from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 def test_matplotlib(request):
     try:
@@ -185,7 +174,6 @@ def test_matplotlib(request):
         return response
     except AttributeError:
         return redirect('index')
-
   
 class HelpPageView(TemplateView):
     template_name = 'rs_viz/help.html'
@@ -219,34 +207,19 @@ def model_test(request):
             fs.combine_first(arr)
             raster = create_raster.add_to_raster(raster,fs)
 
-
     context.update({'List':List})
     return render(request, 'rs_viz/fig.html', context)
-
-
-def show_map(request):
-
-    m = folium.Map(location=[46.8721, -113.9940], control_scale ='True', zoom_start=14)
-    #test = folium.Html('<b>Hello world</b>', script=True)
-    #popup = folium.Popup(test, max_width=2650)
-    #folium.RegularPolygonMarker(location=[51.5, -0.25], popup=popup).add_to(m)
-    m = m._repr_html_() #updated
-
-    context = {'my_map': m}
-    return render(request, 'rs_viz/index.html', context)
-
-
 
 def delete_files(request):
     choices = request.POST.getlist('choice') #Get the file name from the as a list
     for i in choices:
         Layer.objects.filter(document=i).delete()
     return redirect('index')
+
 def convert_xml(request):
     data = Layer.objects.all()
     data = serializers.serialize('xml', data)
     return HttpResponse(data, content_type='application/xml')
-
 
 def remove_layer(request):
     layers = Layer.objects.all()
