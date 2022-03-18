@@ -5,6 +5,7 @@ from io import BytesIO
 import folium
 import base64, xarray
 
+from django.core.files.storage import FileSystemStorage
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import loader, RequestContext
