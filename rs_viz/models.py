@@ -1,12 +1,6 @@
-from django.core.exceptions import ValidationError
 from django.db import models
-from django.contrib.auth import get_user_model
-from django.conf import settings
 from django.urls import reverse
 import os
-
-from rasterio.errors import NotGeoreferencedWarning
-
 from raster_tools import Raster
 from django.core.exceptions import ValidationError
 
@@ -19,11 +13,9 @@ from web_function import create_raster
 def validate_file_extension(value):
     import os
     ext = os.path.splitext(value.name)[1]
-    valid_extensions = ['.tif', '.jpeg', '.png', '.jpg']
+    valid_extensions = ['.tif', '.jpeg', '.png', '.tiff', '.jpg']
     if not ext in valid_extensions:
         raise ValidationError(u'File not supported!')
-
-
 
 class Layer(models.Model):
     name = models.CharField(max_length=100)
