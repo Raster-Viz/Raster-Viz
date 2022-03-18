@@ -1,38 +1,39 @@
 import os
 import random
 
-import folium
 from io import BytesIO
-import base64
-import numpy
-import xarray
+import folium
+import base64, xarray
+
+from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect, HttpResponse
+from django.template import loader, RequestContext
+from django.shortcuts import render, redirect
+from django.core import serializers
 from django.core.checks import messages
 from django.core.exceptions import ValidationError
-from django.core.files.storage import FileSystemStorage
-from django.template import loader, RequestContext
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.edit import CreateView
+from django.views.generic.edit import DeletionMixin
+from django.views.generic import TemplateView
+
 from matplotlib import pyplot as plt, cm
 from rioxarray.exceptions import MissingCRS
 
 from raster_tools import Raster, surface, distance, open_vectors, general, zonal, creation, Vector
 from .forms import LayerForm
 from .models import Layer
-from django.views.generic.edit import CreateView
 from web_function import create_raster
-from django.views.generic import TemplateView
-from django.core import serializers
 from folium import plugins
+from pylab import figure, axes, pie, title
+from matplotlib.backends.backend_agg import FigureCanvasAgg
 import xml.etree.ElementTree as ET
 
 
 
 
 def delete_everything(request):
-    layers = Layer.objects.all()
-    layers.delete()
+    Layer.objects.all().delete()
     return redirect('index')
 
 def Upload_Env(request):
@@ -57,7 +58,6 @@ def Upload_Env(request):
         return redirect('index')
     field = ('XML File')
     return render(request, 'rs_viz/env.html', {'field':field})
-
 
 
 class CreateFileUpload(CreateView):
@@ -146,13 +146,11 @@ def add_to_raster(raster, rs):
 
 def index(request):
     plt.clf()
+
     # Creates the Map View's default folium map
-    m = folium.Map(location=[46.8721, -113.9940], control_scale ='True', zoom_start=14)
+    f = folium.Figure(width='100%', height='100%')
+    m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f)
     graphic = "empty"
-    #test = folium.Html('<b>Hello world</b>', script=True)
-    #popup = folium.Popup(test, max_width=2650)
-    #folium.RegularPolygonMarker(location=[51.5, -0.25], popup=popup).add_to(m)
-     #updated
 
     layers = Layer.objects.filter(activated=True)
     inactive_layers = Layer.objects.filter(activated=False)
@@ -187,10 +185,6 @@ def index(request):
 
     return render(request, 'rs_viz/index.html', context)
 
-# Create your views here.
-from pylab import figure, axes, pie, title
-from matplotlib.backends.backend_agg import FigureCanvasAgg
-
 def test_matplotlib(request):
     try:
         plt.clf()
@@ -223,7 +217,6 @@ def test_matplotlib(request):
         return response
     except AttributeError:
         return redirect('index')
-
   
 class HelpPageView(TemplateView):
     template_name = 'rs_viz/help.html'
@@ -257,23 +250,8 @@ def model_test(request):
             fs.combine_first(arr)
             raster = create_raster.add_to_raster(raster,fs)
 
-
     context.update({'List':List})
     return render(request, 'rs_viz/fig.html', context)
-
-
-def show_map(request):
-
-    m = folium.Map(location=[46.8721, -113.9940], control_scale ='True', zoom_start=14)
-    #test = folium.Html('<b>Hello world</b>', script=True)
-    #popup = folium.Popup(test, max_width=2650)
-    #folium.RegularPolygonMarker(location=[51.5, -0.25], popup=popup).add_to(m)
-    m = m._repr_html_() #updated
-
-    context = {'my_map': m}
-    return render(request, 'rs_viz/index.html', context)
-
-
 
 def delete_files(request):
     choices = request.POST.getlist('choice') #Get the file name from the as a list
@@ -291,7 +269,6 @@ def convert_xml(request):
     response = HttpResponse(data, content_type='application/xml')
     response['Content-Disposition'] = 'attachment; filename=' + 'data_path'+suffix+".xml"
     return response
-
 
 def remove_layer(request):
     layers = Layer.objects.all()
