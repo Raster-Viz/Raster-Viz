@@ -17,7 +17,9 @@
 </head>
 
 <body>
-
+{% if fnp %}
+    <script>window.alert('file(s) not found in Database')</script>
+{% endif %}
 <!-- Top Menu Bar-->
 <nav id='menu' class="noprint">
     <ul>
@@ -27,6 +29,7 @@
                 <li><a href="{% url 'xml' %}" id="download" download="data_paths">Save</a></li>
                 <li><a href="" id="print" onclick="changefunction(id);">Print</a></li>
                 <li><a href="{% url 'layer_upload' %}" id="import">Import</a></li>
+                <li><a href="{% url 'env' %}" id="env">Open ENV</a></li>
             </ul>
         </li>
         <li><a class='dropdown-arrow' href="#">Edit</a>
@@ -66,12 +69,22 @@
                 <th style="width: 27%; text-align: center">Activate</th>
                 <th>Layer Name</th>
             </tr>
-            {% for q in layers %}
-            <tr>
-                <td><input type="checkbox" id="layer1" name="layer1" value="yes"></td>
-                <td><label for="layer1">{{ q.document }}</label></td>
-            </tr>
+            <form method="POST" action="{% url 'rend' %}"> {% csrf_token %}
+            {% for layer in alayers %}
+                {% if layer.activated %}
+                <tr>
+                    <td><input type="checkbox" name="choices" id="achoice{{ forloop.counter }}" value="{{ layer.document }}" checked/></td>
+                    <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br /></td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td><input type="checkbox" name="choices" id="ilchoice{{ forloop.counter }}" value="{{ layer.document }}"/></td>
+                    <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br /></td>
+                </tr>
+                {% endif %}
             {% endfor %}
+                <p><button type="submit">render changes</button></p>
+            </form>
         </table>
     </div>
 
