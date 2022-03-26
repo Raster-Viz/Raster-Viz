@@ -1,7 +1,11 @@
+import os
+import random
+
 from io import BytesIO
 import folium
 import base64, xarray
 
+from django.core.files.storage import FileSystemStorage
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import loader, RequestContext
@@ -16,17 +20,46 @@ from django.views.generic import TemplateView
 
 from matplotlib import pyplot as plt, cm
 from rioxarray.exceptions import MissingCRS
-from raster_tools import Raster, surface
+
+from raster_tools import Raster, surface, distance, open_vectors, general, zonal, creation, Vector
 from .forms import LayerForm
 from .models import Layer
 from web_function import create_raster
 from folium import plugins
 from pylab import figure, axes, pie, title
 from matplotlib.backends.backend_agg import FigureCanvasAgg
+import xml.etree.ElementTree as ET
+
+
+
 
 def delete_everything(request):
     Layer.objects.all().delete()
     return redirect('index')
+
+def Upload_Env(request):
+    if request.method == 'POST':
+        myfile = request.FILES['filename']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        tree = ET.parse(uploaded_file_url)
+        root = tree.getroot()
+
+        # create empty list for news items
+
+        # iterate news items
+        for i in range(len(root)):
+            news=[]
+            for j in range(len(root[i])):
+                news.append(root[i][j].text)
+            print(type(news[2]))
+            Layer.objects.create(name=news[0], document=news[1], activated=news[2])
+        fs.delete(filename)
+        return redirect('index')
+    field = ('XML File')
+    return render(request, 'rs_viz/env.html', {'field':field})
+
 
 class CreateFileUpload(CreateView):
     model = Layer
@@ -40,10 +73,12 @@ class CreateFileUpload(CreateView):
             if form.is_valid():
                 form.save()
                 return redirect('rs_viz')
+            else:
+                message = True
         else:
             form = LayerForm()
         return render(request, '', {
-            'form': form
+            'form': form, 'message':message
         })
       
 # This function creates the home page view for the web application
@@ -81,8 +116,14 @@ def render_raster():
     layers = Layer.objects.filter(activated=True)
     i = 0
     raster = 0
+    context = False
     for layer in layers:
-        rs = Raster(layer.document.path)
+        try:
+            rs = Raster(layer.document.path).astype('int32').set_null_value(-9999)
+        except FileNotFoundError:
+            layer.delete()
+            context=True
+            continue
         if (i == 0):
             raster = rs
             i += 1
@@ -93,12 +134,13 @@ def render_raster():
         except ValueError:
             fs = raster._to_presentable_xarray()
             fs.combine_first(arr)
-            raster = raster.add(raster, fs)
+            raster = raster.add(fs)
         except OverflowError:
             fs = raster._to_presentable_xarray()
             fs.combine_first(arr)
-            raster = raster.add(raster, fs)
-    return raster
+            raster = raster.add(fs)
+
+    return raster, context
 
 def add_to_raster(raster, rs):
     raster.add(rs)
@@ -112,22 +154,21 @@ def index(request):
     graphic = "empty"
 
     layers = Layer.objects.filter(activated=True)
-    # raster =0
-    # raster = render_raster()
-    # arr = xarray.DataArray([[0],[0]])
-    # arr = raster._to_presentable_xarray()
-    # if (arr.shape[0] != 3):
-    #     arr.plot()
-    # else:
-    #     arr.plot.imshow()
-    # buffer = BytesIO()
-    # plt.savefig(buffer, format='png')
-    # buffer.seek(0)
-    # image_png = buffer.getvalue()
-    # buffer.close()
-    #
-    # graphic = base64.b64encode(image_png)
-    # graphic = graphic.decode('utf-8')
+    inactive_layers = Layer.objects.filter(activated=False)
+    raster =0
+    raster, fnp = render_raster() #fnp=File Not Present
+    try:
+        raster._rs.plot(robust=True, cmap=plt.cm.terrain, zorder=1)
+    except AttributeError:
+        plt.plot([0],[0])
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+
+    graphic = base64.b64encode(image_png)
+    graphic = graphic.decode('utf-8')
 
     vocal = None
     i = 0
@@ -137,8 +178,11 @@ def index(request):
     fs = plugins.Fullscreen()
     m.add_child(fs)
     m = m._repr_html_()
+    alayers = Layer.objects.all()
     context = {'folMap': m,
-                'vocal': vocal, 'layers':layers, 'graphic':graphic}
+                'vocal': vocal, 'layers':layers,
+               'graphic':graphic, 'inactive_layers': inactive_layers,
+               'alayers':alayers, 'fnp':fnp}
 
     return render(request, 'rs_viz/index.html', context)
 
@@ -166,7 +210,7 @@ def test_matplotlib(request):
         if(arr.shape[0]!=3):
             arr.plot()
         else:
-            arr.plot.imshow()
+            arr.plot.imshow(rgb="band")
         f = plt.gcf()
         canvas = FigureCanvasAgg(f)
         response = HttpResponse(content_type='image/png')
@@ -219,9 +263,22 @@ def delete_files(request):
 def convert_xml(request):
     data = Layer.objects.all()
     data = serializers.serialize('xml', data)
-    return HttpResponse(data, content_type='application/xml')
+    suffix="_"
+    for i in range(5):
+        rand = random.randint(0,9)
+        suffix = suffix+str(rand)
+    response = HttpResponse(data, content_type='application/xml')
+    response['Content-Disposition'] = 'attachment; filename=' + 'data_path'+suffix+".xml"
+    return response
 
 def remove_layer(request):
     layers = Layer.objects.all()
     context = {'layers': layers}
     return render(request, 'rs_viz/rem.html', context)
+
+def render_files(request):
+    choices = request.POST.getlist('choices')#Get the file name from the as a list
+    Layer.objects.all().update(activated=False)
+    for i in choices:
+        Layer.objects.filter(document=i).update(activated=True)
+    return redirect('index')

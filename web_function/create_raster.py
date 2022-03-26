@@ -17,6 +17,6 @@ def add_to_raster(raster, file):
 
 
 if __name__ == "__main__":
-    raster = create_raster("web_function/data/pods0_like_elevation.tif")
-    raster = add_to_raster(raster, "web_function/data/elevation2.tif")
-    print((raster._rs[0].min().values.item()))
+    raster = create_raster("web_function/data/Landsat_ETM_2001-08-26_multispectral.tif")
+    arr = raster._to_presentable_xarray()
+    print(arr)
