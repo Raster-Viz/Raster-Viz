@@ -1,7 +1,7 @@
 body {
     background-color: rgba(42, 140, 25, 0.22);
     /*position: fixed;*/
-    padding: 0.25em;
+    padding: 0 .25em;
     min-width: 560px;
     /*min-height: 660px;*/
 }
@@ -72,28 +72,29 @@ td {
     font-size: 14px;
 }
 
-.btn1 {
-    font-size: 1.5rem;
-    background-color: #768d87;
-    border-radius: 5px;
+#toolbar button {
+    font-size: 1.1rem;
+    background-color: #4f544a;
+    border-radius: 6px 6px 3px 3px;
     cursor: pointer;
-    color: #ffffff;
+    color: whitesmoke;
     font-family: Arial, serif;
-    width: 2em;
-    height: 1.5em;
+    width: auto;
+    height: 1.7em;
     margin-right: .18em;
     margin-top: .19em;
 }
 
-.btn1:hover {
-    background-color: #6c7c7c;
+#toolbar button:hover {
+    border-color: ivory;
+    background-color: dimgrey;
 }
 
-/* Table of Contents header */
 .toc {
     grid-area: toc;
     text-align: center;
     font-size: 1.5rem;
+    margin-top: .34em;
     font-family: Calibri, serif;
 }
 
@@ -145,7 +146,7 @@ td {
     padding: .5625em;
     border-radius: 0 0 9px 9px;
     min-height: 550px;
-    height: 90vh;
+    height: 91vh;
 }
 
 .full {
@@ -157,12 +158,12 @@ td {
 /* ---- Menu Bar ---- */
 /*--------------------*/
 #menu {
-    background: #076727;
+    /*background: #076727;*/
+    background: linear-gradient(90deg, rgba(56,79,57,1) 50%, rgba(117,117,117,1) 98%);
     color: white;
     height: 3.0625em;
     border-radius: 9px 9px 0;
     font-family: Arial, serif;
-    /*min-width: 550px;*/
 }
 
 #menu ul {
@@ -185,7 +186,7 @@ td {
 
 #menu button {
     font-size: 1.25rem;
-    background: #076727;
+    background: rgba(56,79,57,1);
     color: white;
     border: none;
     cursor: pointer;
@@ -201,10 +202,12 @@ td {
 }
 
 #menu button:hover {
-    background: #0e5725;
+    background: #67765e;
 }
 
 #menu .appName {
+    font-family: "Leelawadee UI", serif;
+    text-shadow: 2px 2px black;
     font-size: 1.5rem;
     display: block;
     font-weight: bold;
@@ -213,6 +216,16 @@ td {
     float: none;
     position: absolute;
     left: 50%;
+}
+
+#menu img {
+    height: 2.5em;
+    width: auto;
+    display: block;
+    float: right;
+    position: fixed;
+    padding-top: .3em;
+    left: 64.5%;
 }
 
 #menu a {
@@ -225,7 +238,7 @@ td {
 }
 
 #menu a:hover {
-    background: #0e5725;
+    background: #67765e;
 }
 
 #menu ul.sub-menus {
@@ -236,6 +249,7 @@ td {
     position: absolute;
     z-index: 99;
     display: none;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.3);
 }
 
 #menu ul.sub-menus li {
@@ -246,7 +260,14 @@ td {
 #menu ul.sub-menus a {
     font-size: 1rem;
     color: #000000;
+}
 
+#menu ul.sub-menus button {
+    font-size: 1rem;
+    color: #000000;
+    background: #D2DBD9;
+    width: 100%;
+    text-align: left;
 }
 
 #menu li:hover ul.sub-menus {
@@ -258,14 +279,18 @@ td {
     color: #444444;
 }
 
+#menu ul.sub-menus button:hover {
+    background: #F2F2F2;
+    color: #444444;
+}
+
+/*--------------------*/
+/* - Window Scaling -- */
+/*--------------------*/
+/* When max-width <= 800px */
 @media screen and (max-width: 50rem) {
     html {
         font-size: 0.75rem
-    }
-
-    .toc {
-        font-size: 1.58rem;
-        /*font-weight: bold;*/
     }
 
     table {
@@ -296,14 +321,17 @@ td {
     }
 }
 
+/* When max-height <= 500px */
 @media screen and (max-height: 31.25rem) {
-    .btn1 {
+    .toolbar_btn {
         font-size: 1.2rem;
+        padding: 10em;
     }
 
     .toc {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         font-weight: bold;
+        margin: .2em;
     }
 
     .grid-container {
@@ -312,4 +340,69 @@ td {
         min-height: 360px;
         height: 100%;
     }
+}
+
+
+/*--------------------*/
+/* --- Index Modal -- */
+/*--------------------*/
+/* The Modal (background) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-import, .modal-openENV, .modal-remove, .modal-properties {
+    display: none;
+    position: relative;
+    background-color: ivory;
+    margin: 15% auto;
+    border-radius: 5px;
+    width: 25%;
+    max-width: 300px;
+}
+
+/*.modal-openENV {*/
+/*    display: none;*/
+/*    background-color: ivory;*/
+/*    margin: 15% auto; !* 15% from the top and centered *!*/
+/*    padding: 20px;*/
+/*    border: 1px solid #888;*/
+/*    width: 80%; !* Could be more or less, depending on screen size *!*/
+/*}*/
+
+.modal-header {
+    font-family: Arial,serif;
+    padding: .187em 1em;
+    border-radius: 5px 5px 0 0;
+    background-color: rgba(56,79,57,1);
+    color: white;
+}
+
+.modal-body {
+    padding: .187em 1em;
+}
+
+/* The Close Button */
+.close {
+    font-size: 1.75rem;
+    color: white;
+    float: right;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

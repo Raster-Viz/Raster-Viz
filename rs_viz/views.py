@@ -31,8 +31,6 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 import xml.etree.ElementTree as ET
 
 
-
-
 def delete_everything(request):
     Layer.objects.all().delete()
     return redirect('index')
@@ -173,10 +171,11 @@ def index(request):
 
     layers = Layer.objects.filter(activated=True)
     inactive_layers = Layer.objects.filter(activated=False)
-    raster =0
+    raster = 0
     raster, fnp = render_raster() #fnp=File Not Present
     try:
         raster._rs.plot(robust=True, cmap=plt.cm.terrain, zorder=1)
+
     except AttributeError:
         plt.plot([0],[0])
     buffer = BytesIO()

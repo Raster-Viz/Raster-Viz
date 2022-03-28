@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
 
+{% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'rs_viz/styles.css' %}">
+
 <head>
     <meta charset="UTF-8">
     <title>Upload</title>
@@ -22,8 +23,8 @@
           <ul>Document<input type="file" id="myFile" name="filename"></ul>
           <ul>Activated <input type="checkbox" id="activated" name="activated" checked></ul>
       </tr>
+      <input type="submit">
 
-      <p><button type="submit">Upload</button></p>
   </form>
 
   <p><a href="{% url 'index' %}" >Return to home</a></p>
