@@ -48,7 +48,7 @@
                 <!--<li><a href="{% url 'rem' %}">Remove</a></li>-->
                 <li><button id="btn_remove">Remove</button></li>
 
-                <li><a href="#">Properties</a></li>
+                <li><button id="btn_properties">Properties</button></li>
             </ul>
         </li>
         <li>
@@ -75,7 +75,6 @@
         <button type="submit" form="render">Render Changes</button>
         <button type="button" onclick="toggle_visibility('FoliumMap', 'RasterImages')">Map</button>
         <button type="button" onclick="toggle_visibility('RasterImages', 'FoliumMap')">Image</button>
-        <button type="button">&#9830;</button>
         <button type="button">&#9432;</button>
     </div>
 
@@ -186,6 +185,17 @@
                 </tr>
                 <p><button type="submit">Remove</button></p>
             </form>
+        </div>
+    </div>
+
+    <!-- Properties -->
+    <div id="modal_properties" class="modal-properties">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h3>Layer Properties</h3>
+        </div>
+        <div class="modal-body">
+            <p>Test</p>
         </div>
     </div>
 

@@ -156,10 +156,6 @@ def index(request):
     try:
         raster._rs.plot(robust=True, cmap=plt.cm.terrain, zorder=1)
 
-        # Get raster properties
-        dims = raster.shape
-        dtype = raster.dtype
-
     except AttributeError:
         plt.plot([0],[0])
     buffer = BytesIO()

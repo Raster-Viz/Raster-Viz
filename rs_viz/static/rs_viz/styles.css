@@ -73,21 +73,21 @@ td {
 }
 
 #toolbar button {
-    font-size: 1.3rem;
-    /*background-color: #768d87;*/
-    background-color: rgba(63,73,23,0.44);
-    border-radius: 5px;
+    font-size: 1.1rem;
+    background-color: #4f544a;
+    border-radius: 6px 6px 3px 3px;
     cursor: pointer;
-    color: #ffffff;
+    color: whitesmoke;
     font-family: Arial, serif;
     width: auto;
-    height: 1.5em;
+    height: 1.7em;
     margin-right: .18em;
     margin-top: .19em;
 }
 
 #toolbar button:hover {
-    background-color: #6c7c7c;
+    border-color: ivory;
+    background-color: dimgrey;
 }
 
 .toc {
@@ -249,6 +249,7 @@ td {
     position: absolute;
     z-index: 99;
     display: none;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.3);
 }
 
 #menu ul.sub-menus li {
@@ -284,16 +285,12 @@ td {
 }
 
 /*--------------------*/
-/* --- Index Modal -- */
+/* - Window Scaling -- */
 /*--------------------*/
+/* When max-width <= 800px */
 @media screen and (max-width: 50rem) {
     html {
         font-size: 0.75rem
-    }
-
-    .toc {
-        font-size: 1.58rem;
-        /*font-weight: bold;*/
     }
 
     table {
@@ -324,16 +321,17 @@ td {
     }
 }
 
-
-@media screen and (max-height: 31.25rem /* i.e, 500px */) {
+/* When max-height <= 500px */
+@media screen and (max-height: 31.25rem) {
     .toolbar_btn {
         font-size: 1.2rem;
         padding: 10em;
     }
 
     .toc {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         font-weight: bold;
+        margin: .2em;
     }
 
     .grid-container {
@@ -363,13 +361,14 @@ td {
 }
 
 /* Modal Content/Box */
-.modal-import, .modal-openENV, .modal-remove {
+.modal-import, .modal-openENV, .modal-remove, .modal-properties {
     display: none;
     position: relative;
     background-color: ivory;
     margin: 15% auto;
     border-radius: 5px;
     width: 25%;
+    max-width: 300px;
 }
 
 /*.modal-openENV {*/
@@ -383,19 +382,21 @@ td {
 
 .modal-header {
     font-family: Arial,serif;
-    padding: 3px 16px;
+    padding: .187em 1em;
     border-radius: 5px 5px 0 0;
     background-color: rgba(56,79,57,1);
     color: white;
 }
 
-.modal-body {padding: 3px 16px;}
+.modal-body {
+    padding: .187em 1em;
+}
 
 /* The Close Button */
 .close {
+    font-size: 1.75rem;
     color: white;
     float: right;
-    font-size: 28px;
     font-weight: bold;
 }
 
