@@ -18,27 +18,41 @@
 
 <body>
 {% if fnp %}
-    <script>window.alert('file(s) not found in Database')</script>
+<script>window.alert('file(s) not found in Database')</script>
 {% endif %}
 <!-- Top Menu Bar-->
 <nav id='menu' class="noprint">
     <ul>
-        <li><button class="dropdown-arrow firstBtn">File</button>
+        <li>
+            <button class="dropdown-arrow firstBtn">File</button>
             <ul class='sub-menus'>
                 <li><a href="{% url 'del' %}" id="new">New</a></li>
                 <li><a href="{% url 'xml' %}" id="download" download="data_paths">Save</a></li>
                 <li><a href="" id="print" onclick="changefunction(id);">Print</a></li>
+
                 <li><a href="{% url 'layer_upload' %}" id="import">Import</a></li>
-                <li><a href="{% url 'env' %}" id="env">Open ENV</a></li>
+                <li>
+                    <button id="btn_import">Import (Modal)</button>
+                </li>
+
+                <!--<li><a href="{% url 'env' %}" id="env">Open ENV</a></li>-->
+                <li>
+                    <button id="btn_openENV">Open ENV</button>
+                </li>
+
             </ul>
         </li>
-        <li><button class="dropdown-arrow">Edit</button>
+        <li>
+            <button class="dropdown-arrow menuBtn">Edit</button>
             <ul class='sub-menus'>
-                <li><a href="{% url 'rem' %}">Remove</a></li>
+                <!--<li><a href="{% url 'rem' %}">Remove</a></li>-->
+                <li><button id="btn_remove">Remove</button></li>
+
                 <li><a href="#">Properties</a></li>
             </ul>
         </li>
-        <li><button class="dropdown-arrow">View</button>
+        <li>
+            <button class="dropdown-arrow">View</button>
             <ul class='sub-menus'>
                 <li><a href="#">Zoom to Layer</a></li>
                 <li><a href="#">Selection Zoom</a></li>
@@ -47,19 +61,22 @@
             </ul>
         </li>
         <li><a href="{% url 'help' %}">Help</a></li>
-        <li class="appName">Raster Viz <span style="color: black">Web Utility</span></li>
+        <li class="appName">Raster Viz Web Utility</li>
     </ul>
 </nav>
 
 <!-- Main Application -->
 <div class="grid-container">
+
+    <!-- Table of Contents Header / Toolbar -->
     <div class="toc noprint">TABLE OF CONTENTS</div>
 
-    <div class="select noprint">
-        <button type="button" class="Folium toggle" onclick="toggle_visibility('FoliumMap', 'RasterImages')">Map</button>
-        <button type="button" class="Image toggle" onclick="toggle_visibility('RasterImages', 'FoliumMap')">Image</button>
-        <button type="button" class="button1">&#9830;</button>
-        <button type="button" class="button1">&#9432;</button>
+    <div class="select noprint" id="toolbar">
+        <button type="submit" form="render">Render Changes</button>
+        <button type="button" onclick="toggle_visibility('FoliumMap', 'RasterImages')">Map</button>
+        <button type="button" onclick="toggle_visibility('RasterImages', 'FoliumMap')">Image</button>
+        <button type="button">&#9830;</button>
+        <button type="button">&#9432;</button>
     </div>
 
     <!-- Layer View -->
@@ -72,25 +89,29 @@
                 </th>
                 <th class="th1">Layer Name</th>
             </tr>
-            <form method="POST" action="{% url 'rend' %}"> {% csrf_token %}
-            {% for layer in alayers %}
+            <form method="POST" id="render" action="{% url 'rend' %}"> {% csrf_token %}
+                {% for layer in alayers %}
                 {% if layer.activated %}
                 <tr>
-                    <td><input type="checkbox" name="choices" id="achoice{{ forloop.counter }}" value="{{ layer.document }}" checked/></td>
-                    <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br /></td>
+                    <td><input type="checkbox" name="choices" id="achoice{{ forloop.counter }}"
+                               value="{{ layer.document }}" checked/></td>
+                    <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br/></td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td><input type="checkbox" name="choices" id="ilchoice{{ forloop.counter }}" value="{{ layer.document }}"/></td>
-                    <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br /></td>
+                    <td><input type="checkbox" name="choices" id="ilchoice{{ forloop.counter }}"
+                               value="{{ layer.document }}"/></td>
+                    <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br/></td>
                 </tr>
                 {% endif %}
-            {% endfor %}
-                <p><button type="submit">render changes</button></p>
+                {% endfor %}
             </form>
         </table>
     </div>
 
+    <!-- Map View -->
+    <div class="map" id="FoliumMap">{{ folMap|safe }}</div>
+    <div class="rast" id="RasterImages"><img src="data:image/png;base64,{{ graphic|safe }}"></div>
 
     <!-- Identify Cell -->
     <div class="id noprint" style="overflow: auto">
@@ -106,36 +127,70 @@
         </table>
     </div>
 
-
-    <div class = "map" id= "FoliumMap">{{ folMap|safe }}</div>
-    <div class = "rast" id="RasterImages"><img src="data:image/png;base64,{{ graphic|safe }}"></div>
 </div>
 
+<!-- The Modal -->
+<div id="mainModal" class="modal">
+
+    <!-- Import  -->
+    <div id="modal_import" class="modal-import">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h3>Import New File</h3>
+        </div>
+        <div class="modal-body">
+            {% block content %}
+            <form action="{% url 'layer_upload' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit">
+            </form>
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- Open ENV  -->
+    <div id="modal_openENV" class="modal-openENV">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h3>Open Environment</h3>
+        </div>
+        <div class="modal-body">
+            <p>Load XML File to database</p>
+            <form action="{% url 'env' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <tr>
+                    <input type="file" id="myFile" name="filename">
+                </tr>
+                <p>
+                    <input type="submit">
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Remove Layer(s) -->
+    <div id="modal_remove" class="modal-remove">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h3>Remove Layer(s)</h3>
+        </div>
+        <div class="modal-body">
+            <p>Load XML File to database</p>
+            <form action="{% url 'rem' %}" method="POST" action="{% url 'set' %}"> {% csrf_token %}
+                {% for layer in layers %}
+                <tr>
+                    <td><input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ layer.document }}" /></td>
+                    <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br /></td>
+                    {% endfor %}
+                </tr>
+                <p><button type="submit">Remove</button></p>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script src="{% static 'rs_viz/script.js' %}"></script>
 </body>
 </html>
-
-<script type=text/javascript>
-
-    function changefunction(i) {
-        if (i == "print") {
-            window.print()
-        }
-        if (i == "save") {
-            window.location.href = "index.html"
-        }
-        if (i == "exit") {
-            window.close()
-        }
-        if (i == "import") {
-
-        }
-    }
-</script>
-<script type="text/javascript">
-  function toggle_visibility(id, separate) {
-     var e = document.getElementById(id);
-     var v = document.getElementById(separate);
-     e.style.display = 'block';
-     v.style.display = 'none';
-  }
-  </script>

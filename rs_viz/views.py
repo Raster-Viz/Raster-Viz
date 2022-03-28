@@ -31,8 +31,6 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 import xml.etree.ElementTree as ET
 
 
-
-
 def delete_everything(request):
     Layer.objects.all().delete()
     return redirect('index')
@@ -60,7 +58,6 @@ def Upload_Env(request):
     field = ('XML File')
     return render(request, 'rs_viz/env.html', {'field':field})
 
-
 class CreateFileUpload(CreateView):
     model = Layer
     template_name = 'rs_viz/layer_upload.html'
@@ -77,11 +74,9 @@ class CreateFileUpload(CreateView):
                 message = True
         else:
             form = LayerForm()
-        return render(request, '', {
-            'form': form, 'message':message
-        })
-      
-# This function creates the home page view for the web application
+        return render(request, 'rs_viz/index.html', {'form': form, 'message':message})
+
+
 def render_folium_raster(Layer_set, m):
     for layer in Layer_set:
         try:
@@ -146,7 +141,8 @@ def add_to_raster(raster, rs):
     raster.add(rs)
 
 def index(request):
-    plt.clf()
+    #plt.clf()
+    #plt.close()
 
     # Creates the Map View's default folium map
     f = folium.Figure(width='100%', height='100%')
@@ -155,10 +151,15 @@ def index(request):
 
     layers = Layer.objects.filter(activated=True)
     inactive_layers = Layer.objects.filter(activated=False)
-    raster =0
+    raster = 0
     raster, fnp = render_raster() #fnp=File Not Present
     try:
         raster._rs.plot(robust=True, cmap=plt.cm.terrain, zorder=1)
+
+        # Get raster properties
+        dims = raster.shape
+        dtype = raster.dtype
+
     except AttributeError:
         plt.plot([0],[0])
     buffer = BytesIO()
