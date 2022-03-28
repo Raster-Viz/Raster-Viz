@@ -60,7 +60,7 @@ def Upload_Env(request):
 
 class CreateFileUpload(CreateView):
     model = Layer
-    template_name = 'rs_viz/index.html'
+    template_name = 'rs_viz/layer_upload.html'
     fields = ('name', 'document', 'activated')
 
     # Function to handle uploaded file
@@ -142,7 +142,6 @@ def add_to_raster(raster, rs):
 
 def index(request):
     #plt.clf()
-    #plt.close()
 
     # Creates the Map View's default folium map
     f = folium.Figure(width='100%', height='100%')
