@@ -23,7 +23,7 @@ from rioxarray.exceptions import MissingCRS
 
 from raster_tools import Raster, surface, distance, open_vectors, general, zonal, creation, Vector
 from .forms import LayerForm
-from .models import Layer
+from .models import Layer, validate_file_extension
 from web_function import create_raster
 from folium import plugins
 from pylab import figure, axes, pie, title
@@ -60,26 +60,44 @@ def Upload_Env(request):
     field = ('XML File')
     return render(request, 'rs_viz/env.html', {'field':field})
 
-
-class CreateFileUpload(CreateView):
-    model = Layer
-    template_name = 'rs_viz/layer_upload.html'
-    fields = ('name', 'document', 'activated')
-
-    # Function to handle uploaded file
-    def model_form_upload(request):
-        if request.method == 'POST':
-            form = LayerForm(request.POST, request.FILES)
-            if form.is_valid():
-                form.save()
-                return redirect('rs_viz')
-            else:
-                message = True
+def CreateFileUpload(request):
+    file_error =False
+    if request.method == 'POST':
+        document = request.FILES['filename']
+        activated = request.POST['activated']
+        name = request.POST['name']
+        if activated=='on':
+            activated=True
         else:
-            form = LayerForm()
-        return render(request, '', {
-            'form': form, 'message':message
-        })
+            activated=False
+        if validate_file_extension(document):
+            Layer.objects.create(name=name, document=document, activated=activated)
+            return redirect('index')
+        else:
+            file_error = True
+
+    field = ('name', 'document', 'activated')
+    return render(request, 'rs_viz/layer_upload.html', {'field': field, 'file_error': file_error})
+
+# class CreateFileUpload(CreateView):
+#     model = Layer
+#     template_name = 'rs_viz/layer_upload.html'
+#     fields = ('name', 'document', 'activated')
+#
+#     # Function to handle uploaded file
+#     def model_form_upload(request):
+#         if request.method == 'POST':
+#             form = LayerForm(request.POST, request.FILES)
+#             if form.is_valid():
+#                 form.save()
+#                 return redirect('rs_viz')
+#             else:
+#                 message = True
+#         else:
+#             form = LayerForm()
+#         return render(request, '', {
+#             'form': form, 'message':message
+#         })
       
 # This function creates the home page view for the web application
 def render_folium_raster(Layer_set, m):

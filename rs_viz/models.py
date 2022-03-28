@@ -15,7 +15,8 @@ def validate_file_extension(value):
     ext = os.path.splitext(value.name)[1]
     valid_extensions = ['.tif', '.jpeg', '.png', '.tiff', '.jpg']
     if not ext in valid_extensions:
-        raise ValidationError(u'File not supported!')
+        return False
+    return True
 
 class Layer(models.Model):
     name = models.CharField(max_length=100)
@@ -41,4 +42,3 @@ class Layer(models.Model):
             self.activated = True
         else:
             self.activated = False
-        print(self.activated)
