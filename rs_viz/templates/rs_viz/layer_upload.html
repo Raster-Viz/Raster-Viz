@@ -9,14 +9,22 @@
     <title>Upload</title>
 </head>
 <body>
+{% if file_error %}
+    <script>window.alert('File not supported')</script>
+{% endif %}
 <nav id='menu' class="noprint">
     <a href="{% url 'index' %}"> Home </a>
 </nav>
 {% block content %}
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit">
+      <tr>
+          <ul> Name <input type="text" id="name" name="name"></ul>
+          <ul>Document<input type="file" id="myFile" name="filename"></ul>
+          <ul>Activated <input type="checkbox" id="activated" name="activated" checked></ul>
+      </tr>
+      <input type="submit">
+
   </form>
 
   <p><a href="{% url 'index' %}" >Return to home</a></p>
