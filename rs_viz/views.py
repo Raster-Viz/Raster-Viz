@@ -60,7 +60,7 @@ def Upload_Env(request):
 
 class CreateFileUpload(CreateView):
     model = Layer
-    template_name = 'rs_viz/layer_upload.html'
+    template_name = 'rs_viz/index.html'
     fields = ('name', 'document', 'activated')
 
     # Function to handle uploaded file
