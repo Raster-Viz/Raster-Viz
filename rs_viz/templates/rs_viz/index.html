@@ -132,15 +132,15 @@
 </div>
 
 <!-- The Modal -->
-<div id="mainModal" class="modal">
+<div id="mainModal" class="modal noprint">
 
     <!-- Import  -->
     <div id="modal_import" class="modal-import">
-        <div class="modal-header">
+        <div class="modal-header noprint">
             <span class="close">&times;</span>
             <h3>Import New File</h3>
         </div>
-        <div class="modal-body">
+        <div class="modal-body noprint">
             {% block content %}
             <form action="{% url 'layer_upload' %}"  method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -158,12 +158,12 @@
     </div>
 
     <!-- Open ENV  -->
-    <div id="modal_openENV" class="modal-openENV">
-        <div class="modal-header">
+    <div id="modal_openENV" class="modal-openENV noprint">
+        <div class="modal-header noprint">
             <span class="close">&times;</span>
             <h3>Open Environment</h3>
         </div>
-        <div class="modal-body">
+        <div class="modal-body noprint">
             <p>Load XML File to database</p>
             <form action="{% url 'env' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -178,12 +178,12 @@
     </div>
 
     <!-- Remove Layer(s) -->
-    <div id="modal_remove" class="modal-remove">
+    <div id="modal_remove" class="modal-remove noprint">
         <div class="modal-header">
             <span class="close">&times;</span>
             <h3>Remove Layer(s)</h3>
         </div>
-        <div class="modal-body">
+        <div class="modal-body noprint">
             <p>Load XML File to database</p>
             <form action="{% url 'rem' %}" method="POST" action="{% url 'set' %}"> {% csrf_token %}
                 {% for layer in layers %}
@@ -198,12 +198,12 @@
     </div>
 
     <!-- Properties -->
-    <div id="modal_properties" class="modal-properties">
+    <div id="modal_properties" class="modal-properties noprint">
         <div class="modal-header">
             <span class="close">&times;</span>
             <h3>Layer Properties</h3>
         </div>
-        <div class="modal-body">
+        <div class="modal-body noprint">
             <p>Test</p>
         </div>
     </div>

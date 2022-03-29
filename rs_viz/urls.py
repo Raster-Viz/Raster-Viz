@@ -13,7 +13,7 @@ urlpatterns = [
     path('rem/', views.remove_layer, name='rem'),
     path('xml/', views.convert_xml, name='xml'),
     path('html_export/', views.export_index, name='html_export'),
+    path('del/', views.delete_files, name='set'),
     path('rend/', views.render_files, name='rend'),
-    path('env/', views.Upload_Env, name='env'),
-    path('vect/', views.CreateVectorUpload, name='vect')
+    path('env/', views.Upload_Env, name='env')
 ]
