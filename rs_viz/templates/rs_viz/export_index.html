@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    {% if red_flag %}
+    <div id="red_flag" title="Red Flag">
+        <p>{{vocal}}</p>
+    </div>
+    {% endif %}
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'rs_viz/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'rs_viz/print.css' %}" media="print"/>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Raster Viz Web Utility</title>
+</head>
+
+<body>
+{% if fnp %}
+<script>window.alert('file(s) not found in Database')</script>
+{% endif %}
+
+<!-- Main Application -->
+<div class="grid-container">
+
+    <!-- Layer View -->
+    <div class="layer noprint" style="overflow: auto">
+        <table>
+            <tr class="tr_layer">
+                <th class="th_col_width_layer">
+                    <span class="full_act">Activate</span>
+                    <span class="short">Act.</span>
+                </th>
+                <th class="th1">Layer Name</th>
+            </tr>
+            <form method="POST" id="render" action="{% url 'rend' %}"> {% csrf_token %}
+                {% for layer in alayers %}
+                {% if layer.activated %}
+                <tr>
+                    <td><input type="checkbox" name="choices" id="achoice{{ forloop.counter }}"
+                               value="{{ layer.document }}" checked/></td>
+                    <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br/></td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td><input type="checkbox" name="choices" id="ilchoice{{ forloop.counter }}"
+                               value="{{ layer.document }}"/></td>
+                    <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br/></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </form>
+        </table>
+    </div>
+
+    <!-- Map View -->
+    <div class="map" id="FoliumMap">{{ folMap|safe }}</div>
+
+</div>
+
+<script src="{% static 'rs_viz/script.js' %}"></script>
+</body>
+</html>

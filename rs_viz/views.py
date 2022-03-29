@@ -299,3 +299,45 @@ def render_files(request):
     for i in choices:
         Layer.objects.filter(document=i).update(activated=True)
     return redirect('index')
+
+def export_index(request):
+    plt.clf()
+
+    # Creates the Map View's default folium map
+    f = folium.Figure(width='100%', height='100%')
+    m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f)
+    graphic = "empty"
+
+    layers = Layer.objects.filter(activated=True)
+    inactive_layers = Layer.objects.filter(activated=False)
+    raster = 0
+    raster, fnp = render_raster() #fnp=File Not Present
+    try:
+        raster._rs.plot(robust=True, cmap=plt.cm.terrain, zorder=1)
+
+    except AttributeError:
+        plt.plot([0],[0])
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+
+    graphic = base64.b64encode(image_png)
+    graphic = graphic.decode('utf-8')
+
+    vocal = None
+    i = 0
+
+    render_folium_raster(layers,m)
+    folium.LayerControl().add_to(m)
+    fs = plugins.Fullscreen()
+    m.add_child(fs)
+    m = m._repr_html_()
+    alayers = Layer.objects.all()
+    context = {'folMap': m,
+                'vocal': vocal, 'layers':layers,
+               'graphic':graphic, 'inactive_layers': inactive_layers,
+               'alayers':alayers, 'fnp':fnp}
+
+    return render(request, 'rs_viz/export_index.html', context)
