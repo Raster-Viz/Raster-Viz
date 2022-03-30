@@ -162,7 +162,7 @@ def add_to_raster(raster, rs):
     raster.add(rs)
 
 def index(request):
-    plt.clf()
+    #plt.clf()
 
     # Creates the Map View's default folium map
     f = folium.Figure(width='100%', height='100%')
@@ -271,12 +271,6 @@ def model_test(request):
     context.update({'List':List})
     return render(request, 'rs_viz/fig.html', context)
 
-def delete_files(request):
-    choices = request.POST.getlist('choice') #Get the file name from the as a list
-    for i in choices:
-        Layer.objects.filter(document=i).delete()
-    return redirect('index')
-
 def convert_xml(request):
     data = Layer.objects.all()
     data = serializers.serialize('xml', data)
@@ -289,6 +283,12 @@ def convert_xml(request):
     return response
 
 def remove_layer(request):
+    if request.method == 'POST':
+        choices = request.POST.getlist('choice') #Get the file name from the as a list
+        for i in choices:
+            Layer.objects.filter(document=i).delete()
+        return redirect('index')
+
     layers = Layer.objects.all()
     context = {'layers': layers}
     return render(request, 'rs_viz/rem.html', context)

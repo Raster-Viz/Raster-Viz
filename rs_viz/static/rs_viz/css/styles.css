@@ -1,0 +1,414 @@
+@charset "UTF-8";
+body {
+  background-color: rgba(42, 140, 25, 0.22);
+  padding: 0 0.25em;
+  min-width: 560px;
+}
+
+table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  font-family: Arial, serif;
+}
+
+th {
+  font-size: 1.1em;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  padding: 0.3125em;
+}
+
+.th_col_width_layer {
+  width: 27%;
+}
+
+.th_col_width_id {
+  width: 35%;
+}
+
+.full_act {
+  text-align: center;
+  font-stretch: semi-condensed;
+}
+
+.full_loc {
+  text-align: center;
+}
+
+.short {
+  display: none;
+}
+
+.th1 {
+  text-align: left;
+  padding-left: 0.5em;
+}
+
+th:last-child {
+  border-right: none;
+}
+
+tr {
+  border-bottom: 1px solid black;
+}
+
+.tr_layer {
+  background-color: rgba(190, 153, 24, 0.16);
+}
+
+.tr_id {
+  background-color: rgba(158, 169, 157, 0.37);
+}
+
+tr:last-child {
+  border-bottom: none;
+}
+
+td {
+  padding: 3px 5px;
+  word-wrap: break-word;
+  font-size: 14px;
+}
+
+#toolbar button {
+  font-size: 1.1rem;
+  background-color: #4f544a;
+  border-radius: 6px 6px 3px 3px;
+  cursor: pointer;
+  color: whitesmoke;
+  font-family: Arial, serif;
+  width: auto;
+  height: 1.7em;
+  margin-right: 0.18em;
+  margin-top: 0.19em;
+}
+
+#toolbar button:hover {
+  border-color: ivory;
+  background-color: dimgrey;
+}
+
+.toc {
+  grid-area: toc;
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 0.34em;
+  font-family: Calibri, serif;
+}
+
+.select {
+  display: flex;
+  align-items: center;
+  grid-area: select;
+}
+
+.layer {
+  grid-area: layer;
+  border-style: ridge;
+  border-width: thick;
+  background: ivory;
+  border-radius: 7px;
+}
+
+.id {
+  grid-area: id;
+  border-style: ridge;
+  border-width: thick;
+  background: white;
+  border-radius: 7px;
+}
+
+.map {
+  grid-area: map;
+  border-style: inset;
+  border-width: thick;
+  border-color: Gainsboro;
+  background: LightSteelBlue;
+}
+
+.rast {
+  display: none;
+}
+
+.grid-container {
+  display: grid;
+  position: relative;
+  grid-template-areas: "toc select select" "layer map map" "id map map";
+  grid-template-columns: minmax(50px, 230px) minmax(185px, 1fr) minmax(185px, 1fr);
+  grid-template-rows: 30px minmax(150px, 1fr) minmax(140px, 0.6fr);
+  background-color: lightgrey;
+  gap: 0.4375em;
+  padding: 0.5625em;
+  border-radius: 0 0 9px 9px;
+  height: calc(100vh - 85px);
+}
+
+.full {
+  text-align: center;
+  width: 27%;
+}
+
+/*--------------------*/
+/* ---- Menu Bar ---- */
+/*--------------------*/
+#menu {
+  /*background: #076727;*/
+  background: linear-gradient(90deg, #385a39 50%, #757575 98%);
+  color: white;
+  height: 3.0625em;
+  border-radius: 9px 9px 0;
+  font-family: Arial, serif;
+}
+
+#menu ul {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding: 0;
+}
+
+#menu li {
+  float: left;
+  display: inline;
+  position: relative;
+  border-right: 1px solid black;
+  font-family: Arial, serif;
+}
+
+#menu .firstBtn {
+  border-radius: 9px 0 0 0;
+}
+
+#menu button {
+  font-size: 1.25rem;
+  background: #385a39;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: block;
+  line-height: 2.45em;
+  padding: 0 0.75em;
+}
+
+#menu button.dropdown-arrow:after {
+  content: "⏷";
+  margin-left: 0.25em;
+}
+
+#menu button:hover {
+  background: #67765e;
+}
+
+#menu .appName {
+  font-family: "Leelawadee UI", serif;
+  text-shadow: 2px 2px black;
+  font-size: 1.5rem;
+  display: block;
+  font-weight: bold;
+  line-height: 2.04em;
+  border-right: none;
+  float: none;
+  position: absolute;
+  left: 50%;
+}
+
+#menu img {
+  height: 2.5em;
+  width: auto;
+  display: block;
+  float: right;
+  position: fixed;
+  padding-top: 0.3em;
+  left: 64.5%;
+}
+
+#menu a {
+  font-size: 1.25rem;
+  display: block;
+  line-height: 2.45em;
+  padding: 0 0.75em;
+  text-decoration: none;
+  color: white;
+}
+
+#menu a:hover {
+  background: #67765e;
+}
+
+#menu ul.sub-menus {
+  height: auto;
+  overflow: hidden;
+  width: 150px;
+  background: #D2DBD9;
+  position: absolute;
+  z-index: 99;
+  display: none;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
+}
+
+#menu ul.sub-menus li {
+  display: block;
+  width: 100%;
+}
+
+#menu ul.sub-menus a {
+  font-size: 1rem;
+  color: #000000;
+}
+
+#menu ul.sub-menus button {
+  font-size: 1rem;
+  color: #000000;
+  background: #D2DBD9;
+  width: 100%;
+  text-align: left;
+}
+
+#menu li:hover ul.sub-menus {
+  display: block;
+}
+
+#menu ul.sub-menus a:hover {
+  background: #F2F2F2;
+  color: #444444;
+}
+
+#menu ul.sub-menus button:hover {
+  background: #F2F2F2;
+  color: #444444;
+}
+
+/*--------------------*/
+/* - Window Scaling -- */
+/*--------------------*/
+/* When max-width <= 800px */
+@media screen and (max-width: 50rem) {
+  html {
+    font-size: 0.75rem;
+  }
+
+  table {
+    font-size: 1.1em;
+  }
+
+  .grid-container {
+    grid-template-rows: 1.91em minmax(150px, 1fr) minmax(140px, 0.6fr);
+    height: calc(100vh - 69px);
+  }
+
+  #menu .appName {
+    position: relative;
+    float: left;
+    left: 0;
+    margin-left: 1em;
+  }
+
+  .full_act {
+    display: none;
+  }
+
+  .full_loc {
+    display: none;
+  }
+
+  .short {
+    display: inline-block;
+  }
+}
+/* When max-height <= 500px */
+@media screen and (max-height: 31.25rem) {
+  .toolbar_btn {
+    font-size: 1.2rem;
+    padding: 10em;
+  }
+
+  .toc {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0.2em;
+  }
+
+  .grid-container {
+    grid-template-rows: 20px minmax(140px, 1fr) minmax(130px, 0.6fr);
+    height: calc(100vh - 79px);
+    min-height: 300px;
+  }
+}
+@media screen and (max-width: 50rem) and (max-height: 31.25rem) {
+  .grid-container {
+    height: calc(100vh - 67px);
+  }
+}
+/*--------------------*/
+/* --- Index Modal -- */
+/*--------------------*/
+/* The Modal (background) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: hidden;
+  background-color: black;
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-import, .modal-openENV, .modal-remove, .modal-properties {
+  display: none;
+  position: relative;
+  background-color: ivory;
+  margin: 15% auto;
+  border-radius: 5px;
+  width: 300px;
+  max-width: 300px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.6);
+}
+.modal-import button, .modal-openENV button, .modal-remove button, .modal-properties button {
+  cursor: pointer;
+}
+
+/*.modal-openENV {*/
+/*    display: none;*/
+/*    background-color: ivory;*/
+/*    margin: 15% auto; !* 15% from the top and centered *!*/
+/*    padding: 20px;*/
+/*    border: 1px solid #888;*/
+/*    width: 80%; !* Could be more or less, depending on screen size *!*/
+/*}*/
+.modal-header {
+  font-family: Arial, serif;
+  padding: 0.187em 1em;
+  border-radius: 5px 5px 0 0;
+  background-color: #384f39;
+  color: white;
+}
+
+.modal-body {
+  padding: 0.187em 1em;
+}
+
+/* The Close Button */
+.close {
+  font-size: 1.75rem;
+  color: white;
+  float: right;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=styles.css.map */
