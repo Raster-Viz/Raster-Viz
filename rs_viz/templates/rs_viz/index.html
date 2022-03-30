@@ -185,7 +185,7 @@
             <form method="POST" action="{% url 'set' %}"> {% csrf_token %}
                 {% for layer in alayers %}
                 <tr>
-                    <td><input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ layer.document }}" /></td>
+                    <td><input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ layer.filename }}" /></td> <!-- The code, 'layer.filename' is used for now to show distiction between duplicate layers. This adds random letters to the filename and should probably be changed to show an ordered numbering in parenthesis or similar. -->
                     <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br /></td>
                     {% endfor %}
                 </tr>

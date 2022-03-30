@@ -35,6 +35,7 @@ def delete_everything(request):
     Layer.objects.all().delete()
     return redirect('index')
 
+# The function of the menu option "Import (Modal)"???
 def Upload_Env(request):
     if request.method == 'POST':
         myfile = request.FILES['filename']
@@ -44,23 +45,29 @@ def Upload_Env(request):
         tree = ET.parse(uploaded_file_url)
         root = tree.getroot()
 
-        # create empty list for news items
+        # create empty list for new items
 
-        # iterate news items
+        # iterate new items
         for i in range(len(root)):
-            news=[]
+            new=[]
             for j in range(len(root[i])):
-                news.append(root[i][j].text)
-            Layer.objects.create(name=news[0], document=news[1], activated=news[2])
+              new.append(root[i][j].text)
+              print(type(new[2]))
+              Layer.objects.create(name=new[0], document=new[1], activated=new[2])
         fs.delete(filename)
         return redirect('index')
     field = ('XML File')
     return render(request, 'rs_viz/env.html', {'field':field})
 
 def CreateFileUpload(request):
+    print("file upload activated") # TESTING
     file_error =False
     if request.method == 'POST':
         document = request.FILES['filename']
+        if activated=='on':
+            activated=True
+        else:
+            activated=False
         name = request.POST['name']
         if validate_file_extension(document):
             Layer.objects.create(name=name, document=document, activated=True)
