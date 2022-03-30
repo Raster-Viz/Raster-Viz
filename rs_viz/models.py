@@ -42,3 +42,6 @@ class Layer(models.Model):
             self.activated = True
         else:
             self.activated = False
+
+    def get_shape(self):
+        return Raster(self.document.path).shape
