@@ -29,6 +29,7 @@
                 <li><a href="{% url 'del' %}" id="new">New</a></li>
                 <li><a href="{% url 'xml' %}" id="download" download="data_paths">Save</a></li>
                 <li><a href="" id="print" onclick="changefunction(id);">Print</a></li>
+                <li><a href="{% url 'html_export' %}" id="download" download="completed_rendering">Export</a></li>
 
                 <li><a href="{% url 'layer_upload' %}" id="import">Import</a></li>
                 <li>
@@ -129,38 +130,37 @@
 </div>
 
 <!-- The Modal -->
-<div id="mainModal" class="modal">
+<div id="mainModal" class="modal noprint">
 
     <!-- Import  -->
     <div id="modal_import" class="modal-import">
-        <div class="modal-header">
+        <div class="modal-header noprint">
             <span class="close">&times;</span>
             <h3>Import New File</h3>
         </div>
-        <div class="modal-body">
+        <div class="modal-body noprint">
             {% block content %}
             <form action="{% url 'layer_upload' %}"  method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <tr>
                     <ul> Name <input type="text" id="name" name="name"></ul>
                     <ul>Document<input type="file" id="document" name="filename"></ul>
-                    <ul>Activated <input type="checkbox" id="activated" name="activated" checked></ul>
                 </tr>
                 <input type="submit">
             </form>
 
 
-{% endblock %}
+            {% endblock %}
         </div>
     </div>
 
     <!-- Open ENV  -->
-    <div id="modal_openENV" class="modal-openENV">
-        <div class="modal-header">
+    <div id="modal_openENV" class="modal-openENV noprint">
+        <div class="modal-header noprint">
             <span class="close">&times;</span>
             <h3>Open Environment</h3>
         </div>
-        <div class="modal-body">
+        <div class="modal-body noprint">
             <p>Load XML File to database</p>
             <form action="{% url 'env' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -175,15 +175,15 @@
     </div>
 
     <!-- Remove Layer(s) -->
-    <div id="modal_remove" class="modal-remove">
+    <div id="modal_remove" class="modal-remove noprint">
         <div class="modal-header">
             <span class="close">&times;</span>
             <h3>Remove Layer(s)</h3>
         </div>
-        <div class="modal-body">
+        <div class="modal-body noprint">
             <p>Load XML File to database</p>
-            <form action="{% url 'rem' %}" method="POST" action="{% url 'set' %}"> {% csrf_token %}
-                {% for layer in layers %}
+            <form method="POST" action="{% url 'set' %}"> {% csrf_token %}
+                {% for layer in alayers %}
                 <tr>
                     <td><input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ layer.filename }}" /></td> <!-- The code, 'layer.filename' is used for now to show distiction between duplicate layers. This adds random letters to the filename and should probably be changed to show an ordered numbering in parenthesis or similar. -->
                     <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br /></td>
@@ -195,12 +195,12 @@
     </div>
 
     <!-- Properties -->
-    <div id="modal_properties" class="modal-properties">
+    <div id="modal_properties" class="modal-properties noprint">
         <div class="modal-header">
             <span class="close">&times;</span>
             <h3>Layer Properties</h3>
         </div>
-        <div class="modal-body">
+        <div class="modal-body noprint">
             <p>Test</p>
         </div>
     </div>

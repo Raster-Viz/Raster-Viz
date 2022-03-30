@@ -77,12 +77,6 @@ function changefunction(i) {
     if (i == "save") {
         window.location.href = "index.html"
     }
-    if (i == "exit") {
-        window.close()
-    }
-    if (i == "import") {
-
-    }
 }
 
 function toggle_visibility(id, separate) {
