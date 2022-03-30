@@ -145,13 +145,12 @@
                 <tr>
                     <ul> Name <input type="text" id="name" name="name"></ul>
                     <ul>Document<input type="file" id="document" name="filename"></ul>
-                    <ul>Activated <input type="checkbox" id="activated" name="activated" checked></ul>
                 </tr>
                 <input type="submit">
             </form>
 
 
-{% endblock %}
+            {% endblock %}
         </div>
     </div>
 
@@ -183,8 +182,8 @@
         </div>
         <div class="modal-body noprint">
             <p>Load XML File to database</p>
-            <form action="{% url 'rem' %}" method="POST" action="{% url 'set' %}"> {% csrf_token %}
-                {% for layer in layers %}
+            <form method="POST" action="{% url 'set' %}"> {% csrf_token %}
+                {% for layer in alayers %}
                 <tr>
                     <td><input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ layer.document }}" /></td>
                     <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br /></td>

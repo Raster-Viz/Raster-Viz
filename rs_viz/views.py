@@ -51,7 +51,6 @@ def Upload_Env(request):
             news=[]
             for j in range(len(root[i])):
                 news.append(root[i][j].text)
-            print(type(news[2]))
             Layer.objects.create(name=news[0], document=news[1], activated=news[2])
         fs.delete(filename)
         return redirect('index')
@@ -62,40 +61,15 @@ def CreateFileUpload(request):
     file_error =False
     if request.method == 'POST':
         document = request.FILES['filename']
-        activated = request.POST['activated']
         name = request.POST['name']
-        if activated=='on':
-            activated=True
-        else:
-            activated=False
         if validate_file_extension(document):
-            Layer.objects.create(name=name, document=document, activated=activated)
+            Layer.objects.create(name=name, document=document, activated=True)
             return redirect('index')
         else:
             file_error = True
 
-    field = ('name', 'document', 'activated')
+    field = ('name', 'document')
     return render(request, 'rs_viz/layer_upload.html', {'field': field, 'file_error': file_error})
-
-# class CreateFileUpload(CreateView):
-#     model = Layer
-#     template_name = 'rs_viz/layer_upload.html'
-#     fields = ('name', 'document', 'activated')
-#
-#     # Function to handle uploaded file
-#     def model_form_upload(request):
-#         if request.method == 'POST':
-#             form = LayerForm(request.POST, request.FILES)
-#             if form.is_valid():
-#                 form.save()
-#                 return redirect('rs_viz')
-#             else:
-#                 message = True
-#         else:
-#             form = LayerForm()
-#         return render(request, '', {
-#             'form': form, 'message':message
-#         })
       
 # This function creates the home page view for the web application
 def render_folium_raster(Layer_set, m):
@@ -174,7 +148,13 @@ def index(request):
     raster = 0
     raster, fnp = render_raster() #fnp=File Not Present
     try:
-        raster._rs.plot(robust=True, cmap=plt.cm.terrain, zorder=1)
+        for i in raster._rs['band']:
+            if i==1:
+                ploti = raster._rs.isel(band=i-1)
+                xarray.plot.imshow(ploti, col_wrap=3, robust=True, cmap=plt.cm.terrain, zorder=1, add_colorbar=True)
+            ploti = raster._rs.isel(band=i-1)
+            xarray.plot.imshow(ploti, col_wrap=3, robust=True, cmap=plt.cm.terrain, zorder=1, add_colorbar=False)
+
 
     except AttributeError:
         plt.plot([0],[0])
@@ -183,7 +163,7 @@ def index(request):
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()
-
+    fnp = False
     graphic = base64.b64encode(image_png)
     graphic = graphic.decode('utf-8')
 
@@ -219,7 +199,6 @@ def test_matplotlib(request):
             try:
                 raster = create_raster.add_to_raster(raster, rs)
             except ValueError:
-                print(type(raster))
                 fs = raster._to_presentable_xarray()
                 fs.combine_first(arr)
                 raster = create_raster.add_to_raster(raster, fs)
@@ -249,7 +228,6 @@ def model_test(request):
     for layer in layers:
         rs = create_raster.create_raster(layer.document.path)
         arr = rs._to_presentable_xarray()
-        print(arr.shape)
         if arr.shape in List:
             val = List.get(arr.shape)
             val.append(layer.document)
@@ -263,7 +241,6 @@ def model_test(request):
         try:
             raster = create_raster.add_to_raster(raster, rs)
         except ValueError:
-            print(type(raster))
             fs = raster._to_presentable_xarray()
             fs.combine_first(arr)
             raster = create_raster.add_to_raster(raster,fs)
