@@ -5,8 +5,6 @@ from io import BytesIO
 import folium
 import base64, xarray
 
-import geopandas
-from geopandas import GeoSeries
 from django.core.files.storage import FileSystemStorage
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse
@@ -19,32 +17,22 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import DeletionMixin
 from django.views.generic import TemplateView
-from folium.plugins import MousePosition
+
 from matplotlib import pyplot as plt, cm
 from rioxarray.exceptions import MissingCRS
 
-
 from raster_tools import Raster, surface, distance, open_vectors, general, zonal, creation, Vector
 from .forms import LayerForm
-from .models import Layer, validate_file_extension, Vectors, check_vector_ext, count_bands
+from .models import Layer, validate_file_extension
 from web_function import create_raster
 from folium import plugins
 from pylab import figure, axes, pie, title
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 import xml.etree.ElementTree as ET
 
-def handle_uploaded_file(f):
-    fs =FileSystemStorage()
-    filename = fs.save(os.getcwd()+'/media/vector/'+f.name, f)
 
 def delete_everything(request):
-    layers = Layer.objects.all()
-    vectors =Vectors.objects.all()
-    fs = FileSystemStorage
-    for layer in layers:
-        layer.delete()
-    for vector in vectors:
-        vector.delete()
+    Layer.objects.all().delete()
     return redirect('index')
 
 def Upload_Env(request):
@@ -63,7 +51,8 @@ def Upload_Env(request):
             news=[]
             for j in range(len(root[i])):
                 news.append(root[i][j].text)
-            Layer.objects.create(document=news[0], activated=news[1])
+            print(type(news[2]))
+            Layer.objects.create(name=news[0], document=news[1], activated=news[2])
         fs.delete(filename)
         return redirect('index')
     field = ('XML File')
@@ -72,35 +61,41 @@ def Upload_Env(request):
 def CreateFileUpload(request):
     file_error =False
     if request.method == 'POST':
-        files = request.FILES.getlist('filename')
-        print(files)
-        for document in files:
-            if validate_file_extension(document):
-                Layer.objects.create(document=document, activated=True)
+        document = request.FILES['filename']
+        activated = request.POST['activated']
+        name = request.POST['name']
+        if activated=='on':
+            activated=True
+        else:
+            activated=False
+        if validate_file_extension(document):
+            Layer.objects.create(name=name, document=document, activated=activated)
+            return redirect('index')
+        else:
+            file_error = True
 
-            else:
-                file_error = True
-                field = ('document')
-                return render(request, 'rs_viz/layer_upload.html', {'field': field, 'file_error': file_error})
-
-        return redirect('index')
-
-    field = ('document')
+    field = ('name', 'document', 'activated')
     return render(request, 'rs_viz/layer_upload.html', {'field': field, 'file_error': file_error})
 
-def CreateVectorUpload(request):
-    file_error =False
-    if request.method == 'POST':
-        files = request.FILES.getlist('filename')
-        for document in files:
-            if check_vector_ext(document):
-                Vectors.objects.create(document=document, activated=True)
-            else:
-                handle_uploaded_file(document)
-        return redirect('index')
-
-    field = ('document')
-    return render(request, 'rs_viz/vector_upload.html', {'field': field, 'file_error': file_error})
+# class CreateFileUpload(CreateView):
+#     model = Layer
+#     template_name = 'rs_viz/layer_upload.html'
+#     fields = ('name', 'document', 'activated')
+#
+#     # Function to handle uploaded file
+#     def model_form_upload(request):
+#         if request.method == 'POST':
+#             form = LayerForm(request.POST, request.FILES)
+#             if form.is_valid():
+#                 form.save()
+#                 return redirect('rs_viz')
+#             else:
+#                 message = True
+#         else:
+#             form = LayerForm()
+#         return render(request, '', {
+#             'form': form, 'message':message
+#         })
       
 # This function creates the home page view for the web application
 def render_folium_raster(Layer_set, m):
@@ -121,7 +116,6 @@ def render_folium_raster(Layer_set, m):
             xds_utm = s3dn._rs.rio.reproject("epsg:4326")  # we need to reproject our results to lat lon
             w, s, e, n = xds_utm.rio.bounds()  # get the bounds
             bnd = [[s, w], [n, e]]  # set the bound for folium
-            folium.map.Marker([bnd[1][0],bnd[0][1]], tooltip=elv._attrs ).add_to(m)
             data = cmap(xds_utm[0])
 
             # Step 3: build out the map
@@ -168,30 +162,19 @@ def add_to_raster(raster, rs):
     raster.add(rs)
 
 def index(request):
-    plt.clf()
-    vectors = Vectors.objects.all()
+    #plt.clf()
+
     # Creates the Map View's default folium map
     f = folium.Figure(width='100%', height='100%')
     m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f)
     graphic = "empty"
 
     layers = Layer.objects.filter(activated=True)
-    num = count_bands(layers)
     inactive_layers = Layer.objects.filter(activated=False)
     raster = 0
     raster, fnp = render_raster() #fnp=File Not Present
-    j = 0
     try:
-        for layer in layers:
-            raster = Raster(layer.document.path)
-            for i in raster._rs['band']:
-                if j==0:
-                    ploti = raster._rs.isel(band=i-1)
-                    xarray.plot.imshow(ploti, col_wrap=3, robust=True, cmap=plt.cm.terrain, zorder=1, add_colorbar=True, interpolation='none')
-                    j+=1
-                ploti = raster._rs.isel(band=i-1)
-                xarray.plot.imshow(ploti, col_wrap=3, robust=True, cmap=plt.cm.terrain, zorder=1, add_colorbar=False, alpha=1/num, interpolation='none')
-
+        raster._rs.plot(robust=True, cmap=plt.cm.terrain, zorder=1)
 
     except AttributeError:
         plt.plot([0],[0])
@@ -200,42 +183,17 @@ def index(request):
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()
-    fnp = False
+
     graphic = base64.b64encode(image_png)
     graphic = graphic.decode('utf-8')
 
     vocal = None
     i = 0
+
     render_folium_raster(layers,m)
-    f = folium.Figure(width='100%', height='100%')
-    for vector in vectors:
-        vect = open_vectors(vector.document.path)
-        v = vect.geometry.explore(m=m, color="red",name="Centroid")
-
-    folium.TileLayer(
-        tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-        attr='Esri',
-        name='Esri Imagery',
-        overlay=False,
-        control=True
-    ).add_to(m)
-
     folium.LayerControl().add_to(m)
     fs = plugins.Fullscreen()
     m.add_child(fs)
-
-    formatter = "function(num) {return L.Util.formatNum(num, 3) + ' º ';};"
-    MousePosition(
-        position="topright",
-        separator=" | ",
-        empty_string="NaN",
-        lng_first=True,
-        num_digits=20,
-        prefix="Coordinates:",
-        lat_formatter=formatter,
-        lng_formatter=formatter,
-    ).add_to(m)
-
     m = m._repr_html_()
     alayers = Layer.objects.all()
     context = {'folMap': m,
@@ -261,6 +219,7 @@ def test_matplotlib(request):
             try:
                 raster = create_raster.add_to_raster(raster, rs)
             except ValueError:
+                print(type(raster))
                 fs = raster._to_presentable_xarray()
                 fs.combine_first(arr)
                 raster = create_raster.add_to_raster(raster, fs)
@@ -290,6 +249,7 @@ def model_test(request):
     for layer in layers:
         rs = create_raster.create_raster(layer.document.path)
         arr = rs._to_presentable_xarray()
+        print(arr.shape)
         if arr.shape in List:
             val = List.get(arr.shape)
             val.append(layer.document)
@@ -303,18 +263,13 @@ def model_test(request):
         try:
             raster = create_raster.add_to_raster(raster, rs)
         except ValueError:
+            print(type(raster))
             fs = raster._to_presentable_xarray()
             fs.combine_first(arr)
             raster = create_raster.add_to_raster(raster,fs)
 
     context.update({'List':List})
     return render(request, 'rs_viz/fig.html', context)
-
-def delete_files(request):
-    choices = request.POST.getlist('choice') #Get the file name from the as a list
-    for i in choices:
-        Layer.objects.filter(document=i).delete()
-    return redirect('index')
 
 def convert_xml(request):
     data = Layer.objects.all()
@@ -328,6 +283,12 @@ def convert_xml(request):
     return response
 
 def remove_layer(request):
+    if request.method == 'POST':
+        choices = request.POST.getlist('choice') #Get the file name from the as a list
+        for i in choices:
+            Layer.objects.filter(document=i).delete()
+        return redirect('index')
+
     layers = Layer.objects.all()
     context = {'layers': layers}
     return render(request, 'rs_viz/rem.html', context)
