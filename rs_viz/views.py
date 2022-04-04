@@ -51,9 +51,9 @@ def Upload_Env(request):
         for i in range(len(root)):
             new=[]
             for j in range(len(root[i])):
-                new.append(root[i][j].text)
-            print(type(new[2]))
-            Layer.objects.create(name=new[0], document=new[1], activated=new[2])
+              new.append(root[i][j].text)
+              print(type(new[2]))
+              Layer.objects.create(name=new[0], document=new[1], activated=new[2])
         fs.delete(filename)
         return redirect('index')
     field = ('XML File')
@@ -64,40 +64,20 @@ def CreateFileUpload(request):
     file_error =False
     if request.method == 'POST':
         document = request.FILES['filename']
-        activated = request.POST['activated']
-        name = request.POST['name'] # '+datetime.date.today().isoformat()]' was an attempt to uniquely name uploads
-        if activated=='on':
-            activated=True
-        else:
-            activated=False
+        # The following code references 'activated' before it is used. Incorrect.
+        # if activated=='on':
+        #     activated=True
+        # else:
+        #     activated=False
+        name = request.POST['name']
         if validate_file_extension(document):
-            Layer.objects.create(name=name, document=document, activated=activated)
+            Layer.objects.create(name=name, document=document, activated=True) # This ensures that 'activated' is initially True no matter what.
             return redirect('index')
         else:
             file_error = True
 
-    field = ('name', 'document', 'activated')
+    field = ('name', 'document')
     return render(request, 'rs_viz/layer_upload.html', {'field': field, 'file_error': file_error})
-
-# class CreateFileUpload(CreateView):
-#     model = Layer
-#     template_name = 'rs_viz/layer_upload.html'
-#     fields = ('name', 'document', 'activated')
-#
-#     # Function to handle uploaded file
-#     def model_form_upload(request):
-#         if request.method == 'POST':
-#             form = LayerForm(request.POST, request.FILES)
-#             if form.is_valid():
-#                 form.save()
-#                 return redirect('rs_viz')
-#             else:
-#                 message = True
-#         else:
-#             form = LayerForm()
-#         return render(request, '', {
-#             'form': form, 'message':message
-#         })
       
 # This function creates the home page view for the web application
 def render_folium_raster(Layer_set, m):
@@ -168,7 +148,8 @@ def index(request):
 
     # Creates the Map View's default folium map
     f = folium.Figure(width='100%', height='100%')
-    m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f)
+    m = folium.Map(location=[37.0902, -95.7129], zoom_start=4).add_to(f) # Defaults to view of U.S.
+    #m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f) # Missoula coordinates
     graphic = "empty"
 
     layers = Layer.objects.filter(activated=True)
@@ -176,7 +157,13 @@ def index(request):
     raster = 0
     raster, fnp = render_raster() #fnp=File Not Present
     try:
-        raster._rs.plot(robust=True, cmap=plt.cm.terrain, zorder=1)
+        for i in raster._rs['band']:
+            if i==1:
+                ploti = raster._rs.isel(band=i-1)
+                xarray.plot.imshow(ploti, col_wrap=3, robust=True, cmap=plt.cm.terrain, zorder=1, add_colorbar=True)
+            ploti = raster._rs.isel(band=i-1)
+            xarray.plot.imshow(ploti, col_wrap=3, robust=True, cmap=plt.cm.terrain, zorder=1, add_colorbar=False)
+
 
     except AttributeError:
         plt.plot([0],[0])
@@ -185,7 +172,7 @@ def index(request):
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()
-
+    fnp = False
     graphic = base64.b64encode(image_png)
     graphic = graphic.decode('utf-8')
 
@@ -221,7 +208,6 @@ def test_matplotlib(request):
             try:
                 raster = create_raster.add_to_raster(raster, rs)
             except ValueError:
-                print(type(raster))
                 fs = raster._to_presentable_xarray()
                 fs.combine_first(arr)
                 raster = create_raster.add_to_raster(raster, fs)
@@ -251,7 +237,6 @@ def model_test(request):
     for layer in layers:
         rs = create_raster.create_raster(layer.document.path)
         arr = rs._to_presentable_xarray()
-        print(arr.shape)
         if arr.shape in List:
             val = List.get(arr.shape)
             val.append(layer.document)
@@ -265,7 +250,6 @@ def model_test(request):
         try:
             raster = create_raster.add_to_raster(raster, rs)
         except ValueError:
-            print(type(raster))
             fs = raster._to_presentable_xarray()
             fs.combine_first(arr)
             raster = create_raster.add_to_raster(raster,fs)
@@ -301,3 +285,45 @@ def render_files(request):
     for i in choices:
         Layer.objects.filter(document=i).update(activated=True)
     return redirect('index')
+
+def export_index(request):
+    plt.clf()
+
+    # Creates the Map View's default folium map
+    f = folium.Figure(width='100%', height='100%')
+    m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f)
+    graphic = "empty"
+
+    layers = Layer.objects.filter(activated=True)
+    inactive_layers = Layer.objects.filter(activated=False)
+    raster = 0
+    raster, fnp = render_raster() #fnp=File Not Present
+    try:
+        raster._rs.plot(robust=True, cmap=plt.cm.terrain, zorder=1)
+
+    except AttributeError:
+        plt.plot([0],[0])
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+
+    graphic = base64.b64encode(image_png)
+    graphic = graphic.decode('utf-8')
+
+    vocal = None
+    i = 0
+
+    render_folium_raster(layers,m)
+    folium.LayerControl().add_to(m)
+    fs = plugins.Fullscreen()
+    m.add_child(fs)
+    m = m._repr_html_()
+    alayers = Layer.objects.all()
+    context = {'folMap': m,
+                'vocal': vocal, 'layers':layers,
+               'graphic':graphic, 'inactive_layers': inactive_layers,
+               'alayers':alayers, 'fnp':fnp}
+
+    return render(request, 'rs_viz/export_index.html', context)
