@@ -64,13 +64,14 @@ def CreateFileUpload(request):
     file_error =False
     if request.method == 'POST':
         document = request.FILES['filename']
-        if activated=='on':
-            activated=True
-        else:
-            activated=False
+        # The following code references 'activated' before it is used. Incorrect.
+        # if activated=='on':
+        #     activated=True
+        # else:
+        #     activated=False
         name = request.POST['name']
         if validate_file_extension(document):
-            Layer.objects.create(name=name, document=document, activated=True)
+            Layer.objects.create(name=name, document=document, activated=True) # This ensures that 'activated' is initially True no matter what.
             return redirect('index')
         else:
             file_error = True
@@ -147,7 +148,8 @@ def index(request):
 
     # Creates the Map View's default folium map
     f = folium.Figure(width='100%', height='100%')
-    m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f)
+    m = folium.Map(location=[37.0902, -95.7129], zoom_start=4).add_to(f) # Defaults to view of U.S.
+    #m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f) # Missoula coordinates
     graphic = "empty"
 
     layers = Layer.objects.filter(activated=True)
