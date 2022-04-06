@@ -9,12 +9,10 @@ def create_raster(file):
     rs = Raster(file)
     return rs
 
-
 def add_to_raster(raster, file):
     rs = Raster(file)
     fs = raster.add(rs)
     return fs
-
 
 if __name__ == "__main__":
     raster = create_raster("web_function/data/Landsat_ETM_2001-08-26_multispectral.tif")

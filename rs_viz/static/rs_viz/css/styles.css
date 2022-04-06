@@ -5,70 +5,71 @@ body {
   min-width: 560px;
 }
 
+.help_text {
+  font-size: 1.2em;
+  text-align: center;
+  font-style: italic;
+  color: midnightblue;
+}
+
 table {
   border-collapse: collapse;
   table-layout: fixed;
   width: 100%;
   font-family: Arial, serif;
 }
-
-th {
+table th {
   font-size: 1.1em;
   border-right: 1px solid black;
-  border-bottom: 1px solid black;
+  border-bottom: 3px outset lightgrey;
   padding: 0.3125em;
 }
+table th:last-child {
+  border-right: none;
+  text-align: left;
+  padding-left: 0.5em;
+}
+table tr {
+  border-bottom: 1px solid black;
+}
+table tr:last-child {
+  border-bottom: none;
+}
+table td {
+  padding: 3px 5px;
+  word-wrap: break-word;
+  font-size: 14px;
+}
 
-.th_col_width_layer {
+#table-layer th:first-child {
   width: 27%;
 }
-
-.th_col_width_id {
-  width: 35%;
+#table-layer tr:first-child {
+  background-color: #f5efca;
 }
-
-.full_act {
+#table-layer tr:nth-child(even) {
+  background-color: #ffffe1;
+}
+#table-layer .full_act {
   text-align: center;
   font-stretch: semi-condensed;
 }
 
-.full_loc {
+#table-id th:first-child {
+  width: 35%;
+}
+#table-id tr:first-child {
+  background-color: rgba(158, 169, 157, 0.37);
+}
+#table-id tr:nth-child(even) {
+  background-color: #ebebeb;
+}
+#table-id .full_loc {
   text-align: center;
 }
 
 .short {
   display: none;
-}
-
-.th1 {
-  text-align: left;
-  padding-left: 0.5em;
-}
-
-th:last-child {
-  border-right: none;
-}
-
-tr {
-  border-bottom: 1px solid black;
-}
-
-.tr_layer {
-  background-color: rgba(190, 153, 24, 0.16);
-}
-
-.tr_id {
-  background-color: rgba(158, 169, 157, 0.37);
-}
-
-tr:last-child {
-  border-bottom: none;
-}
-
-td {
-  padding: 3px 5px;
-  word-wrap: break-word;
-  font-size: 14px;
 }
 
 #toolbar button {
@@ -243,7 +244,8 @@ td {
   position: absolute;
   z-index: 99;
   display: none;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3);
+  font-weight: bold;
 }
 
 #menu ul.sub-menus li {
@@ -262,6 +264,7 @@ td {
   background: #D2DBD9;
   width: 100%;
   text-align: left;
+  font-weight: bold;
 }
 
 #menu li:hover ul.sub-menus {
@@ -279,7 +282,7 @@ td {
 }
 
 /*--------------------*/
-/* - Window Scaling -- */
+/* - Window Scaling - */
 /*--------------------*/
 /* When max-width <= 800px */
 @media screen and (max-width: 50rem) {
@@ -288,6 +291,10 @@ td {
   }
 
   table {
+    font-size: 1.1em;
+  }
+
+  .help_text {
     font-size: 1.1em;
   }
 
@@ -370,7 +377,7 @@ td {
   border-radius: 5px;
   width: 300px;
   max-width: 300px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.6);
 }
 .modal-import button, .modal-openENV button, .modal-remove button, .modal-properties button {
   cursor: pointer;

@@ -42,7 +42,6 @@
         <li>
             <button class="dropdown-arrow menuBtn">Edit</button>
             <ul class='sub-menus'>
-                <!--<li><a href="{% url 'rem' %}">Remove</a></li>-->
                 <li>
                     <button id="btn_remove">Remove</button>
                 </li>
@@ -81,15 +80,22 @@
 
     <!-- Layer View -->
     <div class="layer noprint" style="overflow: auto">
-        <table>
-            <tr class="tr_layer">
-                <th class="th_col_width_layer">
+        <table id="table-layer">
+            <tr>
+                <th>
                     <span class="full_act">Activate</span>
                     <span class="short">Act.</span>
                 </th>
-                <th class="th1">Layer Name</th>
+                <th>Layer Name</th>
             </tr>
             <form method="POST" id="render" action="{% url 'rend' %}"> {% csrf_token %}
+                {% if layers|length == 0 %}
+                <tr>
+                    <td colspan="2" style="background-color: ivory"><p class="help_text">Active layers will be<br> displayed here.</p>
+                        <p class="help_text">To import a layer,<br> select File > Import.</p></td>
+                </tr>
+                {% endif %}
+
                 {% for layer in alayers %}
                 {% if layer.activated %}
                 <tr>
@@ -115,15 +121,28 @@
 
     <!-- Identify Cell -->
     <div class="id noprint" style="overflow: auto">
-        <table>
-            <tr class="tr_id">
-                <!--<th style="width: 35%">Location</th>-->
-                <th class="th_col_width_id">
+        <table id="table-id">
+            <tr>
+                <th>
                     <span class="full_loc">Location</span>
                     <span class="short">Loc.</span>
                 </th>
-                <th class="th1">Value(s)</th>
+                <th>Value(s)</th>
             </tr>
+
+            <tr>
+                <td>Test</td>
+                <td>299.12</td>
+            </tr>
+            <tr>
+                <td>Test</td>
+                <td>976.34</td>
+            </tr>
+            <tr>
+                <td>Test</td>
+                <td>1005.52</td>
+            </tr>
+
         </table>
     </div>
 

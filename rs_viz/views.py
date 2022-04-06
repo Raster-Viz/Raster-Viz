@@ -147,7 +147,7 @@ def index(request):
 
     # Creates the Map View's default folium map
     f = folium.Figure(width='100%', height='100%')
-    m = folium.Map(location=[37.0902, -95.7129], zoom_start=4).add_to(f) # Defaults to view of U.S.
+    m = folium.Map(location=[37.0902, -95.7129], zoom_start=4.5).add_to(f) # Defaults to view of U.S.
     #m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f) # Missoula coordinates
     graphic = "empty"
 
@@ -279,7 +279,7 @@ def remove_layer(request):
     return render(request, 'rs_viz/rem.html', context)
 
 def render_files(request):
-    choices = request.POST.getlist('choices')#Get the file name from the as a list
+    choices = request.POST.getlist('choices') #Get the file name from the as a list
     Layer.objects.all().update(activated=False)
     for i in choices:
         Layer.objects.filter(document=i).update(activated=True)
