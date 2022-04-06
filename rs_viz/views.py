@@ -35,7 +35,6 @@ def delete_everything(request):
     Layer.objects.all().delete()
     return redirect('index')
 
-# The function of the menu option "Import (Modal)"???
 def Upload_Env(request):
     if request.method == 'POST':
         myfile = request.FILES['filename']
@@ -61,7 +60,7 @@ def Upload_Env(request):
 
 def CreateFileUpload(request):
     print("file upload activated") # TESTING
-    file_error =False
+    file_error = False
     if request.method == 'POST':
         document = request.FILES['filename']
         # The following code references 'activated' before it is used. Incorrect.
