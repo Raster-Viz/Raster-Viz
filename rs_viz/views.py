@@ -162,7 +162,7 @@ def add_to_raster(raster, rs):
     raster.add(rs)
 
 def index(request):
-    #plt.clf()
+    fig = figure()
 
     # Creates the Map View's default folium map
     f = folium.Figure(width='100%', height='100%')
@@ -205,7 +205,7 @@ def index(request):
 
 def test_matplotlib(request):
     try:
-        plt.clf()
+        fig = figure()
         layers = Layer.objects.filter(activated=True)
         i = 0
         raster = 0
@@ -301,7 +301,7 @@ def render_files(request):
     return redirect('index')
 
 def export_index(request):
-    plt.clf()
+    fig = figure()
 
     # Creates the Map View's default folium map
     f = folium.Figure(width='100%', height='100%')
