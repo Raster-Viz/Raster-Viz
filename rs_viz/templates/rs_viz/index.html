@@ -80,7 +80,7 @@
 
     <!-- Layer View -->
     <div class="layer noprint" style="overflow: auto">
-        <table id="table-layer">
+        <table class="table-main" id="table-layer">
             <tr>
                 <th>
                     <span class="full_act">Activate</span>
@@ -91,7 +91,8 @@
             <form method="POST" id="render" action="{% url 'rend' %}"> {% csrf_token %}
                 {% if layers|length == 0 %}
                 <tr>
-                    <td colspan="2" style="background-color: ivory"><p class="help_text">Active layers will be<br> displayed here.</p>
+                    <td colspan="2" style="background-color: ivory"><p class="help_text">Active layers will be<br>
+                        displayed here.</p>
                         <p class="help_text">To import a layer,<br> select File > Import.</p></td>
                 </tr>
                 {% endif %}
@@ -121,7 +122,7 @@
 
     <!-- Identify Cell -->
     <div class="id noprint" style="overflow: auto">
-        <table id="table-id">
+        <table class="table-main" id="table-id">
             <tr>
                 <th>
                     <span class="full_loc">Location</span>
@@ -201,7 +202,7 @@
         <div class="modal-body noprint">
             <p><b>Select files to remove:</b></p>
             <form action="{% url 'rem' %}" method="POST"> {% csrf_token %}
-                <table>
+                <table class="table-main">
                     {% for layer in layers %}
                     <tr>
                         <td style="width: 18px"><input type="checkbox" name="choice" id="choice{{ forloop.counter }}"
@@ -223,8 +224,36 @@
             <span class="close">&times;</span>
             <h3>Layer Properties</h3>
         </div>
-        <div class="modal-body noprint">
-            <p>Coming Soon</p>
+        <div class="modal-body-properties noprint">
+            {% for layer in layers %}
+            <h3 class="prop-filename">{{ layer.filename }}</h3>
+            <table class="table-properties">
+                <tr>
+                    <th>Property</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Columns & Rows</td>
+                    <td>{{ layer.n_cols }}, {{ layer.n_rows }}</td>
+                </tr>
+                <tr>
+                    <td>Number of Bands</td>
+                    <td>{{ layer.n_bands }}</td>
+                </tr>
+                <tr>
+                    <td>Format</td>
+                    <td>{{ layer.file_ext }}</td>
+                </tr>
+                <tr>
+                    <td>File Size</td>
+                    <td>{{ layer.file_size }}</td>
+                </tr>
+                <tr>
+                    <td>Bit Depth & Type</td>
+                    <td>{{ layer.data_type }}</td>
+                </tr>
+            </table>
+            {% endfor %}
         </div>
     </div>
 

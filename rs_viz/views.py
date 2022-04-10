@@ -163,9 +163,9 @@ def index(request):
             ploti = raster._rs.isel(band=i-1)
             xarray.plot.imshow(ploti, col_wrap=3, robust=True, cmap=plt.cm.terrain, zorder=1, add_colorbar=False)
 
-
     except AttributeError:
         plt.plot([0],[0])
+
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
