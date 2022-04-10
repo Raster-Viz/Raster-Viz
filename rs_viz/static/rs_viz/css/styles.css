@@ -1,6 +1,6 @@
 @charset "UTF-8";
 body {
-  background-color: rgba(42, 140, 25, 0.22);
+  background-color: #cedecd;
   padding: 0 0.25em;
   min-width: 560px;
 }
@@ -12,30 +12,43 @@ body {
   color: midnightblue;
 }
 
-table {
+.prop-filename {
+  background-color: #f5efca;
+  font-family: Arial, serif;
+  border-left: 2px double grey;
+  height: 100%;
+  width: fit-content;
+  padding: 5px;
+  margin-left: 5%;
+  margin-right: 5%;
+  vertical-align: middle;
+  margin-bottom: 0;
+}
+
+.table-main {
   border-collapse: collapse;
   table-layout: fixed;
   width: 100%;
   font-family: Arial, serif;
 }
-table th {
+.table-main th {
   font-size: 1.1em;
-  border-right: 1px solid black;
+  border-right: 2px solid grey;
   border-bottom: 3px outset lightgrey;
   padding: 0.3125em;
 }
-table th:last-child {
+.table-main th:last-child {
   border-right: none;
   text-align: left;
   padding-left: 0.5em;
 }
-table tr {
+.table-main tr {
   border-bottom: 1px solid black;
 }
-table tr:last-child {
+.table-main tr:last-child {
   border-bottom: none;
 }
-table td {
+.table-main td {
   padding: 3px 5px;
   word-wrap: break-word;
   font-size: 14px;
@@ -48,7 +61,7 @@ table td {
   background-color: #f5efca;
 }
 #table-layer tr:nth-child(even) {
-  background-color: #ffffe1;
+  background-color: #ffffd7;
 }
 #table-layer .full_act {
   text-align: center;
@@ -62,10 +75,49 @@ table td {
   background-color: rgba(158, 169, 157, 0.37);
 }
 #table-id tr:nth-child(even) {
-  background-color: #ebebeb;
+  background-color: #e6e6e6;
 }
 #table-id .full_loc {
   text-align: center;
+}
+
+.table-properties {
+  border-collapse: separate;
+  border: 2px solid grey;
+  border-radius: 0 5px 5px 5px;
+  table-layout: fixed;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  margin-bottom: 1.8em;
+  font-family: Arial, serif;
+}
+.table-properties th {
+  border-right: 2px solid grey;
+  border-bottom: 2px outset lightgrey;
+  text-align: left;
+  font-size: 0.8em;
+  padding: 0.3125em;
+}
+.table-properties th:last-child {
+  border-right: none;
+  text-align: left;
+  padding-left: 0.5em;
+}
+.table-properties tr {
+  border-bottom: 1px solid black;
+}
+.table-properties td {
+  padding: 3px 5px;
+  word-wrap: break-word;
+  font-size: 14px;
+}
+.table-properties tr:first-child {
+  background-color: rgba(158, 169, 157, 0.37);
+}
+.table-properties tr:nth-child(even) {
+  background-color: #e6e6e6;
 }
 
 .short {
@@ -172,7 +224,7 @@ table td {
   float: left;
   display: inline;
   position: relative;
-  border-right: 1px solid black;
+  border-right: 1px outset #385a39;
   font-family: Arial, serif;
 }
 
@@ -373,7 +425,7 @@ table td {
   display: none;
   position: relative;
   background-color: ivory;
-  margin: 15% auto;
+  margin: 10% auto;
   border-radius: 5px;
   width: 300px;
   max-width: 300px;
@@ -381,6 +433,11 @@ table td {
 }
 .modal-import button, .modal-openENV button, .modal-remove button, .modal-properties button {
   cursor: pointer;
+}
+
+.modal-properties {
+  width: 450px;
+  max-width: 450px;
 }
 
 /*.modal-openENV {*/
@@ -397,6 +454,12 @@ table td {
   border-radius: 5px 5px 0 0;
   background-color: #384f39;
   color: white;
+}
+
+.modal-body-properties {
+  max-height: 450px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .modal-body {
