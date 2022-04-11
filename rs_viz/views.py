@@ -51,8 +51,7 @@ def Upload_Env(request):
             new=[]
             for j in range(len(root[i])):
               new.append(root[i][j].text)
-              print(type(new[2]))
-              Layer.objects.create(name=new[0], document=new[1], activated=new[2])
+            Layer.objects.create(name=new[0], document=new[1], activated=new[2])
         fs.delete(filename)
         return redirect('index')
     field = ('XML File')
