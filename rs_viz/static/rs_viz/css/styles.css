@@ -12,6 +12,10 @@ body {
   color: midnightblue;
 }
 
+.settings {
+  display: inline-block;
+}
+
 .prop-filename {
   background-color: #f5efca;
   font-family: Arial, serif;
