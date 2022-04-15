@@ -486,3 +486,18 @@ body {
 }
 
 /*# sourceMappingURL=styles.css.map */
+
+/* The following are some experiments for the Layers Side Menu that I'm working on. -- JD */
+/*input[type="checkbox"][id^="achoice"] { /* 'id^="achoice"' targets only ids that begin with "achoice" *//*}*/
+
+#trLayer > tr:hover { /* Should make pointer a hand on hover but does not seem to be working on Mac in Chrome at least. */
+    cursor: pointer;
+}
+
+.draggable-layer {
+    cursor: move;
+}
+
+.draggable-layer.dragging-layer {
+    opacity: .5;
+}
