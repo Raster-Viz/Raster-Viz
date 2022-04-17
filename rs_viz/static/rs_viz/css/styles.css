@@ -58,14 +58,39 @@ body {
   font-size: 14px;
 }
 
+#table-layer {
+  table-layout: fixed;
+  width: 100%;
+}
+#table-layer td:last-child {
+  padding: 3px 2px 0 0;
+}
+#table-layer th {
+  padding: 0 0 0 2px;
+}
+#table-layer th img {
+  height: 1.3em;
+  width: 1.4em;
+  padding-top: 5px;
+}
 #table-layer th:first-child {
-  width: 27%;
+  font-size: 1.35em;
+  border-right: none;
+  width: 40px;
+}
+#table-layer th:last-child {
+  font-size: 1.3em;
+  text-align: left;
+  padding-left: 0;
 }
 #table-layer tr:first-child {
   background-color: #f5efca;
 }
-#table-layer tr:nth-child(even) {
+#table-layer tr:not(:first-child):hover {
   background-color: #ffffd7;
+}
+#table-layer tr:last-child {
+  border-bottom: 1px solid black;
 }
 #table-layer .full_act {
   text-align: center;
@@ -192,7 +217,7 @@ body {
   display: grid;
   position: relative;
   grid-template-areas: "toc select select" "layer map map" "id map map";
-  grid-template-columns: minmax(50px, 230px) minmax(185px, 1fr) minmax(185px, 1fr);
+  grid-template-columns: minmax(50px, 260px) minmax(185px, 1fr) minmax(185px, 1fr);
   grid-template-rows: 30px minmax(150px, 1fr) minmax(140px, 0.6fr);
   background-color: lightgrey;
   gap: 0.4375em;
@@ -444,14 +469,6 @@ body {
   max-width: 450px;
 }
 
-/*.modal-openENV {*/
-/*    display: none;*/
-/*    background-color: ivory;*/
-/*    margin: 15% auto; !* 15% from the top and centered *!*/
-/*    padding: 20px;*/
-/*    border: 1px solid #888;*/
-/*    width: 80%; !* Could be more or less, depending on screen size *!*/
-/*}*/
 .modal-header {
   font-family: Arial, serif;
   padding: 0.187em 1em;
@@ -483,6 +500,64 @@ body {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.tDnD_whileDrag td {
+  background-color: #ffffd7;
+  /*-webkit-box-shadow: 11px 5px 12px 2px #333, 0 1px 0 #ccc inset, 0 -1px 0 #ccc inset;*/
+  -webkit-box-shadow: 6px 3px 5px #555, 0 1px 0 #ffffd7 inset, 0 -1px 0 #ffffd7 inset;
+  /*-moz-box-shadow: 6px 4px 5px 1px #555, 0 1px 0 #ccc inset, 0 -1px 0 #ccc inset;*/
+  /*-box-shadow: 6px 4px 5px 1px #555, 0 1px 0 #ccc inset, 0 -1px 0 #ccc inset;*/
+}
+
+.collapsible {
+  color: black;
+  cursor: pointer;
+  text-align: right;
+}
+
+.collapsible:after {
+  content: "+";
+  color: black;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "−";
+}
+
+.layer_content {
+  float: right;
+  padding: 3px 5px 5px 5px;
+  display: none;
+  background-color: inherit;
+  cursor: default;
+}
+
+.btn-layer-options {
+  width: 1.75em;
+  height: 1.75em;
+  padding: 1px;
+  margin-right: 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 17px;
+}
+
+.eye {
+  background-image: url("../imgs/eye.png");
+}
+
+.rm {
+  background-image: url("../imgs/trash-bin.png");
+}
+
+.settings {
+  background-image: url("../imgs/settings.png");
 }
 
 /*# sourceMappingURL=styles.css.map */

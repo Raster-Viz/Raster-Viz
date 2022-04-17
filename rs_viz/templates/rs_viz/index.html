@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     {% if red_flag %}
     <div id="red_flag" title="Red Flag">
         <p>{{vocal}}</p>
@@ -11,10 +14,11 @@
     <link rel="icon" href="{% static 'rs_viz/imgs/mountain_32.ico' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'rs_viz/css/styles.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'rs_viz/css/print.css' %}" media="print"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{% static 'rs_viz/scripts/jquery.tablednd.js' %}"></script>
+
     <title>Raster Viz Web Utility</title>
 </head>
 
@@ -33,7 +37,7 @@
                 <li><a href="" id="print" onclick="changefunction(id);">Print</a></li>
                 <li><a href="{% url 'html_export' %}" id="download" download="completed_rendering">Export</a></li>
                 <li>
-                    <button id="btn_import">Import</button>
+                    <button id="btn_addLayer">Add Layer</button>
                 </li>
                 <li>
                     <button id="btn_openENV">Open ENV</button>
@@ -81,20 +85,26 @@
 
     <!-- Layer View -->
     <div class="layer noprint" style="overflow: auto">
+        <script>
+            $(document).ready(function () {
+                $("#table-layer").tableDnD();
+            });
+        </script>
         <table class="table-main" id="table-layer">
-            <tr>
-                <th>
+            <tr class="nodrag nodrop">
+                <!--<th>
                     <span class="full_act">Activate</span>
                     <span class="short">Act.</span>
-                </th>
-                <th>Layer Name</th>
+                </th>-->
+                <th><img src="{% static 'rs_viz/imgs/three_layers.png' %}" height="25" width="auto"></th>
+                <th>Layers</th>
             </tr>
             <form method="POST" id="render" action="{% url 'rend' %}"> {% csrf_token %}
                 {% if layers|length == 0 %}
                 <tr>
                     <td colspan="2" style="background-color: ivory"><p class="help_text">Active layers will be<br>
                         displayed here.</p>
-                        <p class="help_text">To import a layer,<br> select File > Import.</p></td>
+                        <p class="help_text">To add a layer,<br> select File > Add.</p></td>
                 </tr>
                 {% endif %}
 
@@ -105,14 +115,31 @@
                         <input type="checkbox" name="choices" id="achoice{{ forloop.counter }}"
                                value="{{ layer.document }}" checked/>
                     </td>
-                    <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br/></td>
+                    <td><label class="collapsible" for="choice{{ forloop.counter }}">{{ layer.filename }}<br></label>
+                        <div class="layer_content">
+
+                            <!--<form action="{% url 'rem' %}" method="POST"> {% csrf_token %}
+                                <button class="btn-layer-options rm" type="submit" name="choice" value="{{ layer.document }}"></button>
+                            </form>-->
+
+                            <button class="btn-layer-options rm" type="button"></button>
+                            <button class="btn-layer-options eye" type="button"></button>
+                            <button class="btn-layer-options settings" type="button"></button>
+                        </div>
+                    </td>
                 </tr>
+
                 {% else %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
                     <td><input type="checkbox" name="choices" id="ilchoice{{ forloop.counter }}"
                                value="{{ layer.document }}"/></td>
-                    <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br/></td>
+                    <td><label class="collapsible" for="choice{{ forloop.counter }}">{{ layer.filename }}<br></label>
+                        <div class="layer_content">
+                            <button class="btn-layer-options rm" type="button"></button>
+                            <button class="btn-layer-options eye" type="button"></button>
+                            <button class="btn-layer-options settings" type="button"></button>
+                        </div>
+                    </td>
                 </tr>
                 {% endif %}
                 {% endfor %}
@@ -156,11 +183,11 @@
 <!-- The Modal -->
 <div id="mainModal" class="modal noprint">
 
-    <!-- Import  -->
+    <!-- Add Layer  -->
     <div id="modal_import" class="modal-import">
         <div class="modal-header noprint">
             <span class="close">&times;</span>
-            <h3>Import New File</h3>
+            <h3>Add New Layer</h3>
         </div>
         <div class="modal-body noprint">
             {% block content %}
@@ -267,9 +294,7 @@
             {% endfor %}
         </div>
     </div>
-
 </div>
-
-<script src="{% static 'rs_viz/script.js' %}"></script>
+<script src="{% static 'rs_viz/scripts/main.js' %}"></script>
 </body>
 </html>
