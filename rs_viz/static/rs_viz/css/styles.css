@@ -59,6 +59,7 @@ body {
 }
 
 #table-layer {
+  background-color: ivory;
   table-layout: fixed;
   width: 100%;
 }
@@ -90,7 +91,7 @@ body {
   background-color: #ffffd7;
 }
 #table-layer tr:last-child {
-  border-bottom: 1px solid black;
+  border-bottom: 2px outset darkgrey;
 }
 #table-layer .full_act {
   text-align: center;
@@ -189,7 +190,7 @@ body {
   grid-area: layer;
   border-style: ridge;
   border-width: thick;
-  background: ivory;
+  background: whitesmoke;
   border-radius: 7px;
 }
 
@@ -503,11 +504,8 @@ body {
 }
 
 .tDnD_whileDrag td {
-  background-color: #ffffd7;
-  /*-webkit-box-shadow: 11px 5px 12px 2px #333, 0 1px 0 #ccc inset, 0 -1px 0 #ccc inset;*/
+  background-color: #ffffcc;
   -webkit-box-shadow: 6px 3px 5px #555, 0 1px 0 #ffffd7 inset, 0 -1px 0 #ffffd7 inset;
-  /*-moz-box-shadow: 6px 4px 5px 1px #555, 0 1px 0 #ccc inset, 0 -1px 0 #ccc inset;*/
-  /*-box-shadow: 6px 4px 5px 1px #555, 0 1px 0 #ccc inset, 0 -1px 0 #ccc inset;*/
 }
 
 .collapsible {
@@ -534,6 +532,8 @@ body {
   display: none;
   background-color: inherit;
   cursor: default;
+  width: 100%;
+  border-top: 1.5px solid darkgrey;
 }
 
 .btn-layer-options {
@@ -550,14 +550,17 @@ body {
 
 .eye {
   background-image: url("../imgs/eye.png");
+  float: right;
 }
 
-.rm {
+.bin {
   background-image: url("../imgs/trash-bin.png");
+  float: left;
 }
 
 .settings {
   background-image: url("../imgs/settings.png");
+  float: right;
 }
 
 /*# sourceMappingURL=styles.css.map */

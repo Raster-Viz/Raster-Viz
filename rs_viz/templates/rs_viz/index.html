@@ -122,9 +122,9 @@
                                 <button class="btn-layer-options rm" type="submit" name="choice" value="{{ layer.document }}"></button>
                             </form>-->
 
-                            <button class="btn-layer-options rm" type="button"></button>
-                            <button class="btn-layer-options eye" type="button"></button>
-                            <button class="btn-layer-options settings" type="button"></button>
+                            <button class="btn-layer-options bin" type="button" title="Remove Layer"></button>
+                            <button class="btn-layer-options eye" type="button" title="Zoom to Layer"></button>
+                            <button class="btn-layer-options settings" type="button" title="Layer Settings"></button>
                         </div>
                     </td>
                 </tr>
@@ -135,9 +135,9 @@
                                value="{{ layer.document }}"/></td>
                     <td><label class="collapsible" for="choice{{ forloop.counter }}">{{ layer.filename }}<br></label>
                         <div class="layer_content">
-                            <button class="btn-layer-options rm" type="button"></button>
-                            <button class="btn-layer-options eye" type="button"></button>
-                            <button class="btn-layer-options settings" type="button"></button>
+                            <button class="btn-layer-options bin" type="button" title="Remove Layer"></button>
+                            <button class="btn-layer-options eye" type="button" title="Zoom to Layer"></button>
+                            <button class="btn-layer-options settings" type="button" title="Layer Settings"></button>
                         </div>
                     </td>
                 </tr>

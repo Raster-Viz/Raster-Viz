@@ -70,6 +70,7 @@ body {
 }
 
 #table-layer {
+  background-color: $color1;
   table-layout: fixed; width: 100%;
 
   td:last-child {
@@ -107,7 +108,7 @@ body {
   }
 
   tr:last-child {
-    border-bottom: 1px solid black;
+    border-bottom: 2px outset darkgrey;
   }
 
   .full_act {
@@ -220,7 +221,7 @@ body {
   grid-area: layer;
   border-style: ridge;
   border-width: thick;
-  background: $color1;
+  background: whitesmoke;
   border-radius: 7px;
 }
 
@@ -540,11 +541,8 @@ body {
 }
 
 .tDnD_whileDrag td {
-  background-color: darken($color1, 5%);
-  /*-webkit-box-shadow: 11px 5px 12px 2px #333, 0 1px 0 #ccc inset, 0 -1px 0 #ccc inset;*/
+  background-color: darken($color1, 7%);
   -webkit-box-shadow: 6px 3px 5px #555, 0 1px 0 darken($color1, 5%) inset, 0 -1px 0 darken($color1, 5%) inset;
-  /*-moz-box-shadow: 6px 4px 5px 1px #555, 0 1px 0 #ccc inset, 0 -1px 0 #ccc inset;*/
-  /*-box-shadow: 6px 4px 5px 1px #555, 0 1px 0 #ccc inset, 0 -1px 0 #ccc inset;*/
 }
 
 .collapsible {
@@ -576,6 +574,8 @@ body {
   //overflow: hidden;
   background-color: inherit;
   cursor: default;
+  width: 100%;
+  border-top: 1.5px solid darkgrey;
 }
 
 .btn-layer-options {
@@ -592,12 +592,16 @@ body {
 
 .eye {
   background-image: url("../imgs/eye.png");
+  float: right;
 }
 
-.rm {
+.bin {
+  //position: relative;
   background-image: url("../imgs/trash-bin.png");
+  float: left;
 }
 
 .settings {
   background-image: url("../imgs/settings.png");
+  float: right;
 }
