@@ -100,7 +100,7 @@
 
                 {% for layer in alayers %}
                 {% if layer.activated %}
-                <tr draggable="true" class="draggable-layer" id="active_layer{{ forloop.counter }}">
+                <tr>
                     <td>
                         <input type="checkbox" name="choices" id="achoice{{ forloop.counter }}"
                                value="{{ layer.document }}" checked/>
@@ -108,7 +108,7 @@
                     <td><label for="choice{{ forloop.counter }}">{{ layer.filename }}</label><br/></td>
                 </tr>
                 {% else %}
-                <tr draggable="true" class="draggable-layer" id="inactive_layer{{ forloop.counter }}>
+                <tr>
                     <td>{{ forloop.counter }}</td>
                     <td><input type="checkbox" name="choices" id="ilchoice{{ forloop.counter }}"
                                value="{{ layer.document }}"/></td>
@@ -271,6 +271,5 @@
 </div>
 
 <script src="{% static 'rs_viz/script.js' %}"></script>
-
 </body>
 </html>
