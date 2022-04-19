@@ -142,8 +142,7 @@
             <form action="{% url 'layer_upload' %}"  method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <tr>
-                    <ul> Name <input type="text" id="name" name="name"></ul>
-                    <ul>Document<input type="file" id="document" name="filename"></ul>
+                    <ul>Document<input type="file" id="document" name="filename" required multiple></ul>
                 </tr>
                 <input type="submit">
             </form>

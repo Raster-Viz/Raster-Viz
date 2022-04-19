@@ -14,5 +14,6 @@ urlpatterns = [
     path('xml/', views.convert_xml, name='xml'),
     path('del/', views.delete_files, name='set'),
     path('rend/', views.render_files, name='rend'),
-    path('env/', views.Upload_Env, name='env')
+    path('env/', views.Upload_Env, name='env'),
+    path('vect/', views.CreateVectorUpload, name='vect')
 ]
