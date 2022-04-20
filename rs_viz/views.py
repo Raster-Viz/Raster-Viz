@@ -96,17 +96,18 @@ def render_folium_raster(Layer_set, m):
             xds_utm = s3dn._rs.rio.reproject("epsg:4326")  # we need to reproject our results to lat lon
             w, s, e, n = xds_utm.rio.bounds()  # get the bounds
             bnd = [[s, w], [n, e]]  # set the bound for folium
-            folium.map.Marker([bnd[1][0],bnd[0][1]], tooltip=elv._attrs ).add_to(m)
+
+            folium.map.Marker([bnd[1][0],bnd[0][1]], tooltip=layer.filename()).add_to(m)
+
             data = cmap(xds_utm[0])
 
             # Step 3: build out the map
-            folium.raster_layers.ImageOverlay(image=data, bounds=bnd, mercator_project=True,name=layer.filename()).add_to(m)  # add the raster
+            folium.raster_layers.ImageOverlay(image=data, bounds=bnd, mercator_project=True, name=layer.filename()).add_to(m)  # add the raster
             m.fit_bounds(bnd)
 
             # add the layer control
         except MissingCRS:
             continue
-
 
 def render_raster():
     active_layers = Layer.objects.filter(activated=True)
@@ -141,14 +142,22 @@ def render_raster():
 def add_to_raster(raster, rs):
     raster.add(rs)
 
+# def zoom_to_layer(request):
+#     logger.error('>>>>>>>>>>>>>>>>>>>>>>>')
+#     zoom = request.POST.getlist('zoom')
+#     logger.error(main_context)
+#     coords = zoom[0]
+#     return render(request, 'rs_viz/index.html', main_context)
+
 def index(request):
     fig = figure()
 
     # Creates the Map View's default folium map
     f = folium.Figure(width='100%', height='100%')
 
-    # Defaults to view of U.S.
-    m = folium.Map(location=[37.0902, -95.7129], zoom_start=4.5).add_to(f)
+    # Defaults to view of U.S. [37.0902, -95.7129]
+    coords = [37.0902, -95.7129]
+    m = folium.Map(location=coords, zoom_start=4.5).add_to(f)
 
     graphic = "empty"
 
@@ -185,6 +194,7 @@ def index(request):
     m.add_child(fs)
     m = m._repr_html_()
     all_layers = Layer.objects.all()
+
     context = {'folMap': m,
                 'vocal': vocal, 'active_layers':active_layers,
                'graphic':graphic, 'inactive_layers':inactive_layers,
@@ -327,3 +337,5 @@ def export_index(request):
                'all_layers':all_layers, 'fnp':fnp}
 
     return render(request, 'rs_viz/export_index.html', context)
+
+main_context = {1: 'Geeks', 2: 'For', 3: 'Geeks'}

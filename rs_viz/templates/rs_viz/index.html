@@ -42,7 +42,7 @@
                     <button id="btn_addLayer">Add Layer</button>
                 </li>
                 <li>
-                    <button id="btn_openENV">Open ENV</button>
+                    <button id="btn_openENV">Open XML</button>
                 </li>
             </ul>
         </li>
@@ -128,7 +128,7 @@
                         <div class="layer_content">
 
                             <button class="btn-layer-options bin" form="remove" type="submit" value="{{ layer.document }}"></button>
-                            <button class="btn-layer-options eye" type="button" title="Remove Layer" title="Zoom to Layer"></button>
+                            <button class="btn-layer-options eye" type="button" title="Zoom to Layer"></button>
                             <button class="btn-layer-options settings" type="button" title="Layer Settings"></button>
                         </div>
                     </td>
@@ -185,7 +185,10 @@
             {% block content %}
             <form action="{% url 'layer_upload' %}" method="POST" enctype="multipart/form-data" id="add_layer">
                 {% csrf_token %}
-                <p>Document: <input type="file" id="document" name="filename" required multiple></p>
+                <p>Choose files to open: </p>
+                <p>
+                    <input type="file" id="document" name="filename" required multiple>
+                </p>
                 <p>
                     <button type="submit" id="add_layer_submit">Submit</button>
                 </p>
@@ -194,19 +197,19 @@
         </div>
     </div>
 
-    <!-- Open ENV  -->
+    <!-- Open XML  -->
     <div id="modal_openENV" class="modal-openENV noprint">
         <div class="modal-header noprint">
             <span class="close">&times;</span>
-            <h3>Open Environment</h3>
+            <h3>Open XML file</h3>
         </div>
         <div class="modal-body noprint">
-            <p>Load XML File to database</p>
             <form action="{% url 'env' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <tr>
+                <p>Choose an XML file to open:</p>
+                <p>
                     <input type="file" id="myFile" name="filename">
-                </tr>
+                </p>
                 <p>
                     <button type="submit" id="openENV_submit">Submit</button>
                 </p>
@@ -246,7 +249,7 @@
         </div>
     </div>
 
-    <!-- Properties -->
+    <!-- All Properties from Dropdown (Edit > Properties) -->
     <div id="modal_properties" class="modal-properties noprint">
         <div class="modal-header">
             <span class="close">&times;</span>
@@ -287,6 +290,7 @@
             {% endfor %}
         </div>
     </div>
+
 </div>
 
 <script src="{% static 'rs_viz/scripts/main.js' %}"></script>

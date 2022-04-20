@@ -3,6 +3,7 @@ from django.urls import reverse
 import os
 from raster_tools import Raster
 from django.core.exceptions import ValidationError
+from matplotlib import pyplot as plt, cm
 
 # This model is a template for importing raster objects into
 # the web database, and provides a name for the layer. The activated
@@ -50,6 +51,23 @@ class Layer(models.Model):
 
     def get_shape(self):
         return Raster(self.document.path).shape
+
+#     def location(self):
+#         elv = Raster(self.document.path)
+#
+#         dxr = elv._rs
+#         elv._rs.data = dxr.where(dxr != elv.null_value)
+#
+#         l = elv._rs[0].min().values.item()
+#         u = elv._rs[0].max().values.item()
+#         s3dn = (elv - l) / (u - l)
+#         cmap = cm.get_cmap('coolwarm')
+#
+#         xds_utm = s3dn._rs.rio.reproject("epsg:4326")
+#         w, s, e, n = xds_utm.rio.bounds()
+#         bnd = [s, w]
+#
+#         return bnd
 
     # Layer Properties Functions
     def n_bands(self):
