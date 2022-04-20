@@ -5,6 +5,10 @@ var modal_openENV = document.getElementById("modal_openENV");
 var modal_remove = document.getElementById("modal_remove");
 var modal_properties = document.getElementById("modal_properties");
 
+var add_layer_submit = document.getElementById("add_layer_submit");
+var rm_layer_submit = document.getElementById("rm_layer_submit");
+openENV_submit = document.getElementById("openENV_submit");
+
 // Get the buttons that open the modal
 var btn_addLayer = document.getElementById("btn_addLayer");
 var btn_openENV = document.getElementById("btn_openENV");
@@ -60,6 +64,18 @@ window.onload = function () {
     }
 }
 
+// Modals close on submit
+add_layer_submit.onclick = function () {
+    modal.style.display = "none";
+}
+openENV_submit.onclick = function () {
+    modal.style.display = "none";
+}
+rm_layer_submit.onclick = function () {
+    modal.style.display = "none";
+}
+
+
 // When the user clicks anywhere outside the modal, close it
 window.onclick = function (event) {
     if (event.target == modal) {
@@ -79,6 +95,7 @@ function changefunction(i) {
     }
 }
 
+// Switch between Map and Image
 function toggle_visibility(id, separate) {
     var e = document.getElementById(id);
     var v = document.getElementById(separate);

@@ -30,6 +30,8 @@ from pylab import figure, axes, pie, title
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 import xml.etree.ElementTree as ET
 
+import logging
+logger = logging.getLogger(__name__)
 
 def delete_everything(request):
     Layer.objects.all().delete()
@@ -51,30 +53,28 @@ def Upload_Env(request):
             new=[]
             for j in range(len(root[i])):
               new.append(root[i][j].text)
-            Layer.objects.create(name=new[0], document=new[1], activated=new[2])
+            Layer.objects.create(document=new[0], activated=new[1])
         fs.delete(filename)
         return redirect('index')
     field = ('XML File')
     return render(request, 'rs_viz/env.html', {'field':field})
 
 def CreateFileUpload(request):
-    print("file upload activated") # TESTING
     file_error = False
     if request.method == 'POST':
-        document = request.FILES['filename']
-        # The following code references 'activated' before it is used. Incorrect.
-        # if activated=='on':
-        #     activated=True
-        # else:
-        #     activated=False
-        name = request.POST['name']
-        if validate_file_extension(document):
-            Layer.objects.create(name=name, document=document, activated=True) # This ensures that 'activated' is initially True no matter what.
-            return redirect('index')
-        else:
-            file_error = True
+        files = request.FILES.getlist('filename')
+        print(files)
+        for document in files:
+            if validate_file_extension(document):
+                Layer.objects.create(document=document, activated=True)
+            else:
+                file_error = True
+                field = ('document')
+                return render(request, 'rs_viz/layer_upload.html', {'field': field, 'file_error': file_error})
 
-    field = ('name', 'document')
+        return redirect('index')
+
+    field = ('document')
     return render(request, 'rs_viz/layer_upload.html', {'field': field, 'file_error': file_error})
       
 # This function creates the home page view for the web application
@@ -96,24 +96,24 @@ def render_folium_raster(Layer_set, m):
             xds_utm = s3dn._rs.rio.reproject("epsg:4326")  # we need to reproject our results to lat lon
             w, s, e, n = xds_utm.rio.bounds()  # get the bounds
             bnd = [[s, w], [n, e]]  # set the bound for folium
+            folium.map.Marker([bnd[1][0],bnd[0][1]], tooltip=elv._attrs ).add_to(m)
             data = cmap(xds_utm[0])
 
             # Step 3: build out the map
-            folium.raster_layers.ImageOverlay(image=data, bounds=bnd, mercator_project=True,
-                                              name=layer.filename()).add_to(
-                m)  # add the raster
+            folium.raster_layers.ImageOverlay(image=data, bounds=bnd, mercator_project=True,name=layer.filename()).add_to(m)  # add the raster
             m.fit_bounds(bnd)
+
             # add the layer control
         except MissingCRS:
             continue
 
 
 def render_raster():
-    layers = Layer.objects.filter(activated=True)
+    active_layers = Layer.objects.filter(activated=True)
     i = 0
     raster = 0
     context = False
-    for layer in layers:
+    for layer in active_layers:
         try:
             rs = Raster(layer.document.path).astype('int32').set_null_value(-9999)
         except FileNotFoundError:
@@ -146,11 +146,13 @@ def index(request):
 
     # Creates the Map View's default folium map
     f = folium.Figure(width='100%', height='100%')
-    m = folium.Map(location=[37.0902, -95.7129], zoom_start=4.5).add_to(f) # Defaults to view of U.S.
-    #m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f) # Missoula coordinates
+
+    # Defaults to view of U.S.
+    m = folium.Map(location=[37.0902, -95.7129], zoom_start=4.5).add_to(f)
+
     graphic = "empty"
 
-    layers = Layer.objects.filter(activated=True)
+    active_layers = Layer.objects.filter(activated=True)
     inactive_layers = Layer.objects.filter(activated=False)
     raster = 0
     raster, fnp = render_raster() #fnp=File Not Present
@@ -177,26 +179,26 @@ def index(request):
     vocal = None
     i = 0
 
-    render_folium_raster(layers,m)
+    render_folium_raster(active_layers,m)
     folium.LayerControl().add_to(m)
     fs = plugins.Fullscreen()
     m.add_child(fs)
     m = m._repr_html_()
-    alayers = Layer.objects.all()
+    all_layers = Layer.objects.all()
     context = {'folMap': m,
-                'vocal': vocal, 'layers':layers,
-               'graphic':graphic, 'inactive_layers': inactive_layers,
-               'alayers':alayers, 'fnp':fnp}
+                'vocal': vocal, 'active_layers':active_layers,
+               'graphic':graphic, 'inactive_layers':inactive_layers,
+               'all_layers':all_layers, 'fnp':fnp}
 
     return render(request, 'rs_viz/index.html', context)
 
 def test_matplotlib(request):
     try:
         fig = figure()
-        layers = Layer.objects.filter(activated=True)
+        active_layers = Layer.objects.filter(activated=True)
         i = 0
         raster = 0
-        for layer in layers:
+        for layer in active_layers:
             rs = create_raster.create_raster(layer.document.path)
             if (i == 0):
                 raster = rs
@@ -226,13 +228,13 @@ class HelpPageView(TemplateView):
     template_name = 'rs_viz/help.html'
 
 def model_test(request):
-    layers = Layer.objects.filter(activated = True)
-    context = {"layers": layers}
+    active_layers = Layer.objects.filter(activated = True)
+    context = {"active_layers": active_layers}
     vocal = None
     i = 0
     raster = 0
     List = {}
-    for layer in layers:
+    for layer in active_layers:
         rs = create_raster.create_raster(layer.document.path)
         arr = rs._to_presentable_xarray()
         if arr.shape in List:
@@ -268,17 +270,17 @@ def convert_xml(request):
 
 def remove_layer(request):
     if request.method == 'POST':
-        choices = request.POST.getlist('choice') #Get the file name from the as a list
+        choices = request.POST.getlist('choice') # Get the file name from the as a list
         for i in choices:
             Layer.objects.filter(document=i).delete()
         return redirect('index')
 
-    layers = Layer.objects.all()
-    context = {'layers': layers}
+    all_layers = Layer.objects.all()
+    context = {'all_layers': all_layers}
     return render(request, 'rs_viz/rem.html', context)
 
 def render_files(request):
-    choices = request.POST.getlist('choices') #Get the file name from the as a list
+    choices = request.POST.getlist('choice') # Get the file name from the as a list
     Layer.objects.all().update(activated=False)
     for i in choices:
         Layer.objects.filter(document=i).update(activated=True)
@@ -292,7 +294,7 @@ def export_index(request):
     m = folium.Map(location=[46.8721, -113.9940], zoom_start=14).add_to(f)
     graphic = "empty"
 
-    layers = Layer.objects.filter(activated=True)
+    active_layers = Layer.objects.filter(activated=True)
     inactive_layers = Layer.objects.filter(activated=False)
     raster = 0
     raster, fnp = render_raster() #fnp=File Not Present
@@ -313,15 +315,15 @@ def export_index(request):
     vocal = None
     i = 0
 
-    render_folium_raster(layers,m)
+    render_folium_raster(active_layers,m)
     folium.LayerControl().add_to(m)
     fs = plugins.Fullscreen()
     m.add_child(fs)
     m = m._repr_html_()
-    alayers = Layer.objects.all()
+    all_layers = Layer.objects.all()
     context = {'folMap': m,
-                'vocal': vocal, 'layers':layers,
+                'vocal': vocal, 'active_layers':active_layers,
                'graphic':graphic, 'inactive_layers': inactive_layers,
-               'alayers':alayers, 'fnp':fnp}
+               'all_layers':all_layers, 'fnp':fnp}
 
     return render(request, 'rs_viz/export_index.html', context)

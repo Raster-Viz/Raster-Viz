@@ -9,6 +9,12 @@ from django.core.exceptions import ValidationError
 # var sets up a potential method that may be used to turning layers 'on and off'
 from web_function import create_raster
 
+def count_bands(keys):
+    num = 0
+    for layer in keys:
+        raster = Raster(layer.document.path)
+        num += raster.shape[0]
+    return num
 
 def validate_file_extension(value):
     import os
@@ -19,8 +25,7 @@ def validate_file_extension(value):
     return True
 
 class Layer(models.Model):
-    name = models.CharField(max_length=100)
-    document = models.FileField(upload_to='rs_viz/', validators=[validate_file_extension])
+    document = models.FileField(upload_to='rs_viz/layers', validators=[validate_file_extension])
     activated = models.BooleanField(blank=True, default=True)
     marked = False
 
@@ -28,7 +33,7 @@ class Layer(models.Model):
         return Raster(self.document.path)
 
     def __str__(self):
-        return self.name
+        return self.filename()
 
     def get_absolute_url(self):
         return reverse('index')
@@ -44,7 +49,7 @@ class Layer(models.Model):
             self.activated = False
 
     def get_shape(self):
-            return Raster(self.document.path).shape
+        return Raster(self.document.path).shape
 
     # Layer Properties Functions
     def n_bands(self):

@@ -360,7 +360,7 @@ body {
   width: 150px;
   background: #D2DBD9;
   position: absolute;
-  z-index: 99;
+  z-index: 2;
   display: none;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3);
   font-weight: bold;
@@ -475,7 +475,7 @@ body {
 .modal {
   display: none;
   position: fixed;
-  z-index: 1; /* Sit on top */
+  z-index: 3; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -604,4 +604,26 @@ body {
 .settings {
   background-image: url("../imgs/settings.png");
   float: right;
+}
+
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid $menu-primary; /* Blue */
+  border-radius: 50%;
+  margin: auto;
+  z-index: 99;
+  width: 70px;
+  height: 70px;
+  -webkit-animation: spin 2s linear;
+  animation: spin 2s linear;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
