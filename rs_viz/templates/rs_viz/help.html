@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'rs_viz/css/styles.css' %}">
+
 <head>
     <meta charset="UTF-8">
-    <title>Help</title>
+    <title>Upload</title>
 </head>
 <body>
-Help documentation...
+<h2>Sorry, there is currently no help documentation for the Raster Viz Web Utility.</h2>
+
+<h2><a href="{% url 'index' %}">Return to the main page.</a></h2>
 </body>
 </html>

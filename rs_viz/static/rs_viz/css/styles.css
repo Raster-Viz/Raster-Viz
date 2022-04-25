@@ -563,6 +563,12 @@ body {
   float: right;
 }
 
+.id-cell-btn {
+  background-image: url("../imgs/info.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .loader {
   border: 16px solid #f3f3f3;
   /* Light grey */
@@ -592,6 +598,10 @@ body {
   100% {
     transform: rotate(360deg);
   }
+}
+.isDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 /*# sourceMappingURL=styles.css.map */

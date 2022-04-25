@@ -28,6 +28,7 @@
 {% if fnp %}
 <script>window.alert('file(s) not found in Database')</script>
 {% endif %}
+
 <!-- Top Menu Bar-->
 <nav id='menu' class="noprint">
     <ul>
@@ -60,10 +61,10 @@
         <li>
             <button class="dropdown-arrow">View</button>
             <ul class='sub-menus'>
-                <li><a href="#">Zoom to Layer</a></li>
-                <li><a href="#">Selection Zoom</a></li>
-                <li><a href="#">Grid</a></li>
-                <li><a href="#">Ruler</a></li>
+                <li><a class="isDisabled" href="#">Zoom to Layer</a></li>
+                <li><a class="isDisabled" href="#">Selection Zoom</a></li>
+                <li><a class="isDisabled" href="#">Grid</a></li>
+                <li><a class="isDisabled" href="#">Ruler</a></li>
             </ul>
         </li>
         <li><a href="{% url 'help' %}">Help</a></li>
@@ -81,15 +82,16 @@
         <button type="submit" form="render">Render Changes</button>
         <button type="button" onclick="toggle_visibility('FoliumMap', 'RasterImages')">Map</button>
         <button type="button" onclick="toggle_visibility('RasterImages', 'FoliumMap')">Image</button>
-        <button type="button">&#9432;</button>
+        <button class="isDisabled" type="button" title="Identify Cell" disabled>&#9432;</button>
     </div>
 
     <!-- Layer View -->
     <div class="layer noprint" style="overflow: auto">
         <script>
-            $(document).ready(function () {
+            // Used for Layer menu drag/drop
+            /*$(document).ready(function () {
                 $("#table-layer").tableDnD();
-            });
+            });*/
         </script>
         <table class="table-main" id="table-layer">
             <tr class="nodrag nodrop">
@@ -101,7 +103,7 @@
                 <tr>
                     <td colspan="2" style="background-color: ivory">
                         <p class="help_text">Active layers will be<br>displayed here.</p>
-                        <p class="help_text">To import a layer,<br> select File > Import.</p>
+                        <p class="help_text">To add a layer,<br> select File > Add Layer.</p>
                     </td>
                 </tr>
                 {% endif %}
@@ -116,8 +118,8 @@
                         <div class="layer_content">
 
                             <button class="btn-layer-options bin" form="remove" type="submit" title="Remove Layer" value="{{ layer.document }}"></button>
-                            <button class="btn-layer-options eye" type="button" title="Zoom to Layer"></button>
-                            <button class="btn-layer-options settings" type="button" title="Layer Settings"></button>
+                            <button class="btn-layer-options eye isDisabled" type="button" title="Zoom to Layer"></button>
+                            <button class="btn-layer-options settings isDisabled" type="button" title="Layer Settings"></button>
                         </div>
                     </td>
                 </tr>
@@ -128,8 +130,8 @@
                         <div class="layer_content">
 
                             <button class="btn-layer-options bin" form="remove" type="submit" value="{{ layer.document }}"></button>
-                            <button class="btn-layer-options eye" type="button" title="Zoom to Layer"></button>
-                            <button class="btn-layer-options settings" type="button" title="Layer Settings"></button>
+                            <button class="btn-layer-options eye isDisabled" type="button" title="Zoom to Layer"></button>
+                            <button class="btn-layer-options settings isDisabled" type="button" title="Layer Settings"></button>
                         </div>
                     </td>
                 </tr>
@@ -153,20 +155,6 @@
                 </th>
                 <th>Value(s)</th>
             </tr>
-
-            <tr>
-                <td>Test</td>
-                <td>299.12</td>
-            </tr>
-            <tr>
-                <td>Test</td>
-                <td>976.34</td>
-            </tr>
-            <tr>
-                <td>Test</td>
-                <td>1005.52</td>
-            </tr>
-
         </table>
     </div>
 

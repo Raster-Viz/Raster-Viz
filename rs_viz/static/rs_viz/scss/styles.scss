@@ -606,6 +606,12 @@ body {
   float: right;
 }
 
+.id-cell-btn {
+  background-image: url("../imgs/info.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .loader {
   border: 16px solid #f3f3f3; /* Light grey */
   border-top: 16px solid $menu-primary; /* Blue */
@@ -626,4 +632,9 @@ body {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.isDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }

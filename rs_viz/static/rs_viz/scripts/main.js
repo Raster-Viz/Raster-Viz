@@ -64,6 +64,16 @@ window.onload = function () {
     }
 }
 
+// When the user clicks anywhere outside the modal, close it
+window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+        modal_import.style.display = "none";
+        modal_openENV.style.display = "none";
+        modal_properties.style.display = "none";
+    }
+}
+
 // Modals close on submit
 add_layer_submit.onclick = function () {
     modal.style.display = "none";
@@ -75,16 +85,6 @@ rm_layer_submit.onclick = function () {
     modal.style.display = "none";
 }
 
-
-// When the user clicks anywhere outside the modal, close it
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-        modal_import.style.display = "none";
-        modal_openENV.style.display = "none";
-        modal_properties.style.display = "none";
-    }
-}
 
 function changefunction(i) {
     if (i == "print") {
