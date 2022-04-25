@@ -12,6 +12,10 @@ body {
   color: midnightblue;
 }
 
+.settings {
+  display: inline-block;
+}
+
 .prop-filename {
   background-color: #f5efca;
   font-family: Arial, serif;
@@ -54,14 +58,40 @@ body {
   font-size: 14px;
 }
 
+#table-layer {
+  background-color: ivory;
+  table-layout: fixed;
+  width: 100%;
+}
+#table-layer td:last-child {
+  padding: 3px 2px 0 0;
+}
+#table-layer th {
+  padding: 0 0 0 2px;
+}
+#table-layer th img {
+  height: 1.3em;
+  width: 1.4em;
+  padding-top: 5px;
+}
 #table-layer th:first-child {
-  width: 27%;
+  font-size: 1.35em;
+  border-right: none;
+  width: 40px;
+}
+#table-layer th:last-child {
+  font-size: 1.3em;
+  text-align: left;
+  padding-left: 0;
 }
 #table-layer tr:first-child {
   background-color: #f5efca;
 }
-#table-layer tr:nth-child(even) {
+#table-layer tr:not(:first-child):hover {
   background-color: #ffffd7;
+}
+#table-layer tr:last-child {
+  border-bottom: 2px outset darkgrey;
 }
 #table-layer .full_act {
   text-align: center;
@@ -160,7 +190,7 @@ body {
   grid-area: layer;
   border-style: ridge;
   border-width: thick;
-  background: ivory;
+  background: whitesmoke;
   border-radius: 7px;
 }
 
@@ -188,7 +218,7 @@ body {
   display: grid;
   position: relative;
   grid-template-areas: "toc select select" "layer map map" "id map map";
-  grid-template-columns: minmax(50px, 230px) minmax(185px, 1fr) minmax(185px, 1fr);
+  grid-template-columns: minmax(50px, 260px) minmax(185px, 1fr) minmax(185px, 1fr);
   grid-template-rows: 30px minmax(150px, 1fr) minmax(140px, 0.6fr);
   background-color: lightgrey;
   gap: 0.4375em;
@@ -294,7 +324,7 @@ body {
   width: 150px;
   background: #D2DBD9;
   position: absolute;
-  z-index: 99;
+  z-index: 2;
   display: none;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3);
   font-weight: bold;
@@ -405,7 +435,7 @@ body {
 .modal {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   /* Sit on top */
   left: 0;
   top: 0;
@@ -440,14 +470,6 @@ body {
   max-width: 450px;
 }
 
-/*.modal-openENV {*/
-/*    display: none;*/
-/*    background-color: ivory;*/
-/*    margin: 15% auto; !* 15% from the top and centered *!*/
-/*    padding: 20px;*/
-/*    border: 1px solid #888;*/
-/*    width: 80%; !* Could be more or less, depending on screen size *!*/
-/*}*/
 .modal-header {
   font-family: Arial, serif;
   padding: 0.187em 1em;
@@ -479,6 +501,107 @@ body {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.tDnD_whileDrag td {
+  background-color: #ffffcc;
+  -webkit-box-shadow: 6px 3px 5px #555, 0 1px 0 #ffffd7 inset, 0 -1px 0 #ffffd7 inset;
+}
+
+.collapsible {
+  color: black;
+  cursor: pointer;
+  text-align: right;
+}
+
+.collapsible:after {
+  content: "+";
+  color: black;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "−";
+}
+
+.layer_content {
+  float: right;
+  padding: 3px 5px 5px 5px;
+  display: none;
+  background-color: inherit;
+  cursor: default;
+  width: 100%;
+  border-top: 1.5px solid darkgrey;
+}
+
+.btn-layer-options {
+  width: 1.75em;
+  height: 1.75em;
+  padding: 1px;
+  margin-right: 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 17px;
+}
+
+.eye {
+  background-image: url("../imgs/eye.png");
+  float: right;
+}
+
+.bin {
+  background-image: url("../imgs/trash-bin.png");
+  float: left;
+}
+
+.settings {
+  background-image: url("../imgs/settings.png");
+  float: right;
+}
+
+.id-cell-btn {
+  background-image: url("../imgs/info.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  /* Light grey */
+  border-top: 16px solid #385a39;
+  /* Blue */
+  border-radius: 50%;
+  margin: auto;
+  z-index: 99;
+  width: 70px;
+  height: 70px;
+  -webkit-animation: spin 2s linear;
+  animation: spin 2s linear;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.isDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 /*# sourceMappingURL=styles.css.map */

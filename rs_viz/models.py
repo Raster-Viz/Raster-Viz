@@ -3,12 +3,19 @@ from django.urls import reverse
 import os
 from raster_tools import Raster
 from django.core.exceptions import ValidationError
+from matplotlib import pyplot as plt, cm
 
 # This model is a template for importing raster objects into
 # the web database, and provides a name for the layer. The activated
 # var sets up a potential method that may be used to turning layers 'on and off'
 from web_function import create_raster
 
+def count_bands(keys):
+    num = 0
+    for layer in keys:
+        raster = Raster(layer.document.path)
+        num += raster.shape[0]
+    return num
 
 def validate_file_extension(value):
     import os
@@ -19,16 +26,15 @@ def validate_file_extension(value):
     return True
 
 class Layer(models.Model):
-    name = models.CharField(max_length=100)
-    document = models.FileField(upload_to='rs_viz/', validators=[validate_file_extension])
+    document = models.FileField(upload_to='rs_viz/layers', validators=[validate_file_extension])
     activated = models.BooleanField(blank=True, default=True)
     marked = False
-
+    color = models.CharField(default="terrain", max_length=50)
     def get_Raster(self):
         return Raster(self.document.path)
 
     def __str__(self):
-        return self.name
+        return self.filename()
 
     def get_absolute_url(self):
         return reverse('index')
@@ -44,7 +50,24 @@ class Layer(models.Model):
             self.activated = False
 
     def get_shape(self):
-            return Raster(self.document.path).shape
+        return Raster(self.document.path).shape
+
+#     def location(self):
+#         elv = Raster(self.document.path)
+#
+#         dxr = elv._rs
+#         elv._rs.data = dxr.where(dxr != elv.null_value)
+#
+#         l = elv._rs[0].min().values.item()
+#         u = elv._rs[0].max().values.item()
+#         s3dn = (elv - l) / (u - l)
+#         cmap = cm.get_cmap('coolwarm')
+#
+#         xds_utm = s3dn._rs.rio.reproject("epsg:4326")
+#         w, s, e, n = xds_utm.rio.bounds()
+#         bnd = [s, w]
+#
+#         return bnd
 
     # Layer Properties Functions
     def n_bands(self):

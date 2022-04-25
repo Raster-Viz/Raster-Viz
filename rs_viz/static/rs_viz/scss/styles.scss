@@ -18,6 +18,10 @@ body {
   color: midnightblue;
 }
 
+.settings {
+  display: inline-block;
+}
+
 .prop-filename {
   background-color: rgb(245, 239, 202);
   font-family: Arial, serif;
@@ -66,16 +70,45 @@ body {
 }
 
 #table-layer {
+  background-color: $color1;
+  table-layout: fixed; width: 100%;
+
+  td:last-child {
+    padding: 3px 2px 0 0;
+  }
+
+  th {
+    padding: 0 0 0 2px;
+  }
+
+  th img {
+    height: 1.3em;
+    width: 1.4em;
+    padding-top: 5px;
+  }
+
   th:first-child {
-    width: 27%;
+    font-size: 1.35em;
+    border-right: none;
+    width: 40px;
+  }
+
+  th:last-child {
+    font-size: 1.3em;
+    text-align: left;
+    padding-left: 0;
   }
 
   tr:first-child {
     background-color: rgb(245, 239, 202);
   }
 
-  tr:nth-child(even){
+  tr:not(:first-child):hover{
     background-color: darken($color1, 5%);
+  }
+
+  tr:last-child {
+    border-bottom: 2px outset darkgrey;
   }
 
   .full_act {
@@ -188,7 +221,7 @@ body {
   grid-area: layer;
   border-style: ridge;
   border-width: thick;
-  background: $color1;
+  background: whitesmoke;
   border-radius: 7px;
 }
 
@@ -219,7 +252,7 @@ body {
     'toc select select'
     'layer map map'
     'id map map';
-  grid-template-columns: minmax(50px, 230px) minmax(185px, 1fr) minmax(185px, 1fr);
+  grid-template-columns: minmax(50px, 260px) minmax(185px, 1fr) minmax(185px, 1fr);
   grid-template-rows: 30px minmax(150px, 1fr) minmax(140px, .6fr);
   background-color: lightgrey;
   gap: .4375em;
@@ -327,7 +360,7 @@ body {
   width: 150px;
   background: #D2DBD9;
   position: absolute;
-  z-index: 99;
+  z-index: 2;
   display: none;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3);
   font-weight: bold;
@@ -442,7 +475,7 @@ body {
 .modal {
   display: none;
   position: fixed;
-  z-index: 1; /* Sit on top */
+  z-index: 3; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -473,15 +506,6 @@ body {
   width: 450px;
   max-width: 450px;
 }
-
-/*.modal-openENV {*/
-/*    display: none;*/
-/*    background-color: ivory;*/
-/*    margin: 15% auto; !* 15% from the top and centered *!*/
-/*    padding: 20px;*/
-/*    border: 1px solid #888;*/
-/*    width: 80%; !* Could be more or less, depending on screen size *!*/
-/*}*/
 
 .modal-header {
   font-family: Arial, serif;
@@ -514,4 +538,103 @@ body {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.tDnD_whileDrag td {
+  background-color: darken($color1, 7%);
+  -webkit-box-shadow: 6px 3px 5px #555, 0 1px 0 darken($color1, 5%) inset, 0 -1px 0 darken($color1, 5%) inset;
+}
+
+.collapsible {
+  color: black;
+  cursor: pointer;
+  text-align: right;
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: black;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.active, .collapsible:hover {
+  //background-color: red;
+}
+
+.layer_content {
+  float: right;
+  padding: 3px 5px 5px 5px;
+  display: none;
+  //overflow: hidden;
+  background-color: inherit;
+  cursor: default;
+  width: 100%;
+  border-top: 1.5px solid darkgrey;
+}
+
+.btn-layer-options {
+  width: 1.75em;
+  height: 1.75em;
+  padding: 1px;
+  margin-right: 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 17px;
+}
+
+.eye {
+  background-image: url("../imgs/eye.png");
+  float: right;
+}
+
+.bin {
+  //position: relative;
+  background-image: url("../imgs/trash-bin.png");
+  float: left;
+}
+
+.settings {
+  background-image: url("../imgs/settings.png");
+  float: right;
+}
+
+.id-cell-btn {
+  background-image: url("../imgs/info.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid $menu-primary; /* Blue */
+  border-radius: 50%;
+  margin: auto;
+  z-index: 99;
+  width: 70px;
+  height: 70px;
+  -webkit-animation: spin 2s linear;
+  animation: spin 2s linear;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.isDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
