@@ -326,7 +326,7 @@ def export_index(request):
     i = 0
 
     render_folium_raster(active_layers,m)
-    folium.LayerControl().add_to(m)
+    #folium.LayerControl().add_to(m)
     fs = plugins.Fullscreen()
     m.add_child(fs)
     m = m._repr_html_()
