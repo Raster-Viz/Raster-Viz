@@ -486,7 +486,7 @@ body {
 }
 
 /* Modal Content/Box */
-.modal-import, .modal-openENV, .modal-remove, .modal-properties .modal-color {
+.modal-import, .modal-openENV, .modal-remove, .modal-properties, .modal-color {
   display: none;
   position: relative;
   background-color: ivory;
@@ -590,6 +590,19 @@ body {
   background-size: 17px;
 }
 
+
+.btn_color {
+  width: auto;
+  height: 1.75em;
+  padding: 1px;
+  margin-right: 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  font-stretch: semi-condensed;
+  float: right;
+}
+
 .eye {
   background-image: url("../imgs/eye.png");
   float: right;
@@ -638,3 +651,9 @@ body {
   cursor: not-allowed;
   opacity: 0.5;
 }
+
+.isDisabled2 {
+  opacity: 0.5;
+}
+
+

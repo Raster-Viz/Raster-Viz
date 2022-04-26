@@ -461,7 +461,7 @@ body {
   max-width: 300px;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.6);
 }
-.modal-import button, .modal-openENV button, .modal-remove button, .modal-properties button {
+.modal-import button, .modal-openENV button, .modal-remove button, .modal-properties button, .modal-color button {
   cursor: pointer;
 }
 
@@ -548,6 +548,18 @@ body {
   background-size: 17px;
 }
 
+.btn_color {
+  width: auto;
+  height: 1.75em;
+  padding: 1px;
+  margin-right: 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  font-stretch: semi-condensed;
+  float: right;
+}
+
 .eye {
   background-image: url("../imgs/eye.png");
   float: right;
@@ -601,6 +613,10 @@ body {
 }
 .isDisabled {
   cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.isDisabled2 {
   opacity: 0.5;
 }
 

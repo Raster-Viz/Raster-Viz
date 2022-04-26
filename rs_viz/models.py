@@ -119,6 +119,7 @@ class Layer(models.Model):
                        'float128':'128 bit, floating-point'
                      }
         return data_types.get(dtype, dtype)
+
 class Vectors(models.Model):
     document = models.FileField(upload_to='rs_viz/vectors')
     activated = models.BooleanField(blank=True, default=True)

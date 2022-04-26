@@ -35,15 +35,15 @@
         <li>
             <button class="dropdown-arrow firstBtn">File</button>
             <ul class='sub-menus'>
-                <li><a href="{% url 'del' %}" id="new">New</a></li>
-                <li><a href="{% url 'xml' %}" id="download" download="data_paths">Save</a></li>
+                <li><a href="{% url 'del' %}" title="Reset the environment (removes all layers)"id="new">New</a></li>
+                <li><a href="{% url 'xml' %}" id="download" download="data_paths" title="Save the working environment as an XML file">Save</a></li>
                 <li><a href="" id="print" onclick="changefunction(id);">Print</a></li>
-                <li><a href="{% url 'html_export' %}" id="download" download="completed_rendering">Export</a></li>
+                <li><a href="{% url 'html_export' %}" id="download" download="completed_rendering" title="Save the working environment as an HTML file (INCOMPLETE) ">Export</a></li>
                 <li>
                     <button id="btn_addLayer">Add Layer</button>
                 </li>
                 <li>
-                    <button id="btn_openENV">Open XML</button>
+                    <button id="btn_openENV" title="Open a saved environment from an XML file">Open XML</button>
                 </li>
             </ul>
         </li>
@@ -79,10 +79,10 @@
     <div class="toc noprint">TABLE OF CONTENTS</div>
 
     <div class="select noprint" id="toolbar">
-        <button type="submit" form="render">Render Changes</button>
-        <button type="button" onclick="toggle_visibility('FoliumMap', 'RasterImages')">Map</button>
-        <button type="button" onclick="toggle_visibility('RasterImages', 'FoliumMap')">Image</button>
-        <button class="isDisabled" type="button" title="Identify Cell" disabled>&#9432;</button>
+        <button type="submit" title="Process checkbox selection/deselection from the Layer menu" form="render">Render</button>
+        <button type="button" title="View active layers on world map" onclick="toggle_visibility('FoliumMap', 'RasterImages')">Map</button>
+        <button type="button" title="View plot and key of active layers" onclick="toggle_visibility('RasterImages', 'FoliumMap')">Image</button>
+        <button class="isDisabled" style="cursor: not-allowed" type="button" title="Identify Cell" disabled>&#9432;</button>
     </div>
 
     <!-- Layer View -->
@@ -97,9 +97,9 @@
             <tr class="nodrag nodrop">
                 <th><img src="{% static 'rs_viz/imgs/three_layers.png' %}" height="25" width="auto"></th>
                 <th>Layers</th>
-                <button type="button" id="btn_color" title="Color Ramp" value="{{layer.document}}">
+<!--                <button type="button" id="btn_color" title="Color Ramp" value="{{layer.document}}">
                     Color Ramp
-                </button>
+                </button>-->
             </tr>
             <form method="POST" id="render" action="{% url 'rend' %}"> {% csrf_token %}
                 {% if all_layers|length == 0 %}
@@ -115,12 +115,13 @@
                 {% if layer.activated %}
                 <tr>
                     <td>
-                        <input type="checkbox" name="choice" value="{{ layer.document }}" checked/>
+                        <input title="Determines if layer is active in Map & Image views. Render to finalize." type="checkbox" name="choice" value="{{ layer.document }}" checked/>
                     </td>
                     <td><label class="collapsible" for="choice{{ forloop.counter }}">{{ layer.filename }}<br></label>
                         <div class="layer_content">
 
                             <button class="btn-layer-options bin" form="remove" type="submit" title="Remove Layer" value="{{ layer.document }}"></button>
+                            <button class="btn_color" type="button" form="colorRamp" title="Color Ramp" value="{{ layer.document }}">Color Ramp</button>
                             <button class="btn-layer-options eye isDisabled" type="button" title="Zoom to Layer"></button>
                             <button class="btn-layer-options settings isDisabled" type="button" title="Layer Settings"></button>
                         </div>
@@ -128,12 +129,12 @@
                 </tr>
                 {% else %}
                 <tr>
-                    <td><input type="checkbox" name="choice" value="{{ layer.document }}"/></td>
+                    <td><input title="Determines if layer is active in Map & Image views. Render to finalize." type="checkbox" name="choice" value="{{ layer.document }}"/></td>
                     <td><label class="collapsible" for="choice{{ forloop.counter }}">{{ layer.filename }}<br></label>
                         <div class="layer_content">
 
                             <button class="btn-layer-options bin" form="remove" type="submit" value="{{ layer.document }}"></button>
-
+                            <button class="btn_color" type="button" form="colorRamp" title="Color Ramp" value="{{ layer.document }}">Color Ramp</button>
                             <button class="btn-layer-options eye isDisabled" type="button" title="Zoom to Layer"></button>
                             <button class="btn-layer-options settings isDisabled" type="button" title="Layer Settings"></button>
                         </div>
@@ -150,7 +151,7 @@
     <div class="rast" id="RasterImages"><img src="data:image/png;base64,{{ graphic|safe }}"></div>
 
     <!-- Identify Cell -->
-    <div class="id noprint" style="overflow: auto">
+    <div class="id noprint isDisabled2" style="overflow: auto">
         <table class="table-main" id="table-id">
             <tr>
                 <th>
@@ -176,11 +177,11 @@
             {% block content %}
             <form action="{% url 'layer_upload' %}" method="POST" enctype="multipart/form-data" id="add_layer">
                 {% csrf_token %}
-                <p>Choose files to open: </p>
+                <p>Choose a file to open.<br>Multiple files may be selected: </p>
                 <p>
                     <input type="file" id="document" name="filename" required multiple>
                 </p>
-                <p>
+                <p style="text-align: right">
                     <button type="submit" id="add_layer_submit">Submit</button>
                 </p>
             </form>
@@ -201,7 +202,7 @@
                 <p>
                     <input type="file" id="myFile" name="filename">
                 </p>
-                <p>
+                <p style="text-align: right">
                     <button type="submit" id="openENV_submit">Submit</button>
                 </p>
             </form>
@@ -232,7 +233,7 @@
                     </tr>
                     {% endfor %}
                 </table>
-                <p>
+                <p style="text-align: right">
                     <button type="submit" id="rm_layer_submit">Remove</button>
                 </p>
             </form>
@@ -282,26 +283,19 @@
         </div>
     </div>
 
+    <!-- Color Ramp -->
     <div id="modal_color" class="modal-color noprint">
         <div class="modal-header noprint">
             <span class="close">&times;</span>
-            <h3>Change Color</h3>
+            <h3>Change Color Ramp</h3>
         </div>
         <div class="modal-body noprint">
-            <form action="{% url 'ramp' %}" method="POST">
-                {% csrf_token %}
+            <form action="{% url 'ramp' %}" id="colorRamp" method="POST"> {% csrf_token %}
                 {% for layer in all_layers %}
-                <table>
-                    <tr>
-                        <td style="width: 18px">
-                            <input type="checkbox" name="choice" id="choice1{{ forloop.counter }}" value="{{ layer.document }}"/>
-                        </td>
-                        <td>
-                            <label for="choice{{ forloop.counter }}">{{ layer.filename }}</label>
-                        </td>
-                    </tr>
-                </table>
+                <input type="hidden" name="choice" value="{{ layer.document }}"/>
                 {% endfor %}
+                <p>
+                <button id="color_submit" type="submit">Process</button>
                 <select name="color" id="color">
                     <option value="terrain">Terrain</option>
                     <option value="earth">Earth</option>
@@ -311,7 +305,7 @@
                     <option value="winter">Winter</option>
                     <option value="bone">Bone</option>
                 </select>
-                <button type="submit">Submit</button>
+                </p>
             </form>
         </div>
     </div>
@@ -321,3 +315,4 @@
 <script src="{% static 'rs_viz/scripts/main.js' %}"></script>
 </body>
 </html>
+

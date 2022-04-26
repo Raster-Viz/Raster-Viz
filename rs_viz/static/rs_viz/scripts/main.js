@@ -8,14 +8,15 @@ var modal_color = document.getElementById("modal_color")
 
 var add_layer_submit = document.getElementById("add_layer_submit");
 var rm_layer_submit = document.getElementById("rm_layer_submit");
-openENV_submit = document.getElementById("openENV_submit");
+var openENV_submit = document.getElementById("openENV_submit");
+var color_submit = document.getElementById("color_submit");
 
 // Get the buttons that open the modal
 var btn_addLayer = document.getElementById("btn_addLayer");
 var btn_openENV = document.getElementById("btn_openENV");
 var btn_remove = document.getElementById("btn_remove");
 var btn_properties = document.getElementById("btn_properties");
-var btn_color = document.getElementById("btn_color")
+var btn_color = document.getElementsByClassName("btn_color")
 
 // Get the <span> element that closes the modal
 var spans = document.getElementsByClassName("close");
@@ -29,6 +30,7 @@ btn_addLayer.onclick = function () {
     modal_openENV.style.display = "none";
     modal_remove.style.display = "none";
     modal_properties.style.display = "none";
+    modal_color.style.display= "none";
 }
 
 btn_openENV.onclick = function () {
@@ -37,6 +39,7 @@ btn_openENV.onclick = function () {
     modal_import.style.display = "none";
     modal_remove.style.display = "none";
     modal_properties.style.display = "none";
+    modal_color.style.display= "none";
 }
 
 btn_remove.onclick = function () {
@@ -45,6 +48,7 @@ btn_remove.onclick = function () {
     modal_import.style.display = "none";
     modal_openENV.style.display = "none";
     modal_properties.style.display = "none";
+    modal_color.style.display= "none";
 }
 
 btn_properties.onclick = function () {
@@ -53,16 +57,20 @@ btn_properties.onclick = function () {
     modal_import.style.display = "none";
     modal_openENV.style.display = "none";
     modal_remove.style.display = "none";
+    modal_color.style.display= "none";
 }
 
-btn_color.onclick = function () {
-    modal.style.display = "block";
-    modal_color.style.display= "block";
-    modal_import.style.display = "none";
-    modal_openENV.style.display = "none";
-    modal_remove.style.display = "none";
-    modal_properties.style.display = "none";
+for (var i = 0; i < btn_color.length; i++) {
+    btn_color[i].onclick = function () {
+        modal.style.display = "block";
+        modal_color.style.display= "block";
+        modal_import.style.display = "none";
+        modal_openENV.style.display = "none";
+        modal_remove.style.display = "none";
+        modal_properties.style.display = "none";
+    }
 }
+
 // When the user clicks on <span> (x), close the modal
 window.onload = function () {
     for (var i = 0; i < spans.length; i++) {
@@ -96,7 +104,9 @@ openENV_submit.onclick = function () {
 rm_layer_submit.onclick = function () {
     modal.style.display = "none";
 }
-
+color_submit.onclick = function () {
+    modal.style.display = "none";
+}
 
 function changefunction(i) {
     if (i == "print") {

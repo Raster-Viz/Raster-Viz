@@ -223,7 +223,7 @@ def index(request):
     folium.TileLayer(
         tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         attr='Esri',
-        name='Esri Imagery',
+        name='Esri Imagery (satellite map)',
         overlay=False,
         control=True
     ).add_to(m)
