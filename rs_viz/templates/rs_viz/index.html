@@ -97,6 +97,9 @@
             <tr class="nodrag nodrop">
                 <th><img src="{% static 'rs_viz/imgs/three_layers.png' %}" height="25" width="auto"></th>
                 <th>Layers</th>
+                <button type="button" id="btn_color" title="Color Ramp" value="{{layer.document}}">
+                    Color Ramp
+                </button>
             </tr>
             <form method="POST" id="render" action="{% url 'rend' %}"> {% csrf_token %}
                 {% if all_layers|length == 0 %}
@@ -130,6 +133,7 @@
                         <div class="layer_content">
 
                             <button class="btn-layer-options bin" form="remove" type="submit" value="{{ layer.document }}"></button>
+
                             <button class="btn-layer-options eye isDisabled" type="button" title="Zoom to Layer"></button>
                             <button class="btn-layer-options settings isDisabled" type="button" title="Layer Settings"></button>
                         </div>
@@ -162,7 +166,6 @@
 
 <!-- The Modal -->
 <div id="mainModal" class="modal noprint">
-
     <!-- Add Layer  -->
     <div id="modal_import" class="modal-import">
         <div class="modal-header noprint">
@@ -276,6 +279,40 @@
                 </tr>
             </table>
             {% endfor %}
+        </div>
+    </div>
+
+    <div id="modal_color" class="modal-color noprint">
+        <div class="modal-header noprint">
+            <span class="close">&times;</span>
+            <h3>Change Color</h3>
+        </div>
+        <div class="modal-body noprint">
+            <form action="{% url 'ramp' %}" method="POST">
+                {% csrf_token %}
+                {% for layer in all_layers %}
+                <table>
+                    <tr>
+                        <td style="width: 18px">
+                            <input type="checkbox" name="choice" id="choice1{{ forloop.counter }}" value="{{ layer.document }}"/>
+                        </td>
+                        <td>
+                            <label for="choice{{ forloop.counter }}">{{ layer.filename }}</label>
+                        </td>
+                    </tr>
+                </table>
+                {% endfor %}
+                <select name="color" id="color">
+                    <option value="terrain">Terrain</option>
+                    <option value="earth">Earth</option>
+                    <option value="ocean">Ocean</option>
+                    <option value="gray">Grey</option>
+                    <option value="hot">Hot</option>
+                    <option value="winter">Winter</option>
+                    <option value="bone">Bone</option>
+                </select>
+                <button type="submit">Submit</button>
+            </form>
         </div>
     </div>
 
