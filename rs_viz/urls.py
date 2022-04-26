@@ -15,5 +15,6 @@ urlpatterns = [
     path('html_export/', views.export_index, name='html_export'),
     path('rend/', views.render_files, name='rend'),
     path('env/', views.Upload_Env, name='env'),
+    path('ramp/', views.SetColor, name='ramp')
     #path('zoom-to-layer/', views.zoom_to_layer, name='zoom-to-layer')
 ]

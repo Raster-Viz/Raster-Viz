@@ -20,8 +20,16 @@ def count_bands(keys):
 def validate_file_extension(value):
     import os
     ext = os.path.splitext(value.name)[1]
-    valid_extensions = ['.tif', '.tiff', '.jpg', '.jpeg', '.png']
+    valid_extensions = ['.tif', '.jpeg', '.png', '.tiff', '.jpg']
     if not ext in valid_extensions:
+        return False
+    return True
+
+def check_vector_ext(value):
+    import os
+    ext = os.path.splitext(value.name)[1]
+    vector_ext=['.shp', '.shx', '.dbf']
+    if not ext in vector_ext:
         return False
     return True
 
@@ -29,7 +37,7 @@ class Layer(models.Model):
     document = models.FileField(upload_to='rs_viz/layers', validators=[validate_file_extension])
     activated = models.BooleanField(blank=True, default=True)
     marked = False
-
+    color = models.CharField(default="terrain", max_length=50)
     def get_Raster(self):
         return Raster(self.document.path)
 
@@ -111,3 +119,12 @@ class Layer(models.Model):
                        'float128':'128 bit, floating-point'
                      }
         return data_types.get(dtype, dtype)
+class Vectors(models.Model):
+    document = models.FileField(upload_to='rs_viz/vectors')
+    activated = models.BooleanField(blank=True, default=True)
+
+    def filename(self):
+        return os.path.basename(self.document.name)
+
+    def __str__(self):
+        return self.filename();
