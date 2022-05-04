@@ -177,7 +177,7 @@ def index(request):
 
     # Defaults to view of U.S. [37.0902, -95.7129]
     coords = [37.0902, -95.7129]
-    m = folium.Map(location=coords, zoom_start=4.5).add_to(f)
+    m = folium.Map(location=coords, zoom_start=4.5, control_scale=True).add_to(f)
 
     graphic = "empty"
 

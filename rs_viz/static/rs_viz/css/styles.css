@@ -1,6 +1,6 @@
 @charset "UTF-8";
 body {
-  background-color: #cedecd;
+  background-color: #b5e0ad;
   padding: 0 0.25em;
   min-width: 560px;
 }
@@ -17,7 +17,7 @@ body {
 }
 
 .prop-filename {
-  background-color: #f5efca;
+  background-color: #ffeca0;
   font-family: Arial, serif;
   border-left: 2px double grey;
   height: 100%;
@@ -59,7 +59,7 @@ body {
 }
 
 #table-layer {
-  background-color: ivory;
+  background-color: #faf1ce;
   table-layout: fixed;
   width: 100%;
 }
@@ -85,10 +85,10 @@ body {
   padding-left: 0;
 }
 #table-layer tr:first-child {
-  background-color: #f5efca;
+  background-color: #ffeca0;
 }
 #table-layer tr:not(:first-child):hover {
-  background-color: #ffffd7;
+  background-color: ivory;
 }
 #table-layer tr:last-child {
   border-bottom: 2px outset darkgrey;
@@ -220,7 +220,7 @@ body {
   grid-template-areas: "toc select select" "layer map map" "id map map";
   grid-template-columns: minmax(50px, 260px) minmax(185px, 1fr) minmax(185px, 1fr);
   grid-template-rows: 30px minmax(150px, 1fr) minmax(140px, 0.6fr);
-  background-color: lightgrey;
+  background-color: #d5cdcd;
   gap: 0.4375em;
   padding: 0.5625em;
   border-radius: 0 0 9px 9px;
@@ -454,7 +454,7 @@ body {
 .modal-import, .modal-openENV, .modal-remove, .modal-properties, .modal-color {
   display: none;
   position: relative;
-  background-color: ivory;
+  background-color: #faf1ce;
   margin: 10% auto;
   border-radius: 5px;
   width: 300px;
@@ -504,8 +504,8 @@ body {
 }
 
 .tDnD_whileDrag td {
-  background-color: #ffffcc;
-  -webkit-box-shadow: 6px 3px 5px #555, 0 1px 0 #ffffd7 inset, 0 -1px 0 #ffffd7 inset;
+  background-color: #f7e8ae;
+  -webkit-box-shadow: 6px 3px 5px #555, 0 1px 0 #f8eab7 inset, 0 -1px 0 #f8eab7 inset;
 }
 
 .collapsible {
@@ -579,6 +579,10 @@ body {
   background-image: url("../imgs/info.png");
   background-repeat: no-repeat;
   background-position: center;
+  background-size: 17px;
+  padding-right: 10px;
+  width: auto;
+  height: 1.7em;
 }
 
 .loader {

@@ -64,7 +64,6 @@
                 <li><a class="isDisabled" href="#">Zoom to Layer</a></li>
                 <li><a class="isDisabled" href="#">Selection Zoom</a></li>
                 <li><a class="isDisabled" href="#">Grid</a></li>
-                <li><a class="isDisabled" href="#">Ruler</a></li>
             </ul>
         </li>
         <li><a href="{% url 'help' %}">Help</a></li>
@@ -82,7 +81,7 @@
         <button type="submit" title="Process checkbox selection/deselection from the Layer menu" form="render">Render</button>
         <button type="button" title="View active layers on world map" onclick="toggle_visibility('FoliumMap', 'RasterImages')">Map</button>
         <button type="button" title="View plot and key of active layers" onclick="toggle_visibility('RasterImages', 'FoliumMap')">Image</button>
-        <button class="isDisabled" style="cursor: not-allowed" type="button" title="Identify Cell" disabled>&#9432;</button>
+        <button class="id-cell-btn isDisabled" style="cursor: not-allowed" type="button" title="Identify Cell" disabled>&nbsp;&nbsp;</button> <!--&#9432;-->
     </div>
 
     <!-- Layer View -->
@@ -106,7 +105,7 @@
                 <tr>
                     <td colspan="2" style="background-color: ivory">
                         <p class="help_text">Active layers will be<br>displayed here.</p>
-                        <p class="help_text">To add a layer,<br> select File > Add Layer.</p>
+                        <p class="help_text">To add a layer,<br> select File > Add Layer</p>
                     </td>
                 </tr>
                 {% endif %}
@@ -298,7 +297,7 @@
                 <button id="color_submit" type="submit">Process</button>
                 <select name="color" id="color">
                     <option value="terrain">Terrain</option>
-                    <option value="earth">Earth</option>
+                    <option value="viridis">Viridis</option>
                     <option value="ocean">Ocean</option>
                     <option value="gray">Grey</option>
                     <option value="hot">Hot</option>

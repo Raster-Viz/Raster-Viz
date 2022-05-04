@@ -2,11 +2,13 @@ $font-stack: Arial, sans-serif;
 $menu-primary: rgba(56, 90, 57);
 $menu-secondary: rgba(117, 117, 117);
 
-$color1: ivory;
+$color1: #faf1ce;
+//$color1: ivory;
 $color2: white;
 
 body {
-  background-color: rgb(206, 222, 205);
+  background-color: rgb(181, 224, 173);
+  //background-color: rgb(206, 222, 205);
   padding: 0 .25em;
   min-width: 560px;
 }
@@ -23,7 +25,8 @@ body {
 }
 
 .prop-filename {
-  background-color: rgb(245, 239, 202);
+  background-color: rgb(255, 236, 160);
+  //background-color: rgb(245, 239, 202);
   font-family: Arial, serif;
   border-left: 2px double grey;
   height: 100%;
@@ -100,11 +103,13 @@ body {
   }
 
   tr:first-child {
-    background-color: rgb(245, 239, 202);
+    background-color: rgb(255, 236, 160);
+    //background-color: rgb(245, 239, 202);
   }
 
   tr:not(:first-child):hover{
-    background-color: darken($color1, 5%);
+    background-color: ivory;
+    //background-color: darken($color1, 5%);
   }
 
   tr:last-child {
@@ -254,7 +259,8 @@ body {
     'id map map';
   grid-template-columns: minmax(50px, 260px) minmax(185px, 1fr) minmax(185px, 1fr);
   grid-template-rows: 30px minmax(150px, 1fr) minmax(140px, .6fr);
-  background-color: lightgrey;
+  background-color: rgb(213, 205, 205);
+  //background-color: lightgrey;
   gap: .4375em;
   padding: .5625em;
   border-radius: 0 0 9px 9px;
@@ -489,7 +495,7 @@ body {
 .modal-import, .modal-openENV, .modal-remove, .modal-properties, .modal-color {
   display: none;
   position: relative;
-  background-color: ivory;
+  background-color: $color1;
   margin: 10% auto;
   border-radius: 5px;
   width: 300px;
@@ -623,6 +629,10 @@ body {
   background-image: url("../imgs/info.png");
   background-repeat: no-repeat;
   background-position: center;
+  background-size: 17px;
+  padding-right: 10px;
+  width: auto;
+  height: 1.7em;
 }
 
 .loader {
