@@ -2,13 +2,10 @@ from django.db import models
 from django.urls import reverse
 import os
 from raster_tools import Raster
-from django.core.exceptions import ValidationError
-from matplotlib import pyplot as plt, cm
 
 # This model is a template for importing raster objects into
 # the web database, and provides a name for the layer. The activated
 # var sets up a potential method that may be used to turning layers 'on and off'
-from web_function import create_raster
 
 def count_bands(keys):
     num = 0
@@ -120,6 +117,7 @@ class Layer(models.Model):
                      }
         return data_types.get(dtype, dtype)
 
+#Experimental model used for implementing vector types
 class Vectors(models.Model):
     document = models.FileField(upload_to='rs_viz/vectors')
     activated = models.BooleanField(blank=True, default=True)

@@ -5,31 +5,19 @@ from io import BytesIO
 import folium
 import base64, xarray
 
-import geopandas
-from geopandas import GeoSeries
 from django.core.files.storage import FileSystemStorage
-from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect, HttpResponse
-from django.template import loader, RequestContext
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core import serializers
-from django.core.checks import messages
-from django.core.exceptions import ValidationError
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.edit import CreateView
-from django.views.generic.edit import DeletionMixin
 from django.views.generic import TemplateView
 from folium.plugins import MousePosition
 from matplotlib import pyplot as plt, cm
 from rioxarray.exceptions import MissingCRS
-
-
 from raster_tools import Raster, surface, distance, open_vectors, general, zonal, creation, Vector
-from .forms import LayerForm
 from .models import Layer, validate_file_extension, Vectors, check_vector_ext, count_bands
 from web_function import create_raster
 from folium import plugins
-from pylab import figure, axes, pie, title
+from pylab import figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 import xml.etree.ElementTree as ET
 
@@ -159,9 +147,6 @@ def render_raster():
 
     return raster, context
 
-def add_to_raster(raster, rs):
-    raster.add(rs)
-
 # def zoom_to_layer(request):
 #     logger.error('>>>>>>>>>>>>>>>>>>>>>>>')
 #     zoom = request.POST.getlist('zoom')
@@ -252,71 +237,9 @@ def index(request):
                'all_layers':all_layers, 'fnp':fnp}
 
     return render(request, 'rs_viz/index.html', context)
-
-def test_matplotlib(request):
-    try:
-        fig = figure()
-        active_layers = Layer.objects.filter(activated=True)
-        i = 0
-        raster = 0
-        for layer in active_layers:
-            rs = create_raster.create_raster(layer.document.path)
-            if (i == 0):
-                raster = rs
-                i += 1
-                continue
-            arr = rs._to_presentable_xarray()
-            try:
-                raster = create_raster.add_to_raster(raster, rs)
-            except ValueError:
-                fs = raster._to_presentable_xarray()
-                fs.combine_first(arr)
-                raster = create_raster.add_to_raster(raster, fs)
-        arr = raster._to_presentable_xarray()
-        if(arr.shape[0]!=3):
-            arr.plot()
-        else:
-            arr.plot.imshow(rgb="band")
-        f = plt.gcf()
-        canvas = FigureCanvasAgg(f)
-        response = HttpResponse(content_type='image/png')
-        canvas.print_png(response)
-        return response
-    except AttributeError:
-        return redirect('index')
   
 class HelpPageView(TemplateView):
     template_name = 'rs_viz/help.html'
-
-def model_test(request):
-    active_layers = Layer.objects.filter(activated = True)
-    context = {"active_layers": active_layers}
-    vocal = None
-    i = 0
-    raster = 0
-    List = {}
-    for layer in active_layers:
-        rs = create_raster.create_raster(layer.document.path)
-        arr = rs._to_presentable_xarray()
-        if arr.shape in List:
-            val = List.get(arr.shape)
-            val.append(layer.document)
-            List.update({arr.shape:val})
-        else:
-            List.update({arr.shape:[layer.document]})
-        if(i==0):
-            raster = rs
-            i+=1
-            continue
-        try:
-            raster = create_raster.add_to_raster(raster, rs)
-        except ValueError:
-            fs = raster._to_presentable_xarray()
-            fs.combine_first(arr)
-            raster = create_raster.add_to_raster(raster,fs)
-
-    context.update({'List':List})
-    return render(request, 'rs_viz/fig.html', context)
 
 def convert_xml(request):
     data = Layer.objects.all()
@@ -390,6 +313,8 @@ def export_index(request):
     return render(request, 'rs_viz/export_index.html', context)
 
 def SetColor(request):
+    #Change color of select Raster Layers
+    #Bug: Currently changes all
     if request.method == 'POST':
         choices = request.POST.getlist('choice') # Get the file name from the as a list
         colors = request.POST.getlist('color')
