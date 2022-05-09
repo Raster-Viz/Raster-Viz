@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/Raster-Viz-Test/Raster-Viz.git
+RUN git clone https://github.com/Raster-Viz/Raster-Viz.git
 
 WORKDIR /Raster-Viz
 RUN cd /Raster-Viz
@@ -29,9 +29,10 @@ RUN echo -e "$(pwd)\n." > "${SITE_PACKAGES}/raster-tools.egg-link" && \
     pre-commit install
 WORKDIR /Raster-Viz
 RUN conda install -c anaconda django
-COPY manage.py .
+RUN python manage.py makemigrations
+RUN python manage.py migrate
 EXPOSE 8000
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "rstools", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "rstools", "python", "manage.py", "runserver"]
 
 
 

@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.test import Client
 from django.urls import reverse
@@ -6,7 +5,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from .models import Layer, validate_file_extension
 
 
-
+#Unit Tests
 class IndexTestCalls(TestCase):
     def test_index_one_layer(self):
         Layer.objects.create(document="rs_viz/elevation.tif", activated=True)
